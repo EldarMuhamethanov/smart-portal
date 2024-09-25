@@ -1,0 +1,5 @@
+.Card__collapsed :global(.ant-card-body) {
+  padding-block: 0;
+  height: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,16 @@
+.methodButton__text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.methodButton {
+  max-width: 100px;
+}
+
+.methodButton__disabled {
+  opacity: 0.3;
+}
+
+.methodField {
+  margin-bottom: 0;
+}
