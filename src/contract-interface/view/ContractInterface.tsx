@@ -20,7 +20,6 @@ export const ContractInterface: React.FC = observer(() => {
   };
 
   useLayoutEffect(() => {
-    console.log("initState");
     environmentModel.initState();
   }, []);
 

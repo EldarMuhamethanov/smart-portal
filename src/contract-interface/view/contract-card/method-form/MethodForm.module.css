@@ -4,7 +4,7 @@
 }
 
 .methodButton {
-  max-width: 100px;
+  width: 200px;
 }
 
 .methodButton__disabled {

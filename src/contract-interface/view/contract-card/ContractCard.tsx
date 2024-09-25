@@ -7,16 +7,14 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
 } from "@ant-design/icons";
-import { ReactNode, useEffect, useState } from "react";
-import { ContractMethod } from "./types";
-import { remapABItoMethodsData } from "./helpers";
+import { ReactNode, useLayoutEffect, useState } from "react";
 import styles from "./ContractCard.module.css";
 import classNames from "classnames";
-import { getABI } from "@/web3/getAbi";
 import { ContractsMethodsTab } from "./methods-tab/ContractMethodsTab";
 import { copyToClipboard } from "@/core/clipboard";
 import { ContractStorageTab } from "./storage-tab/ContractStorageTab";
-import { ABI } from "@/web3/ABI";
+import { observer } from "mobx-react-lite";
+import { getContractModel } from "@/contract-interface/model/AppModel";
 
 const TAB_LIST = [
   {
@@ -53,78 +51,53 @@ type ContractCardProps = {
   onRemoveContract: () => void;
 };
 
-export const ContractCard: React.FC<ContractCardProps> = ({
-  address,
-  onRemoveContract,
-}) => {
-  const [api, contextHolder] = notification.useNotification();
-  const [abi, setAbi] = useState<ABI | null>(null);
-  const [methodsData, setMethodsData] = useState<ContractMethod[]>([]);
-  const [notVerifiedContract, setNotVerifiedContract] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTabKey, setActiveTabKey] = useState<string>("methods");
-  const [expanded, setExpanded] = useState(true);
+export const ContractCard: React.FC<ContractCardProps> = observer(
+  ({ address, onRemoveContract }) => {
+    const cardModel = getContractModel(address);
+    const [api, contextHolder] = notification.useNotification();
+    const [activeTabKey, setActiveTabKey] = useState<string>("methods");
+    const [expanded, setExpanded] = useState(true);
 
-  useEffect(() => {
-    const loadMethods = async () => {
-      setIsLoading(true);
-      const network = "sepolia";
-      const abi = await getABI(address, network);
-      console.log("abi", abi);
-      if (!abi) {
-        setNotVerifiedContract(true);
-      } else {
-        const result = remapABItoMethodsData(abi);
-        setMethodsData(result);
-        setAbi(abi);
-      }
-      setIsLoading(false);
+    useLayoutEffect(() => {
+      cardModel.loadMethods();
+    }, [cardModel]);
+
+    const onCopy = () => {
+      copyToClipboard(address);
+      api.info({
+        message: "Адресс контракта скопирован",
+      });
     };
-    loadMethods();
-  }, [address]);
 
-  const onCopy = () => {
-    copyToClipboard(address);
-    api.info({
-      message: "Адресс контракта скопирован",
-    });
-  };
+    const tabContent: Record<string, ReactNode> = {
+      methods: <ContractsMethodsTab address={address} />,
+      storage: <ContractStorageTab address={address} />,
+    };
 
-  const tabContent: Record<string, ReactNode> = {
-    methods: (
-      <ContractsMethodsTab
-        address={address}
-        abi={abi}
-        notVerifiedContract={notVerifiedContract}
-        methodsData={methodsData}
-      />
-    ),
-    storage: <ContractStorageTab address={address} />,
-  };
-
-  return (
-    <>
-      {contextHolder}
-      <Card
-        title={address}
-        extra={
-          <CardExtra
-            onCopy={onCopy}
-            onRemove={onRemoveContract}
-            expanded={expanded}
-            onExpandChange={() => setExpanded((v) => !v)}
-          />
-        }
-        loading={isLoading}
-        tabList={isLoading || expanded ? TAB_LIST : undefined}
-        activeTabKey={activeTabKey}
-        onTabChange={setActiveTabKey}
-        className={classNames(
-          !isLoading && !expanded && styles.Card__collapsed
-        )}
-      >
-        {tabContent[activeTabKey]}
-      </Card>
-    </>
-  );
-};
+    return (
+      <>
+        {contextHolder}
+        <Card
+          title={address}
+          extra={
+            <CardExtra
+              onCopy={onCopy}
+              onRemove={onRemoveContract}
+              expanded={expanded}
+              onExpandChange={() => setExpanded((v) => !v)}
+            />
+          }
+          loading={cardModel.isLoading}
+          tabList={cardModel.isLoading || expanded ? TAB_LIST : undefined}
+          activeTabKey={activeTabKey}
+          onTabChange={setActiveTabKey}
+          className={classNames(
+            !cardModel.isLoading && !expanded && styles.Card__collapsed
+          )}
+        >
+          {tabContent[activeTabKey]}
+        </Card>
+      </>
+    );
+  }
+);

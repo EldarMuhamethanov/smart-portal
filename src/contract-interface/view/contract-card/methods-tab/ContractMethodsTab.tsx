@@ -1,89 +1,57 @@
-import { Typography, Flex, Divider } from "antd";
+import { Typography, Flex, Divider, notification } from "antd";
 import { MethodForm, MethodFormProps } from "../method-form/MethodForm";
-import { ContractMethod } from "../types";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { observer } from "mobx-react-lite";
-import { environmentModel } from "@/contract-interface/model/AppModel";
-import { ABI } from "@/web3/ABI";
+import { getContractModel } from "@/contract-interface/model/AppModel";
+import { copyToClipboard } from "@/core/clipboard";
 
 type ContractsMethodsTabProps = {
   address: string;
-  abi: ABI | null;
-  notVerifiedContract: boolean;
-  methodsData: ContractMethod[];
 };
 
 export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
-  ({ address, notVerifiedContract, methodsData, abi }) => {
-    const [methodToResult, setMethodToResult] = useState<
-      Record<string, string>
-    >({});
+  ({ address }) => {
+    const [api, contextHolder] = notification.useNotification();
 
-    const _updateMethodResult = (methodName: string, result: string) => {
-      setMethodToResult((v) => ({
-        ...v,
-        [methodName]: result,
-      }));
-    };
+    const contractModel = getContractModel(address);
 
-    const onCallMethod: MethodFormProps["onCall"] = async (
+    const onCopyCalldata: MethodFormProps["onCopyCalldata"] = (
       methodName,
-      methodType,
       fields
     ) => {
-      if (!abi) {
-        return;
-      }
-      const web3 = environmentModel.web3!;
-
-      const contract = new web3.eth.Contract(abi, address);
-      const argsValues = fields.map((field) => field.value);
-
-      if (methodType === "pure" || methodType === "view") {
-        try {
-          const result = await contract.methods[methodName](
-            ...argsValues
-          ).call();
-          if (typeof result === "string") {
-            _updateMethodResult(methodName, result);
-          }
-          return;
-        } catch (e) {
-          console.error("Failed to call method: ", e);
-          return;
-        }
-      }
-
-      const accounts = await web3.eth.getAccounts();
-      try {
-        await contract.methods[methodName](...argsValues).send({
-          from: accounts[0],
-        });
-      } catch (e) {
-        console.error("Failed to call method: ", e);
-        return;
-      }
+      copyToClipboard(contractModel.createCalldata(methodName, fields));
+      api.info({
+        message: "Calldata скопирована в буфер обмена",
+      });
     };
 
-    return notVerifiedContract ? (
+    const onCopyParameters: MethodFormProps["onCopyParameters"] = (fields) => {
+      copyToClipboard(contractModel.createParameters(fields));
+      api.info({
+        message: "Параметры скопированы в буфер обмена",
+      });
+    };
+
+    return !contractModel.verified ? (
       <Typography.Paragraph>
         К сожалению данный контракт не верифицирован, поэтому мы не можем
         отобразить его методы
       </Typography.Paragraph>
     ) : (
       <Flex vertical gap={20}>
-        {methodsData.map((method, index) => (
+        {contextHolder}
+        {contractModel.methodsData.map((method, index) => (
           <Fragment key={method.name}>
             <MethodForm
               type={method.type}
               name={method.name}
               fields={method.fields}
-              result={methodToResult[method.name]}
-              onCall={onCallMethod}
-              onCopyCalldata={() => {}}
-              onCopyParameters={() => {}}
+              result={contractModel.methodToResult[method.name]}
+              onCall={contractModel.callMethod}
+              onCopyCalldata={onCopyCalldata}
+              onCopyParameters={onCopyParameters}
             />
-            {index < methodsData.length - 1 && <Divider />}
+            {index < contractModel.methodsData.length - 1 && <Divider />}
           </Fragment>
         ))}
       </Flex>

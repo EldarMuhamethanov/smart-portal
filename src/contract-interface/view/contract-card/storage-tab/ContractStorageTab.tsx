@@ -10,7 +10,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import { MouseEventHandler, useLayoutEffect } from "react";
 import { copyToClipboard } from "@/core/clipboard";
 import { observer } from "mobx-react-lite";
-import { environmentModel } from "@/contract-interface/model/AppModel";
+import { getContractModel } from "@/contract-interface/model/AppModel";
 
 type ContractStorageTabProps = {
   address: string;
@@ -18,12 +18,12 @@ type ContractStorageTabProps = {
 
 export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
   ({ address }) => {
+    const cardModel = getContractModel(address);
     const [form] = Form.useForm();
     const [api, contextHolder] = notification.useNotification();
 
     const onFinish: FormProps["onFinish"] = async (values) => {
-      const web3 = environmentModel.web3!;
-      const result = await web3.eth.getStorageAt(address, values.slotNumber);
+      const result = await cardModel.getDataFromStorage(values.slotNumber);
       form.setFieldValue("result", result);
     };
 

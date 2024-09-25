@@ -5,17 +5,21 @@ import { makeAutoObservable } from "mobx";
 import Web3 from "web3";
 import { SmartContractsModel } from "./SmartContractsModel";
 import { AccountsModel } from "./AccountsModel";
+import { ContractCardModel } from "./ContractCardModel";
 
 export class EnvironmentModel {
   smartContracts: SmartContractsModel;
   accountsModel: AccountsModel;
   environment: EnvironmentType | null;
   web3: Web3 | null;
+  contractsModelsMap: Record<string, ContractCardModel> = {};
 
   constructor(
     smartContracts: SmartContractsModel,
-    accountsModel: AccountsModel
+    accountsModel: AccountsModel,
+    contractsModelsMap: Record<string, ContractCardModel>
   ) {
+    this.contractsModelsMap = contractsModelsMap;
     this.smartContracts = smartContracts;
     this.accountsModel = accountsModel;
     this.environment = null;
@@ -23,11 +27,19 @@ export class EnvironmentModel {
     makeAutoObservable(this);
   }
 
-  setEnvironment(env: EnvironmentType | undefined) {
+  async setEnvironment(env: EnvironmentType | undefined) {
     this.environment = env || null;
     this.smartContracts.resetState();
     this._createWeb3();
     this._updateLocalState();
+    if (this.web3) {
+      const accounts = await this.web3.eth.getAccounts();
+      this.accountsModel.updateAccounts(accounts);
+
+      Object.values(this.contractsModelsMap).forEach((model) => {
+        model.setSelectedAccount(accounts[0]);
+      });
+    }
   }
 
   async initState() {

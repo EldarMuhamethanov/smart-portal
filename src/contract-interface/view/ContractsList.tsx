@@ -9,11 +9,9 @@ export const ContractsList: React.FC = observer(() => {
       {smartContracts.contracts.map((contract) => {
         return (
           <ContractCard
-            key={contract.address}
-            address={contract.address}
-            onRemoveContract={() =>
-              smartContracts.removeContract(contract.address)
-            }
+            key={contract}
+            address={contract}
+            onRemoveContract={() => smartContracts.removeContract(contract)}
           />
         );
       })}
