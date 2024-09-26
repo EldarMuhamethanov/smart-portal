@@ -2,13 +2,14 @@
 
 import { Button, Flex, Select, SelectProps } from "antd";
 import styles from "./ContractInterface.module.css";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { AddContractCard } from "./add-contract-card/AddContractCard";
 import { ContractsList } from "./ContractsList";
 import { environmentModel, smartContracts } from "../model/AppModel";
 import { EnvironmentType } from "@/web3/Environment";
 import { observer } from "mobx-react-lite";
+import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 
 const ENVIRONMENTS: EnvironmentType[] = ["metamask", "hardhat"];
 
@@ -19,9 +20,9 @@ export const ContractInterface: React.FC = observer(() => {
     environmentModel.setEnvironment(value);
   };
 
-  useLayoutEffect(() => {
+  useSingleLayoutEffect(() => {
     environmentModel.initState();
-  }, []);
+  });
 
   return (
     <Flex vertical className={styles.container} gap={20}>

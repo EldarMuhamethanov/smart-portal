@@ -20,7 +20,12 @@ export const removeContractModel = (address: string) => {
 };
 
 export const addContractModel = (address: string) => {
-  contractsModelMap[address] = new ContractCardModel(address, environmentModel);
+  if (!contractsModelMap[address]) {
+    contractsModelMap[address] = new ContractCardModel(
+      address,
+      environmentModel
+    );
+  }
 };
 
 export const getContractModel = (address: string): ContractCardModel => {

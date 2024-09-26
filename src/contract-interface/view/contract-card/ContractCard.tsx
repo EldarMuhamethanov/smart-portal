@@ -7,7 +7,7 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
 } from "@ant-design/icons";
-import { ReactNode, useLayoutEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import styles from "./ContractCard.module.css";
 import classNames from "classnames";
 import { ContractsMethodsTab } from "./methods-tab/ContractMethodsTab";
@@ -15,6 +15,8 @@ import { copyToClipboard } from "@/core/clipboard";
 import { ContractStorageTab } from "./storage-tab/ContractStorageTab";
 import { observer } from "mobx-react-lite";
 import { getContractModel } from "@/contract-interface/model/AppModel";
+import { addContractLoadToQueue } from "@/contract-interface/model/ContractCard/contractsLoadsQueue";
+import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 
 const TAB_LIST = [
   {
@@ -58,10 +60,10 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     const [activeTabKey, setActiveTabKey] = useState<string>("methods");
     const [expanded, setExpanded] = useState(true);
 
-    useLayoutEffect(() => {
+    useSingleLayoutEffect(() => {
       cardModel.initState();
-      cardModel.loadMethods();
-    }, [cardModel]);
+      addContractLoadToQueue(address, cardModel);
+    });
 
     const onCopy = () => {
       copyToClipboard(address);
