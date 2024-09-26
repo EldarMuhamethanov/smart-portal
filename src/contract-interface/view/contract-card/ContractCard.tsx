@@ -59,6 +59,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     const [expanded, setExpanded] = useState(true);
 
     useLayoutEffect(() => {
+      cardModel.initState();
       cardModel.loadMethods();
     }, [cardModel]);
 

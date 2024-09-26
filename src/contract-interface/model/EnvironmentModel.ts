@@ -5,7 +5,7 @@ import { makeAutoObservable } from "mobx";
 import Web3 from "web3";
 import { SmartContractsModel } from "./SmartContractsModel";
 import { AccountsModel } from "./AccountsModel";
-import { ContractCardModel } from "./ContractCardModel";
+import { ContractCardModel } from "./ContractCard/ContractCardModel";
 
 export class EnvironmentModel {
   smartContracts: SmartContractsModel;
@@ -30,16 +30,9 @@ export class EnvironmentModel {
   async setEnvironment(env: EnvironmentType | undefined) {
     this.environment = env || null;
     this.smartContracts.resetState();
-    this._createWeb3();
+    await this._createWeb3();
+    await this._updateAccounts();
     this._updateLocalState();
-    if (this.web3) {
-      const accounts = await this.web3.eth.getAccounts();
-      this.accountsModel.updateAccounts(accounts);
-
-      Object.values(this.contractsModelsMap).forEach((model) => {
-        model.setSelectedAccount(accounts[0]);
-      });
-    }
   }
 
   async initState() {
@@ -48,7 +41,8 @@ export class EnvironmentModel {
     if (!this.environment) {
       return;
     }
-    this._createWeb3();
+    await this._createWeb3();
+    await this._updateAccounts();
     this.smartContracts.initState();
   }
 
@@ -57,6 +51,17 @@ export class EnvironmentModel {
       this.web3 = await connectToMetaMask();
     } else {
       this.web3 = new Web3("http://localhost:8545");
+    }
+  }
+
+  private async _updateAccounts() {
+    if (this.web3) {
+      const accounts = await this.web3.eth.getAccounts();
+      this.accountsModel.updateAccounts(accounts);
+
+      Object.values(this.contractsModelsMap).forEach((model) => {
+        model.setSelectedAccount(accounts[0]);
+      });
     }
   }
 

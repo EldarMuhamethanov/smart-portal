@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  padding-block-end: 50px;
 }
 
 .content {

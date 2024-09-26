@@ -1,9 +1,11 @@
 import { Typography, Flex, Divider, notification } from "antd";
-import { MethodForm, MethodFormProps } from "../method-form/MethodForm";
+import { MethodForm, MethodFormProps } from "./method-form/MethodForm";
 import { Fragment } from "react";
 import { observer } from "mobx-react-lite";
 import { getContractModel } from "@/contract-interface/model/AppModel";
 import { copyToClipboard } from "@/core/clipboard";
+import { ContractValueBlock } from "./ContractValueBlock";
+import { ContractSelectedAccountBlock } from "./ContractSelectedAccountBlock";
 
 type ContractsMethodsTabProps = {
   address: string;
@@ -19,41 +21,67 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
       methodName,
       fields
     ) => {
-      copyToClipboard(contractModel.createCalldata(methodName, fields));
-      api.info({
-        message: "Calldata скопирована в буфер обмена",
-      });
+      const calldata = contractModel.createCalldata(methodName, fields);
+      if (calldata) {
+        copyToClipboard(calldata);
+        api.info({
+          message: "Calldata скопирована в буфер обмена",
+        });
+      } else {
+        api.error({
+          message: "Calldata не скопирована",
+          description:
+            "Не все поля были заполнены или были заполнены некорректно",
+        });
+      }
     };
 
     const onCopyParameters: MethodFormProps["onCopyParameters"] = (fields) => {
-      copyToClipboard(contractModel.createParameters(fields));
-      api.info({
-        message: "Параметры скопированы в буфер обмена",
-      });
+      const parameters = contractModel.createParameters(fields);
+      if (parameters) {
+        copyToClipboard(parameters);
+        api.info({
+          message: "Параметры скопированы в буфер обмена",
+        });
+      } else {
+        api.error({
+          message: "Параметры не скопированы",
+          description:
+            "Не все поля были заполнены или были заполнены некорректно",
+        });
+      }
     };
 
-    return !contractModel.verified ? (
-      <Typography.Paragraph>
-        К сожалению данный контракт не верифицирован, поэтому мы не можем
-        отобразить его методы
-      </Typography.Paragraph>
-    ) : (
-      <Flex vertical gap={20}>
+    return (
+      <Flex vertical style={{ width: "100%" }}>
         {contextHolder}
-        {contractModel.methodsData.map((method, index) => (
-          <Fragment key={method.name}>
-            <MethodForm
-              type={method.type}
-              name={method.name}
-              fields={method.fields}
-              result={contractModel.methodToResult[method.name]}
-              onCall={contractModel.callMethod}
-              onCopyCalldata={onCopyCalldata}
-              onCopyParameters={onCopyParameters}
-            />
-            {index < contractModel.methodsData.length - 1 && <Divider />}
-          </Fragment>
-        ))}
+        <ContractSelectedAccountBlock contractModel={contractModel} />
+        <Divider />
+        <ContractValueBlock contractModel={contractModel} />
+        <Divider />
+        {!contractModel.verified ? (
+          <Typography.Paragraph>
+            К сожалению данный контракт не верифицирован, поэтому мы не можем
+            отобразить его методы
+          </Typography.Paragraph>
+        ) : (
+          <Flex vertical>
+            {contractModel.methodsData.map((method, index) => (
+              <Fragment key={method.name}>
+                <MethodForm
+                  type={method.type}
+                  name={method.name}
+                  fields={method.fields}
+                  result={contractModel.methodToResult[method.name]}
+                  onCall={contractModel.callMethod}
+                  onCopyCalldata={onCopyCalldata}
+                  onCopyParameters={onCopyParameters}
+                />
+                {index < contractModel.methodsData.length - 1 && <Divider />}
+              </Fragment>
+            ))}
+          </Flex>
+        )}
       </Flex>
     );
   }

@@ -1,15 +1,8 @@
-import { configure } from "mobx";
 import { ContractInterfaceModel } from "./ContractInterfaceModel";
 import { SmartContractsModel } from "./SmartContractsModel";
 import { EnvironmentModel } from "./EnvironmentModel";
 import { AccountsModel } from "./AccountsModel";
-import { ContractCardModel } from "./ContractCardModel";
-
-configure({
-  reactionRequiresObservable: true,
-  observableRequiresReaction: true,
-  disableErrorBoundaries: true,
-});
+import { ContractCardModel } from "./ContractCard/ContractCardModel";
 
 let contractsModelMap: Record<string, ContractCardModel> = {};
 
@@ -38,4 +31,9 @@ export const resetContractsModel = () => {
   contractsModelMap = {};
 };
 
-export { smartContracts, contractInterfaceModel, environmentModel };
+export {
+  smartContracts,
+  contractInterfaceModel,
+  environmentModel,
+  accountsModel,
+};

@@ -2,18 +2,30 @@
 
 import { useEffect, useMemo, useState } from "react";
 import styles from "./MethodForm.module.css";
-import { Flex, Button, ButtonProps, Form, FormProps, Input, Space } from "antd";
+import {
+  Flex,
+  Button,
+  ButtonProps,
+  Form,
+  FormProps,
+  Input,
+  Space,
+  notification,
+} from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import { FieldData, MethodType } from "../types";
+import { FieldData, MethodType } from "../../types";
 import { getValueByCheckedKey } from "@/core/typings";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
+import { copyToClipboard } from "@/core/clipboard";
 
 type FieldDataWithValue = FieldData & {
   value: string;
 };
 
-const MethodField: React.FC<FieldData> = ({ name, type }) => {
+const MethodField: React.FC<
+  FieldData & { onCopyResult: (name: string) => void }
+> = ({ name, type, onCopyResult }) => {
   return (
     <Form.Item
       label={name}
@@ -21,7 +33,12 @@ const MethodField: React.FC<FieldData> = ({ name, type }) => {
       className={styles.methodField}
       rules={[{ required: true, message: "Поле обязательное к заполнению" }]}
     >
-      <Input placeholder={type} />
+      <Input
+        placeholder={type}
+        suffix={
+          <Button onClick={() => onCopyResult(name)} icon={<CopyOutlined />} />
+        }
+      />
     </Form.Item>
   );
 };
@@ -52,10 +69,22 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
   }) => {
     const [form] = Form.useForm();
     const [isDisabled, setIsDisabled] = useState(false);
+    const [api, contextHolder] = notification.useNotification();
+
+    const onCopyFieldData = (fieldName: string) => {
+      copyToClipboard(form.getFieldValue(fieldName));
+      api.info({
+        message: `Значение поля "${fieldName}" скопированы в буфер обмена`,
+      });
+    };
 
     const values = Form.useWatch([], form);
 
     useEffect(() => {
+      if (!fields.length) {
+        setIsDisabled(false);
+        return;
+      }
       form
         .validateFields({ validateOnly: true })
         .then(() => setIsDisabled(false))
@@ -99,12 +128,13 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
         name="method"
         form={form}
         labelCol={{ span: 4 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 500 }}
+        wrapperCol={{ span: 24 }}
+        style={{ maxWidth: 600 }}
         onFinish={onSend}
         onFinishFailed={onSendFailed}
         layout="vertical"
       >
+        {contextHolder}
         <Flex vertical gap={20}>
           <Flex>
             <Button
@@ -125,12 +155,13 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
                   key={field.name}
                   name={field.name}
                   type={field.type}
+                  onCopyResult={onCopyFieldData}
                 />
               ))
             : null}
 
           {fields.length ? (
-            <Form.Item wrapperCol={{ offset: 4, span: 8 }}>
+            <Form.Item wrapperCol={{ span: 8 }}>
               <Space>
                 <Button
                   type="default"

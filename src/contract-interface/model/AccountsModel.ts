@@ -4,6 +4,7 @@ export class AccountsModel {
   accounts: string[] = [];
 
   constructor() {
+    this.accounts = [];
     makeAutoObservable(this);
   }
 
