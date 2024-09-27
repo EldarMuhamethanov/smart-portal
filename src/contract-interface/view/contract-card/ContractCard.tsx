@@ -58,7 +58,6 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     const cardModel = getContractModel(address);
     const [api, contextHolder] = notification.useNotification();
     const [activeTabKey, setActiveTabKey] = useState<string>("methods");
-    const [expanded, setExpanded] = useState(true);
 
     useSingleLayoutEffect(() => {
       cardModel.initState();
@@ -73,8 +72,8 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     };
 
     const tabContent: Record<string, ReactNode> = {
-      methods: <ContractsMethodsTab address={address} />,
-      storage: <ContractStorageTab address={address} />,
+      methods: <ContractsMethodsTab contractModel={cardModel} />,
+      storage: <ContractStorageTab contractModel={cardModel} />,
     };
 
     return (
@@ -86,16 +85,20 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
             <CardExtra
               onCopy={onCopy}
               onRemove={onRemoveContract}
-              expanded={expanded}
-              onExpandChange={() => setExpanded((v) => !v)}
+              expanded={cardModel.expanded}
+              onExpandChange={() => cardModel.setExpanded(!cardModel.expanded)}
             />
           }
           loading={cardModel.isLoading}
-          tabList={cardModel.isLoading || expanded ? TAB_LIST : undefined}
+          tabList={
+            cardModel.isLoading || cardModel.expanded ? TAB_LIST : undefined
+          }
           activeTabKey={activeTabKey}
           onTabChange={setActiveTabKey}
           className={classNames(
-            !cardModel.isLoading && !expanded && styles.Card__collapsed
+            !cardModel.isLoading &&
+              !cardModel.expanded &&
+              styles.Card__collapsed
           )}
         >
           {tabContent[activeTabKey]}

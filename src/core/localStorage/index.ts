@@ -1,7 +1,10 @@
 type StorageKey =
   | "smart-contracts"
   | "environment"
-  | `contract-${string}-selected-account`;
+  | `contract-${string}-selected-account`
+  | `contract-${string}-expanded`
+  | `contract-${string}-gas-custom`
+  | `contract-${string}-gas-value`;
 
 function setValue<T>(key: StorageKey, value: T) {
   localStorage.setItem(key, JSON.stringify(value));

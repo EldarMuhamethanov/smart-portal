@@ -40,6 +40,7 @@ export class SmartContractsModel {
   resetState() {
     this.contracts = [];
     resetContractsModel();
+    this._updateStorageData();
   }
 
   private _updateStorageData() {

@@ -2,20 +2,19 @@ import { Typography, Flex, Divider, notification } from "antd";
 import { MethodForm, MethodFormProps } from "./method-form/MethodForm";
 import { Fragment } from "react";
 import { observer } from "mobx-react-lite";
-import { getContractModel } from "@/contract-interface/model/AppModel";
 import { copyToClipboard } from "@/core/clipboard";
 import { ContractValueBlock } from "./ContractValueBlock";
 import { ContractSelectedAccountBlock } from "./ContractSelectedAccountBlock";
+import { ContractCardModel } from "@/contract-interface/model/ContractCard/ContractCardModel";
+import { ContractGasBlock } from "./ContractGasBlock";
 
 type ContractsMethodsTabProps = {
-  address: string;
+  contractModel: ContractCardModel;
 };
 
 export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
-  ({ address }) => {
+  ({ contractModel }) => {
     const [api, contextHolder] = notification.useNotification();
-
-    const contractModel = getContractModel(address);
 
     const onCopyCalldata: MethodFormProps["onCopyCalldata"] = (
       methodName,
@@ -58,6 +57,8 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
         <ContractSelectedAccountBlock contractModel={contractModel} />
         <Divider />
         <ContractValueBlock contractModel={contractModel} />
+        <Divider />
+        <ContractGasBlock contractModel={contractModel} />
         <Divider />
         {!contractModel.verified ? (
           <Typography.Paragraph>

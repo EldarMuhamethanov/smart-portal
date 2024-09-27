@@ -10,20 +10,19 @@ import { CopyOutlined } from "@ant-design/icons";
 import { MouseEventHandler, useLayoutEffect } from "react";
 import { copyToClipboard } from "@/core/clipboard";
 import { observer } from "mobx-react-lite";
-import { getContractModel } from "@/contract-interface/model/AppModel";
+import { ContractCardModel } from "@/contract-interface/model/ContractCard/ContractCardModel";
 
 type ContractStorageTabProps = {
-  address: string;
+  contractModel: ContractCardModel;
 };
 
 export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
-  ({ address }) => {
-    const cardModel = getContractModel(address);
+  ({ contractModel }) => {
     const [form] = Form.useForm();
     const [api, contextHolder] = notification.useNotification();
 
     const onFinish: FormProps["onFinish"] = async (values) => {
-      const result = await cardModel.getDataFromStorage(values.slotNumber);
+      const result = await contractModel.getDataFromStorage(values.slotNumber);
       form.setFieldValue("result", result);
     };
 

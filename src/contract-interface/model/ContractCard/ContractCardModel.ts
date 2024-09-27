@@ -13,6 +13,8 @@ import {
   SelectedAccountData,
 } from "./ContractSelectedAccount";
 import { ContractValueModel, CurrencyType } from "./ContractValueModel";
+import { LocalStorage } from "@/core/localStorage";
+import { ContractGasModel } from "./ContractGasModel";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -25,10 +27,12 @@ export class ContractCardModel {
   verified: boolean = true;
   isLoading: boolean = true;
   methodToResult: Record<string, string> = {};
+  expanded: boolean = false;
 
   private _environmentModel: EnvironmentModel;
   private _selectedAccountModel: ContractSelectedAccount;
   private _contractValueModel: ContractValueModel;
+  private _contractGasModel: ContractGasModel;
 
   constructor(address: string, environmentModel: EnvironmentModel) {
     this.address = address;
@@ -38,6 +42,7 @@ export class ContractCardModel {
       environmentModel
     );
     this._contractValueModel = new ContractValueModel();
+    this._contractGasModel = new ContractGasModel(address);
     makeAutoObservable(this);
   }
 
@@ -53,24 +58,50 @@ export class ContractCardModel {
     return this._contractValueModel.selectedCurrency;
   }
 
-  initState() {
+  get gasIsCustom(): boolean {
+    return this._contractGasModel.custom;
+  }
+
+  get gasCustomValue(): string {
+    return this._contractGasModel.customGasValue;
+  }
+
+  initState = () => {
     this._selectedAccountModel.initState();
-  }
+    this.expanded = this._getExpandedFromStorage();
+  };
 
-  setSelectedAccount(address: string | null) {
+  setSelectedAccount = (address: string | null) => {
     this._selectedAccountModel.setSelectedAccount(address);
-  }
+  };
 
-  setValueToSend(value: string) {
+  setValueToSend = (value: string) => {
     this._contractValueModel.setValue(value);
-  }
+  };
 
-  setSelectedCurrency(currency: CurrencyType) {
+  setSelectedCurrency = (currency: CurrencyType) => {
     this._contractValueModel.setSelectedCurrency(currency);
+  };
+
+  setGasIsCustom = (custom: boolean) => {
+    this._contractGasModel.setCustom(custom);
+  };
+
+  setGasCustomValue = (customValue: string) => {
+    this._contractGasModel.setCustomGasValue(customValue);
+  };
+
+  setIsLoading = (isLoading: boolean) => {
+    this.isLoading = isLoading;
+  };
+
+  setExpanded(expanded: boolean) {
+    this.expanded = expanded;
+    this._updateExpandedInStorage();
   }
 
   async loadMethods() {
-    this.isLoading = true;
+    this.setIsLoading(true);
     const network = "sepolia";
     this.abi = await getABI(this.address, network);
     if (!this.abi) {
@@ -80,14 +111,14 @@ export class ContractCardModel {
       const result = remapABItoMethodsData(toJS(this.abi));
       this.methodsData = result;
     }
-    this.isLoading = false;
+    this.setIsLoading(false);
   }
 
-  async getDataFromStorage(slotNumber: number) {
+  getDataFromStorage = async (slotNumber: number) => {
     const web3 = this._environmentModel.web3!;
     const result = await web3.eth.getStorageAt(this.address, slotNumber);
     return result;
-  }
+  };
 
   callMethod = async (
     methodName: string,
@@ -124,6 +155,9 @@ export class ContractCardModel {
     try {
       await contract.methods[methodName](...argsValues).send({
         from: this._selectedAccountModel.selectedAccount.address,
+        gas: this._contractGasModel.custom
+          ? this._contractGasModel.customGasValue
+          : undefined,
         value: web3.utils.toWei(
           this._contractValueModel.value,
           this._contractValueModel.selectedCurrency
@@ -177,6 +211,17 @@ export class ContractCardModel {
 
   private _updateMethodResult(methodName: string, result: string) {
     this.methodToResult[methodName] = result;
+  }
+
+  private _updateExpandedInStorage() {
+    LocalStorage.setValue(`contract-${this.address}-expanded`, this.expanded);
+  }
+
+  private _getExpandedFromStorage() {
+    return (
+      LocalStorage.getValue<boolean>(`contract-${this.address}-expanded`) ||
+      false
+    );
   }
 
   private _remapMethodDataToSignature = (

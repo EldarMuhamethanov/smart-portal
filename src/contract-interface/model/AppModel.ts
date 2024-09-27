@@ -1,4 +1,3 @@
-import { ContractInterfaceModel } from "./ContractInterfaceModel";
 import { SmartContractsModel } from "./SmartContractsModel";
 import { EnvironmentModel } from "./EnvironmentModel";
 import { AccountsModel } from "./AccountsModel";
@@ -13,7 +12,6 @@ const environmentModel = new EnvironmentModel(
   accountsModel,
   contractsModelMap
 );
-const contractInterfaceModel = new ContractInterfaceModel(smartContracts);
 
 export const removeContractModel = (address: string) => {
   delete contractsModelMap[address];
@@ -36,9 +34,4 @@ export const resetContractsModel = () => {
   contractsModelMap = {};
 };
 
-export {
-  smartContracts,
-  contractInterfaceModel,
-  environmentModel,
-  accountsModel,
-};
+export { smartContracts, environmentModel, accountsModel };
