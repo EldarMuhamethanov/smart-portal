@@ -21,19 +21,26 @@ const etherscanEndpoints: Record<number, string> = {
 
 export class UnknownNetwork extends Error {}
 
-export async function getABI(contractAddress: string, networkId: number) {
+export async function getContractCodeData(
+  contractAddress: string,
+  networkId: number
+) {
   const endpoint = etherscanEndpoints[networkId];
   if (!endpoint) {
     throw new UnknownNetwork();
   }
-  const url = `${endpoint}?module=contract&action=getabi&address=${contractAddress}&apikey=${ETHERSCAN_API_KEY}`;
+  const url = `${endpoint}?module=contract&action=getsourcecode&address=${contractAddress}&apikey=${ETHERSCAN_API_KEY}`;
 
   try {
     const response = await fetch(url, { method: "GET" });
     const data = await response.json();
+    console.log("data", data);
     if (data.status === "1") {
-      const abi = JSON.parse(data.result) as ABI;
-      return abi;
+      const abi = JSON.parse(data.result[0].ABI) as ABI;
+      return {
+        abi,
+        code: data.result[0].SourceCode,
+      };
     }
     return null;
   } catch (error) {

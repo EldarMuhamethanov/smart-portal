@@ -5,7 +5,7 @@ import {
   MethodType,
 } from "../../view/contract-card/types";
 import { makeAutoObservable, toJS } from "mobx";
-import { UnknownNetwork, getABI } from "@/web3/getAbi";
+import { UnknownNetwork, getContractCodeData } from "@/web3/getAbi";
 import { remapABItoMethodsData } from "../../view/contract-card/helpers";
 import { EnvironmentModel } from "../EnvironmentModel";
 import {
@@ -15,6 +15,7 @@ import {
 import { ContractValueModel, CurrencyType } from "./ContractValueModel";
 import { LocalStorage } from "@/core/localStorage";
 import { ContractGasModel } from "./ContractGasModel";
+import { ContractCodeModel } from "./ContractCodeModel";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -33,6 +34,7 @@ export class ContractCardModel {
   private _selectedAccountModel: ContractSelectedAccount;
   private _contractValueModel: ContractValueModel;
   private _contractGasModel: ContractGasModel;
+  private _contractCodeModel: ContractCodeModel;
 
   constructor(address: string, environmentModel: EnvironmentModel) {
     this.address = address;
@@ -43,6 +45,7 @@ export class ContractCardModel {
     );
     this._contractValueModel = new ContractValueModel();
     this._contractGasModel = new ContractGasModel(address);
+    this._contractCodeModel = new ContractCodeModel();
     makeAutoObservable(this);
   }
 
@@ -64,6 +67,10 @@ export class ContractCardModel {
 
   get gasCustomValue(): string {
     return this._contractGasModel.customGasValue;
+  }
+
+  get code(): string {
+    return this._contractCodeModel.code;
   }
 
   initState = () => {
@@ -109,7 +116,9 @@ export class ContractCardModel {
     }
     const networkId = await this._environmentModel.web3!.eth.net.getId();
     try {
-      this.abi = await getABI(this.address, Number(networkId));
+      const result = await getContractCodeData(this.address, Number(networkId));
+      this.abi = result?.abi || null;
+      this._contractCodeModel.setCode(result?.code || "");
     } catch (e) {
       if (e instanceof UnknownNetwork) {
         console.log("Неизвестная сеть");
@@ -154,6 +163,7 @@ export class ContractCardModel {
         const result = await contract.methods[methodName](...argsValues).call({
           from: this._selectedAccountModel.selectedAccount.address,
         });
+        console.log("result", result);
         if (typeof result === "string") {
           this._updateMethodResult(methodName, result);
         }

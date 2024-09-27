@@ -17,6 +17,7 @@ import { observer } from "mobx-react-lite";
 import { getContractModel } from "@/contract-interface/model/AppModel";
 import { addContractLoadToQueue } from "@/contract-interface/model/ContractCard/contractsLoadsQueue";
 import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
+import { ContractCodeTab } from "./code-tab/ContractCodeTab";
 
 const TAB_LIST = [
   {
@@ -26,6 +27,10 @@ const TAB_LIST = [
   {
     key: "storage",
     tab: "Storage",
+  },
+  {
+    key: "code",
+    tab: "Код",
   },
 ];
 
@@ -74,6 +79,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     const tabContent: Record<string, ReactNode> = {
       methods: <ContractsMethodsTab contractModel={cardModel} />,
       storage: <ContractStorageTab contractModel={cardModel} />,
+      code: <ContractCodeTab contractModel={cardModel} />,
     };
 
     return (

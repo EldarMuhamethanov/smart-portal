@@ -37,6 +37,12 @@ export class ContractSelectedAccount {
     }
   }
 
+  setSelectedAccountBalance = (balance: string) => {
+    if (this.selectedAccount) {
+      this.selectedAccount.balance = balance.toString();
+    }
+  };
+
   initState() {
     this.selectedAccount =
       LocalStorage.getValue(
@@ -79,7 +85,7 @@ export class ContractSelectedAccount {
     const balance = await this._environmentModel.web3.eth.getBalance(
       this.selectedAccount.address
     );
-    this.selectedAccount.balance = balance.toString();
+    this.setSelectedAccountBalance(balance.toString());
     this._updateSelectedAccountStorageState();
   }
 
