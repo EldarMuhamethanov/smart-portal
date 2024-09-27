@@ -1,35 +1,32 @@
-import { NetworkType } from "@/contract-interface/model/SmartContractsModel";
-import { getValueByCheckedKey } from "@/core/typings";
 import { ABI } from "./ABI";
 
 const ETHERSCAN_API_KEY = "DDZPITBAMCT4SV1CNBW91GX3TQZXSN62AQ";
 
-const mainnetAbiBuilder = (address: string) => {
-  return `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
+const etherscanEndpoints: Record<number, string> = {
+  1: "https://api.etherscan.io/api", // Ethereum Mainnet
+  3: "https://api-ropsten.etherscan.io/api", // Ropsten Testnet (устаревшая)
+  4: "https://api-rinkeby.etherscan.io/api", // Rinkeby Testnet (устаревшая)
+  5: "https://api-goerli.etherscan.io/api", // Goerli Testnet
+  10: "https://api-optimistic.etherscan.io/api", // Optimism
+  42: "https://api-kovan.etherscan.io/api", // Kovan Testnet (устаревшая)
+  56: "https://api.bscscan.com/api", // Binance Smart Chain
+  97: "https://api-testnet.bscscan.com/api", // Binance Smart Chain Testnet
+  137: "https://api.polygonscan.com/api", // Polygon (Matic) Mainnet
+  80001: "https://api-testnet.polygonscan.com/api", // Polygon (Matic) Mumbai Testnet
+  42161: "https://api.arbiscan.io/api", // Arbitrum One
+  421613: "https://api-goerli.arbiscan.io/api", // Arbitrum Goerli Testnet
+  43114: "https://api.snowtrace.io/api", // Avalanche C-Chain
+  11155111: "https://api-sepolia.etherscan.io/api", // Sepolia Testnet
 };
 
-const sepoliaAbiBuilder = (address: string) => {
-  return `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
-};
+export class UnknownNetwork extends Error {}
 
-const hardhatAbiBuilder = (address: string) => {
-  return `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
-};
-
-const getAbiBuilder = (network: NetworkType) => {
-  return getValueByCheckedKey(network, {
-    mainnet: mainnetAbiBuilder,
-    sepolia: sepoliaAbiBuilder,
-    hardhat: hardhatAbiBuilder,
-  });
-};
-
-export async function getABI(
-  contractAddress: string,
-  networkType: NetworkType
-) {
-  const builder = getAbiBuilder(networkType);
-  const url = builder(contractAddress);
+export async function getABI(contractAddress: string, networkId: number) {
+  const endpoint = etherscanEndpoints[networkId];
+  if (!endpoint) {
+    throw new UnknownNetwork();
+  }
+  const url = `${endpoint}?module=contract&action=getabi&address=${contractAddress}&apikey=${ETHERSCAN_API_KEY}`;
 
   try {
     const response = await fetch(url, { method: "GET" });

@@ -5,7 +5,7 @@ import {
   MethodType,
 } from "../../view/contract-card/types";
 import { makeAutoObservable, toJS } from "mobx";
-import { getABI } from "@/web3/getAbi";
+import { UnknownNetwork, getABI } from "@/web3/getAbi";
 import { remapABItoMethodsData } from "../../view/contract-card/helpers";
 import { EnvironmentModel } from "../EnvironmentModel";
 import {
@@ -102,8 +102,20 @@ export class ContractCardModel {
 
   async loadMethods() {
     this.setIsLoading(true);
-    const network = "sepolia";
-    this.abi = await getABI(this.address, network);
+    if (this._environmentModel.environment === "hardhat") {
+      this.verified = false;
+      this.setIsLoading(false);
+      return;
+    }
+    const networkId = await this._environmentModel.web3!.eth.net.getId();
+    try {
+      this.abi = await getABI(this.address, Number(networkId));
+    } catch (e) {
+      if (e instanceof UnknownNetwork) {
+        console.log("Неизвестная сеть");
+      }
+      return;
+    }
     if (!this.abi) {
       this.verified = false;
     } else {
