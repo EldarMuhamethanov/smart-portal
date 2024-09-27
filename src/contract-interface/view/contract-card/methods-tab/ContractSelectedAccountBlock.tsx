@@ -13,16 +13,20 @@ export const ContractSelectedAccountBlock: React.FC<{
     contractModel.setSelectedAccount(value);
   };
 
-  const calculateAccountLabel = (account: string) => {
-    if (
-      account === contractModel.selectedAccount?.address &&
-      contractModel.selectedAccount.balance
-    ) {
+  const calculateAccountBalance = () => {
+    if (typeof contractModel.selectedAccount?.balance === "string") {
       const balanceInEth = environmentModel.web3!.utils.fromWei(
         contractModel.selectedAccount.balance,
         "ether"
       );
 
+      return balanceInEth;
+    }
+  };
+
+  const calculateAccountLabel = (account: string) => {
+    if (account === contractModel.selectedAccount?.address) {
+      const balanceInEth = calculateAccountBalance();
       return `${account} (${balanceInEth} ETH)`;
     }
     return account;
@@ -30,7 +34,14 @@ export const ContractSelectedAccountBlock: React.FC<{
 
   return (
     <Flex vertical>
-      <Typography.Title level={4}>Аккаунт</Typography.Title>
+      <Flex align="center" gap={20} style={{ maxWidth: 600 }}>
+        <Typography.Title level={4} style={{ flexGrow: 1 }}>
+          Аккаунт
+        </Typography.Title>
+        <Typography.Title level={4} style={{ marginTop: 0 }}>
+          {calculateAccountBalance()} ETH
+        </Typography.Title>
+      </Flex>
       <Select
         placeholder="Выберите пользователя"
         onChange={onChangeAccount}

@@ -36,8 +36,9 @@ export const AddContractCard: React.FC<AddContractCardProps> = ({
         name="adding-contract"
         onFinish={onFinish}
         onFinishFailed={onFinisFailed}
-        labelCol={{ span: 4 }}
+        labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
+        layout="vertical"
       >
         <Form.Item
           label="Адрес контракта"
@@ -54,7 +55,7 @@ export const AddContractCard: React.FC<AddContractCardProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
+        <Form.Item wrapperCol={{ span: 16 }}>
           <Button type="primary" htmlType="submit">
             Добавить
           </Button>
