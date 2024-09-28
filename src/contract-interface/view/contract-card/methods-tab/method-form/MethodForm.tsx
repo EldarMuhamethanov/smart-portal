@@ -12,7 +12,7 @@ import {
   Space,
   notification,
 } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
 import { FieldData, MethodType } from "../../types";
 import { getValueByCheckedKey } from "@/core/typings";
 import classNames from "classnames";
@@ -48,6 +48,7 @@ export type MethodFormProps = {
   name: string;
   fields: FieldData[];
   result: string | null;
+  onRemove?: () => void;
   onCall: (
     methodName: string,
     type: MethodType,
@@ -62,6 +63,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
     type,
     name,
     fields,
+    onRemove,
     onCall,
     result,
     onCopyCalldata,
@@ -99,9 +101,9 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
         },
         pure: {
           color: "default",
-          variant: "solid",
+          variant: "outlined",
         },
-        update: {
+        transaction: {
           type: "primary",
         },
       });
@@ -125,7 +127,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
 
     return (
       <Form
-        name="method"
+        name={`method_${name}`}
         form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 24 }}
@@ -136,7 +138,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
       >
         {contextHolder}
         <Flex vertical gap={20}>
-          <Flex>
+          <Flex align="center" gap={30}>
             <Button
               {...buttonProps}
               size="large"
@@ -148,6 +150,14 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
             >
               <span className={styles.methodButton__text}>{name}</span>
             </Button>
+
+            {onRemove && (
+              <Button
+                icon={<DeleteOutlined />}
+                onClick={onRemove}
+                shape="circle"
+              />
+            )}
           </Flex>
           {fields.length
             ? fields.map((field) => (

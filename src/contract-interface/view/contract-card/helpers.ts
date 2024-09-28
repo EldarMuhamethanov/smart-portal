@@ -8,10 +8,17 @@ export const remapABItoMethodsData = (abi: ABI): ContractMethod[] => {
       const methodType: MethodType =
         item.stateMutability === "view" || item.stateMutability === "pure"
           ? item.stateMutability
-          : "update";
+          : "transaction";
 
       const fields: FieldData[] = [
         ...item.inputs.map((input) => ({
+          name: input.name,
+          type: input.type,
+        })),
+      ];
+
+      const outputs: FieldData[] = [
+        ...item.outputs.map((input) => ({
           name: input.name,
           type: input.type,
         })),
@@ -21,6 +28,7 @@ export const remapABItoMethodsData = (abi: ABI): ContractMethod[] => {
         name: item.name,
         type: methodType,
         fields: fields,
+        outputs,
       };
     });
 };

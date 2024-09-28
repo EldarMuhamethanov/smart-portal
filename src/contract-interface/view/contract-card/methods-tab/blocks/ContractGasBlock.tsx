@@ -8,7 +8,6 @@ export const ContractGasBlock: React.FC<{
 }> = observer(({ contractModel }) => {
   const onChange = (e: RadioChangeEvent) => {
     contractModel.setGasIsCustom(e.target.value === "custom");
-    console.log("radio checked", e.target.value);
   };
 
   return (

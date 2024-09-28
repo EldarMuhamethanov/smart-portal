@@ -2,6 +2,7 @@ export type ContractMethod = {
   name: string;
   type: MethodType;
   fields: FieldData[];
+  outputs: FieldData[];
 };
 
 export type FieldData = {
@@ -9,4 +10,4 @@ export type FieldData = {
   type: string;
 };
 
-export type MethodType = "view" | "pure" | "update";
+export type MethodType = "view" | "pure" | "transaction";

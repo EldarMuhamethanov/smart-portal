@@ -16,6 +16,10 @@ import { ContractValueModel, CurrencyType } from "./ContractValueModel";
 import { LocalStorage } from "@/core/localStorage";
 import { ContractGasModel } from "./ContractGasModel";
 import { ContractCodeModel } from "./ContractCodeModel";
+import {
+  ContractCustomMethodsModel,
+  CustomMethodData,
+} from "./ContractCustomMethodsModel";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -35,6 +39,7 @@ export class ContractCardModel {
   private _contractValueModel: ContractValueModel;
   private _contractGasModel: ContractGasModel;
   private _contractCodeModel: ContractCodeModel;
+  private _contractCustomMethodsModel: ContractCustomMethodsModel;
 
   constructor(address: string, environmentModel: EnvironmentModel) {
     this.address = address;
@@ -46,6 +51,7 @@ export class ContractCardModel {
     this._contractValueModel = new ContractValueModel();
     this._contractGasModel = new ContractGasModel(address);
     this._contractCodeModel = new ContractCodeModel();
+    this._contractCustomMethodsModel = new ContractCustomMethodsModel(address);
     makeAutoObservable(this);
   }
 
@@ -73,8 +79,13 @@ export class ContractCardModel {
     return this._contractCodeModel.code;
   }
 
+  get customMethods() {
+    return this._contractCustomMethodsModel.customMethods;
+  }
+
   initState = () => {
     this._selectedAccountModel.initState();
+    this._contractCustomMethodsModel.initState();
     this.expanded = this._getExpandedFromStorage();
   };
 
@@ -96,6 +107,14 @@ export class ContractCardModel {
 
   setGasCustomValue = (customValue: string) => {
     this._contractGasModel.setCustomGasValue(customValue);
+  };
+
+  addCustomMethod = (method: CustomMethodData) => {
+    this._contractCustomMethodsModel.addCustomMethod(method);
+  };
+
+  removeCustomMethod = (id: string) => {
+    this._contractCustomMethodsModel.removeCustomMethod(id);
   };
 
   setIsLoading = (isLoading: boolean) => {
@@ -187,6 +206,75 @@ export class ContractCardModel {
       });
     } catch (e) {
       console.error("Failed to call method: ", e);
+      return;
+    }
+  };
+
+  callCustomMethod = async (
+    id: string,
+    methodType: MethodType,
+    fields: FieldDataWithValue[]
+  ) => {
+    if (!this.abi) {
+      return;
+    }
+    if (!this._selectedAccountModel.selectedAccount) {
+      console.error("need to select account");
+      return;
+    }
+    const web3 = this._environmentModel.web3!;
+
+    const customMethodData = this._contractCustomMethodsModel.getMethodById(id);
+    if (!customMethodData) {
+      console.error("Unknown method");
+      return;
+    }
+    const methodName = customMethodData.name;
+
+    const calldata = this.createCalldata(methodName, fields);
+
+    if (methodType === "pure" || methodType === "view") {
+      try {
+        const result = await web3.eth.call({
+          from: this._selectedAccountModel.selectedAccount.address,
+          to: this.address,
+          data: calldata,
+        });
+        const decodedResult = web3.eth.abi.decodeParameters(
+          customMethodData.outputs,
+          result
+        );
+        console.log("Результат:", decodedResult);
+      } catch (e) {
+        console.error("Error: ", e);
+      }
+
+      return;
+    }
+    try {
+      const gasEstimate = await web3.eth.estimateGas({
+        to: this.address,
+        data: calldata,
+        from: this._selectedAccountModel.selectedAccount.address,
+      });
+      const tx = await web3.eth.sendTransaction({
+        from: this._selectedAccountModel.selectedAccount.address,
+        to: this.address,
+        data: calldata,
+        gas: this._contractGasModel.custom
+          ? this._contractGasModel.customGasValue
+          : gasEstimate,
+        value: web3.utils.toWei(
+          this._contractValueModel.value,
+          this._contractValueModel.selectedCurrency
+        ),
+      });
+      console.log("Транзакция отправлена:", tx.transactionHash);
+      const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
+
+      console.log("Транзакция подтверждена:", receipt);
+    } catch (e) {
+      console.error("Ошибка при отправке транзакции:", e);
       return;
     }
   };

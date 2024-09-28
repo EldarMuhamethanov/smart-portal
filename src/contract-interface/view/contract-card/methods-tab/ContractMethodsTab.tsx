@@ -3,10 +3,11 @@ import { MethodForm, MethodFormProps } from "./method-form/MethodForm";
 import { Fragment } from "react";
 import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
-import { ContractValueBlock } from "./ContractValueBlock";
-import { ContractSelectedAccountBlock } from "./ContractSelectedAccountBlock";
+import { ContractValueBlock } from "./blocks/ContractValueBlock";
+import { ContractSelectedAccountBlock } from "./blocks/ContractSelectedAccountBlock";
 import { ContractCardModel } from "@/contract-interface/model/ContractCard/ContractCardModel";
-import { ContractGasBlock } from "./ContractGasBlock";
+import { ContractGasBlock } from "./blocks/ContractGasBlock";
+import { CustomMethodsBlock } from "./blocks/custom-methods/CustomMethodsBlock";
 
 type ContractsMethodsTabProps = {
   contractModel: ContractCardModel;
@@ -59,6 +60,12 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
         <ContractValueBlock contractModel={contractModel} />
         <Divider />
         <ContractGasBlock contractModel={contractModel} />
+        <Divider />
+        <CustomMethodsBlock
+          contractModel={contractModel}
+          onCopyCalldata={onCopyCalldata}
+          onCopyParameters={onCopyParameters}
+        />
         <Divider />
         {!contractModel.verified ? (
           <Typography.Paragraph>
