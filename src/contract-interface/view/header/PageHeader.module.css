@@ -1,0 +1,6 @@
+.logoTitle {
+  color: var(--page-text-color) !important;
+  font-family: var(--font-geist-mono);
+  margin-bottom: 0;
+  margin-top: 10px;
+}

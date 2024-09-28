@@ -2,9 +2,11 @@ import { SmartContractsModel } from "./SmartContractsModel";
 import { EnvironmentModel } from "./EnvironmentModel";
 import { AccountsModel } from "./AccountsModel";
 import { ContractCardModel } from "./ContractCard/ContractCardModel";
+import { AppSettingsModel } from "./AppSettingsModel";
 
 let contractsModelMap: Record<string, ContractCardModel> = {};
 
+const appSettings = new AppSettingsModel();
 const smartContracts = new SmartContractsModel();
 const accountsModel = new AccountsModel();
 const environmentModel = new EnvironmentModel(
@@ -34,4 +36,4 @@ export const resetContractsModel = () => {
   contractsModelMap = {};
 };
 
-export { smartContracts, environmentModel, accountsModel };
+export { smartContracts, environmentModel, accountsModel, appSettings };

@@ -6,7 +6,7 @@ export const ContractInterfacePage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.content}>
-        <Title>
+        <Title className={styles.title}>
           SmartPortal - ваш универсальный инструмент для взаимодействия со
           смарт-контрактами
         </Title>

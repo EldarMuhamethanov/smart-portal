@@ -1,3 +1,4 @@
+import { appSettings } from "@/contract-interface/model/AppModel";
 import { ContractCardModel } from "@/contract-interface/model/ContractCard/ContractCardModel";
 import { Editor } from "@monaco-editor/react";
 import { Flex, Typography } from "antd";
@@ -19,6 +20,7 @@ export const ContractCodeTab: React.FC<{ contractModel: ContractCardModel }> =
           <Editor
             height="500px"
             defaultLanguage="sol"
+            theme={appSettings.darkModeOn ? "vs-dark" : "vs-light"}
             value={contractModel.code}
             options={{
               readOnly: true,
