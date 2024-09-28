@@ -39,7 +39,7 @@ export const PageHeader: React.FC = observer(() => {
             style={{ marginBottom: 0 }}
             className={styles.logoTitle}
           >
-            SmartPortal
+            Smart Portal
           </Typography.Title>
         </Flex>
         <Flex gap={20}>

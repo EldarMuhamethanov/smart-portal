@@ -22,6 +22,7 @@ import {
 import { EnvironmentType } from "@/web3/Environment";
 import { observer } from "mobx-react-lite";
 import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
+import { darkTheme, lightTheme } from "../model/Settings/themes";
 
 const ENVIRONMENTS: EnvironmentType[] = ["metamask", "hardhat"];
 
@@ -34,30 +35,14 @@ export const ContractInterface: React.FC = observer(() => {
 
   useSingleLayoutEffect(() => {
     environmentModel.initState();
+    appSettings.initState();
   });
 
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--page-background-color",
-      appSettings.darkModeOn ? "#000000" : "#ffffff"
-    );
-
-    document.documentElement.style.setProperty(
-      "--page-text-color",
-      appSettings.darkModeOn ? "#ffffffd9" : "#000000e0"
-    );
-
-    document.documentElement.style.setProperty(
-      "--page-header-color",
-      appSettings.darkModeOn ? "#000000" : "#ffffff"
-    );
-
-    document.documentElement.style.setProperty(
-      "--page-header-box-shadow",
-      appSettings.darkModeOn
-        ? "0 1px 3px rgb(255 255 255 / 22%)"
-        : "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)"
-    );
+    const themeObject = appSettings.darkModeOn ? darkTheme : lightTheme;
+    Object.entries(themeObject).forEach(([cssVariable, value]) => {
+      document.documentElement.style.setProperty(cssVariable, value);
+    });
   }, [appSettings.darkModeOn]);
 
   return (

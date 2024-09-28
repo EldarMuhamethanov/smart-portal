@@ -2,7 +2,7 @@ import { SmartContractsModel } from "./SmartContractsModel";
 import { EnvironmentModel } from "./EnvironmentModel";
 import { AccountsModel } from "./AccountsModel";
 import { ContractCardModel } from "./ContractCard/ContractCardModel";
-import { AppSettingsModel } from "./AppSettingsModel";
+import { AppSettingsModel } from "./Settings/AppSettingsModel";
 
 let contractsModelMap: Record<string, ContractCardModel> = {};
 
