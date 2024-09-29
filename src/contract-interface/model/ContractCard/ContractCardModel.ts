@@ -251,32 +251,8 @@ export class ContractCardModel {
 
       return;
     }
-    try {
-      const gasEstimate = await web3.eth.estimateGas({
-        to: this.address,
-        data: calldata,
-        from: this._selectedAccountModel.selectedAccount.address,
-      });
-      const tx = await web3.eth.sendTransaction({
-        from: this._selectedAccountModel.selectedAccount.address,
-        to: this.address,
-        data: calldata,
-        gas: this._contractGasModel.custom
-          ? this._contractGasModel.customGasValue
-          : gasEstimate,
-        value: web3.utils.toWei(
-          this._contractValueModel.value,
-          this._contractValueModel.selectedCurrency
-        ),
-      });
-      console.log("Транзакция отправлена:", tx.transactionHash);
-      const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
 
-      console.log("Транзакция подтверждена:", receipt);
-    } catch (e) {
-      console.error("Ошибка при отправке транзакции:", e);
-      return;
-    }
+    await this.lowLevelSendTransaction(calldata);
   };
 
   createCalldata(methodName: string, fields: FieldDataWithValue[]) {
@@ -318,6 +294,44 @@ export class ContractCardModel {
       return "";
     }
   }
+
+  lowLevelSendTransaction = async (calldata: string) => {
+    if (!this._selectedAccountModel.selectedAccount) {
+      console.error("need to select account");
+      return null;
+    }
+    const web3 = this._environmentModel.web3!;
+    try {
+      const gasEstimate = await web3.eth.estimateGas({
+        to: this.address,
+        data: calldata,
+        from: this._selectedAccountModel.selectedAccount.address,
+      });
+      const tx = await web3.eth.sendTransaction({
+        from: this._selectedAccountModel.selectedAccount.address,
+        to: this.address,
+        data: calldata,
+        gas: this._contractGasModel.custom
+          ? this._contractGasModel.customGasValue
+          : gasEstimate,
+        value: web3.utils.toWei(
+          this._contractValueModel.value,
+          this._contractValueModel.selectedCurrency
+        ),
+      });
+      console.log("Транзакция отправлена:", tx.transactionHash);
+      const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
+
+      console.log("Транзакция подтверждена:", receipt);
+      return {
+        receipt,
+        transactionHash: tx.transactionHash,
+      };
+    } catch (e) {
+      console.error("Ошибка при отправке транзакции:", e);
+      return;
+    }
+  };
 
   private _updateMethodResult(methodName: string, result: string) {
     this.methodToResult[methodName] = result;

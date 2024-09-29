@@ -1,6 +1,6 @@
 import { CustomMethodData } from "@/contract-interface/model/ContractCard/ContractCustomMethodsModel";
 import { Button, Card, Flex, Form, FormProps, Input, Select } from "antd";
-import { CopyOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { MethodType } from "../../../types";
 import { v4 as uuidv4 } from "uuid";
 

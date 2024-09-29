@@ -8,6 +8,7 @@ import { ContractSelectedAccountBlock } from "./blocks/ContractSelectedAccountBl
 import { ContractCardModel } from "@/contract-interface/model/ContractCard/ContractCardModel";
 import { ContractGasBlock } from "./blocks/ContractGasBlock";
 import { CustomMethodsBlock } from "./blocks/custom-methods/CustomMethodsBlock";
+import { ContractLowLevelActionBlock } from "./blocks/ContractLowLevelActionBlock";
 
 type ContractsMethodsTabProps = {
   contractModel: ContractCardModel;
@@ -66,6 +67,8 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
           onCopyCalldata={onCopyCalldata}
           onCopyParameters={onCopyParameters}
         />
+        <Divider />
+        <ContractLowLevelActionBlock contractModel={contractModel} />
         <Divider />
         {!contractModel.verified ? (
           <Typography.Paragraph>
