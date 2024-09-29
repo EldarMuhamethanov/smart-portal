@@ -9,6 +9,7 @@ export type CustomMethodData = ContractMethod & {
 
 export class ContractCustomMethodsModel {
   customMethods: CustomMethodData[] = [];
+  expanded: boolean = false;
 
   private _contractAddress: string;
 
@@ -19,10 +20,16 @@ export class ContractCustomMethodsModel {
 
   initState() {
     this.customMethods = this._getCustomMethodsFromStorage();
+    this.expanded = this._getCustomMethodsExpandedFromStorage();
   }
 
   getMethodById = (id: string) => {
     return this.customMethods.find((method) => method.id == id) || null;
+  };
+
+  setExpanded = (expanded: boolean) => {
+    this.expanded = expanded;
+    this._updateCustomMethodsExpandedInStorage();
   };
 
   addCustomMethod = (contractMethod: CustomMethodData) => {
@@ -49,6 +56,20 @@ export class ContractCustomMethodsModel {
     LocalStorage.setValue<CustomMethodData[]>(
       `contract-${this._contractAddress}-custom-methods`,
       this.customMethods
+    );
+  }
+  private _getCustomMethodsExpandedFromStorage() {
+    return (
+      LocalStorage.getValue<boolean>(
+        `contract-${this._contractAddress}-custom-methods-expanded`
+      ) || false
+    );
+  }
+
+  private _updateCustomMethodsExpandedInStorage() {
+    LocalStorage.setValue<boolean>(
+      `contract-${this._contractAddress}-custom-methods-expanded`,
+      this.expanded
     );
   }
 }

@@ -1,6 +1,9 @@
-import { ABI } from "./ABI";
+"use server";
 
-const ETHERSCAN_API_KEY = "DDZPITBAMCT4SV1CNBW91GX3TQZXSN62AQ";
+import { ABI } from "./ABI";
+import { UnknownNetwork } from "./errors";
+
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 const etherscanEndpoints: Record<number, string> = {
   1: "https://api.etherscan.io/api", // Ethereum Mainnet
@@ -19,8 +22,6 @@ const etherscanEndpoints: Record<number, string> = {
   11155111: "https://api-sepolia.etherscan.io/api", // Sepolia Testnet
 };
 
-export class UnknownNetwork extends Error {}
-
 export async function getContractCodeData(
   contractAddress: string,
   networkId: number
@@ -34,7 +35,6 @@ export async function getContractCodeData(
   try {
     const response = await fetch(url, { method: "GET" });
     const data = await response.json();
-    console.log("data", data);
     if (data.status === "1") {
       const abi = JSON.parse(data.result[0].ABI) as ABI;
       return {

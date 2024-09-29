@@ -33,7 +33,7 @@ export const PageHeader: React.FC = observer(() => {
           style={{ height: "100%", position: "relative" }}
           align="center"
         >
-          <Image src="/logo.png" height="98%" preview={false} />
+          <Image src="/logo.png" height="98%" preview={false} alt="logo" />
           <Typography.Title
             level={3}
             style={{ marginBottom: 0 }}

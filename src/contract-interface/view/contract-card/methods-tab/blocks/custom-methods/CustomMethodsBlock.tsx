@@ -13,7 +13,6 @@ export const CustomMethodsBlock: React.FC<{
   onCopyCalldata: MethodFormProps["onCopyCalldata"];
   onCopyParameters: MethodFormProps["onCopyParameters"];
 }> = observer(({ contractModel, onCopyCalldata, onCopyParameters }) => {
-  const [collapsed, setCollapsed] = useState(true);
   const [showAddMethodForm, setShowAddMethodForm] = useState(false);
 
   return (
@@ -29,12 +28,24 @@ export const CustomMethodsBlock: React.FC<{
           <Flex gap={20}>
             <Button
               shape="circle"
-              icon={collapsed ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-              onClick={() => setCollapsed((v) => !v)}
+              icon={
+                contractModel.customMethodsExpanded ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )
+              }
+              onClick={() =>
+                contractModel.setCustomMethodsExpanded(
+                  !contractModel.customMethodsExpanded
+                )
+              }
             />
           </Flex>
         }
-        className={classNames(collapsed && styles.Card__collapsed)}
+        className={classNames(
+          !contractModel.customMethodsExpanded && styles.Card__collapsed
+        )}
       >
         <Flex vertical gap={20}>
           {!showAddMethodForm && (

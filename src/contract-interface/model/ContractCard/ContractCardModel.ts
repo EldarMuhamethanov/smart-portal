@@ -5,7 +5,7 @@ import {
   MethodType,
 } from "../../view/contract-card/types";
 import { makeAutoObservable, toJS } from "mobx";
-import { UnknownNetwork, getContractCodeData } from "@/web3/getAbi";
+import { getContractCodeData } from "@/web3/getAbi";
 import { remapABItoMethodsData } from "../../view/contract-card/helpers";
 import { EnvironmentModel } from "../EnvironmentModel";
 import {
@@ -20,6 +20,7 @@ import {
   ContractCustomMethodsModel,
   CustomMethodData,
 } from "./ContractCustomMethodsModel";
+import { UnknownNetwork } from "@/web3/errors";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -83,6 +84,10 @@ export class ContractCardModel {
     return this._contractCustomMethodsModel.customMethods;
   }
 
+  get customMethodsExpanded() {
+    return this._contractCustomMethodsModel.expanded;
+  }
+
   initState = () => {
     this._selectedAccountModel.initState();
     this._contractCustomMethodsModel.initState();
@@ -111,6 +116,10 @@ export class ContractCardModel {
 
   addCustomMethod = (method: CustomMethodData) => {
     this._contractCustomMethodsModel.addCustomMethod(method);
+  };
+
+  setCustomMethodsExpanded = (expanded: boolean) => {
+    this._contractCustomMethodsModel.setExpanded(expanded);
   };
 
   removeCustomMethod = (id: string) => {
@@ -215,9 +224,6 @@ export class ContractCardModel {
     methodType: MethodType,
     fields: FieldDataWithValue[]
   ) => {
-    if (!this.abi) {
-      return;
-    }
     if (!this._selectedAccountModel.selectedAccount) {
       console.error("need to select account");
       return;

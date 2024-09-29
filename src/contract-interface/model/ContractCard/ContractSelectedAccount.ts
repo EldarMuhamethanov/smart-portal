@@ -59,7 +59,10 @@ export class ContractSelectedAccount {
   }
 
   private _subscribeToNewBlockCreated() {
-    if (!this._environmentModel.web3) {
+    if (
+      !this._environmentModel.web3 ||
+      this._environmentModel.environment === "hardhat"
+    ) {
       return;
     }
     this._updateBalanceSubscription = this._environmentModel.web3.eth.subscribe(
@@ -72,7 +75,11 @@ export class ContractSelectedAccount {
   }
 
   private _unsubscribeNewBlockCreated() {
-    if (!this._environmentModel.web3 || !this._updateBalanceSubscription) {
+    if (
+      !this._environmentModel.web3 ||
+      !this._updateBalanceSubscription ||
+      this._environmentModel.environment === "hardhat"
+    ) {
       return;
     }
     this._updateBalanceSubscription.unsubscribe();
