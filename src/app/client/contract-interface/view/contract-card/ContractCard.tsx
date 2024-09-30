@@ -18,21 +18,7 @@ import { getContractModel } from "@/app/client/contract-interface/model/AppModel
 import { addContractLoadToQueue } from "@/app/client/contract-interface/model/ContractCard/contractsLoadsQueue";
 import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 import { ContractCodeTab } from "./code-tab/ContractCodeTab";
-
-const TAB_LIST = [
-  {
-    key: "methods",
-    tab: "Методы",
-  },
-  {
-    key: "storage",
-    tab: "Storage",
-  },
-  {
-    key: "code",
-    tab: "Код",
-  },
-];
+import { useTranslationContext } from "../TranslationContext";
 
 const CardExtra: React.FC<{
   expanded: boolean;
@@ -61,6 +47,7 @@ type ContractCardProps = {
 export const ContractCard: React.FC<ContractCardProps> = observer(
   ({ address, onRemoveContract }) => {
     const cardModel = getContractModel(address);
+    const { t } = useTranslationContext();
     const [api, contextHolder] = notification.useNotification();
     const [activeTabKey, setActiveTabKey] = useState<string>("methods");
 
@@ -72,9 +59,24 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
     const onCopy = () => {
       copyToClipboard(address);
       api.info({
-        message: "Адресс контракта скопирован",
+        message: t("contract-card.address-copied"),
       });
     };
+
+    const tabList = [
+      {
+        key: "methods",
+        tab: t("contract-card.methods-tab"),
+      },
+      {
+        key: "storage",
+        tab: t("contract-card.storage-tab"),
+      },
+      {
+        key: "code",
+        tab: t("contract-card.code-tab"),
+      },
+    ];
 
     const tabContent: Record<string, ReactNode> = {
       methods: <ContractsMethodsTab contractModel={cardModel} />,
@@ -97,7 +99,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
           }
           loading={cardModel.isLoading}
           tabList={
-            cardModel.isLoading || cardModel.expanded ? TAB_LIST : undefined
+            cardModel.isLoading || cardModel.expanded ? tabList : undefined
           }
           activeTabKey={activeTabKey}
           onTabChange={setActiveTabKey}

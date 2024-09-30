@@ -5,10 +5,12 @@ import {
 import { ContractCardModel } from "@/app/client/contract-interface/model/ContractCard/ContractCardModel";
 import { Typography, Select, SelectProps, Flex } from "antd";
 import { observer } from "mobx-react-lite";
+import { useTranslationContext } from "../../../TranslationContext";
 
 export const ContractSelectedAccountBlock: React.FC<{
   contractModel: ContractCardModel;
 }> = observer(({ contractModel }) => {
+  const { t } = useTranslationContext();
   const onChangeAccount: SelectProps["onChange"] = (value) => {
     contractModel.setSelectedAccount(value);
   };
@@ -36,14 +38,14 @@ export const ContractSelectedAccountBlock: React.FC<{
     <Flex vertical>
       <Flex align="center" gap={20} style={{ maxWidth: 600 }}>
         <Typography.Title level={4} style={{ flexGrow: 1 }}>
-          Аккаунт
+          {t("contract-card.methods.account-title")}
         </Typography.Title>
         <Typography.Title level={4} style={{ marginTop: 0 }}>
           {calculateAccountBalance()} ETH
         </Typography.Title>
       </Flex>
       <Select
-        placeholder="Выберите пользователя"
+        placeholder={t("contract-card.methods.select-account")}
         onChange={onChangeAccount}
         value={contractModel.selectedAccount?.address}
         style={{ maxWidth: 600 }}

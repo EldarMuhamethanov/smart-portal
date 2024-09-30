@@ -9,6 +9,7 @@ import { ContractCardModel } from "@/app/client/contract-interface/model/Contrac
 import { ContractGasBlock } from "./blocks/ContractGasBlock";
 import { CustomMethodsBlock } from "./blocks/custom-methods/CustomMethodsBlock";
 import { ContractLowLevelActionBlock } from "./blocks/ContractLowLevelActionBlock";
+import { useTranslationContext } from "../../TranslationContext";
 
 type ContractsMethodsTabProps = {
   contractModel: ContractCardModel;
@@ -17,6 +18,7 @@ type ContractsMethodsTabProps = {
 export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
   ({ contractModel }) => {
     const [api, contextHolder] = notification.useNotification();
+    const { t } = useTranslationContext();
 
     const onCopyCalldata: MethodFormProps["onCopyCalldata"] = (
       methodName,
@@ -26,13 +28,14 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
       if (calldata) {
         copyToClipboard(calldata);
         api.info({
-          message: "Calldata скопирована в буфер обмена",
+          message: t("contract-card.methods.calldata-copied"),
         });
       } else {
         api.error({
-          message: "Calldata не скопирована",
-          description:
-            "Не все поля были заполнены или были заполнены некорректно",
+          message: t("contract-card.methods.failed-calldata-copied-title"),
+          description: t(
+            "contract-card.methods.failed-calldata-copied-description"
+          ),
         });
       }
     };
@@ -42,13 +45,14 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
       if (parameters) {
         copyToClipboard(parameters);
         api.info({
-          message: "Параметры скопированы в буфер обмена",
+          message: t("contract-card.methods.parameters-copied"),
         });
       } else {
         api.error({
-          message: "Параметры не скопированы",
-          description:
-            "Не все поля были заполнены или были заполнены некорректно",
+          message: t("contract-card.methods.failed-parameters-copied-title"),
+          description: t(
+            "contract-card.methods.failed-parameters-copied-description"
+          ),
         });
       }
     };
@@ -72,8 +76,7 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
         <Divider />
         {!contractModel.verified ? (
           <Typography.Paragraph>
-            К сожалению данный контракт не верифицирован, поэтому мы не можем
-            отобразить его методы
+            {t("contract-card.methods.not-verified")}
           </Typography.Paragraph>
         ) : (
           <Flex vertical>

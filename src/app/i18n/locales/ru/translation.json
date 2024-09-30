@@ -3,15 +3,72 @@
   "select-env-title": "Выберите окружение",
   "add-contract-button": "Добавить контракт",
   "common": {
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "calldata": "Calldata",
+    "parameters": "Параметры"
   },
   "common-form": {
-    "required-field": "Поле обязательное"
+    "required-field": "Поле обязательное",
+    "please-input-value": "Пожалуйста введите значение"
   },
   "adding-contract-card": {
     "title": "Добавление контракта",
     "contract-address": "Адрес контракта",
     "add-button": "Добавить",
     "incorrect-contract-address": "Пожалуйста, введите корректный адрес смарт-контракта"
+  },
+  "code": {
+    "not-verified": "К сожалению мы не можем отобразить исходный код смарт контракта так как данный смарт-контракт не верифицирован. Но вы можете воспользоваться конструктором создание кастомных запросов к данному смарт контракту на вкладке 'Методы'"
+  },
+  "contract-card": {
+    "address-copied": "Адресс контракта скопирован",
+    "methods-tab": "Методы",
+    "storage-tab": "Хранилище",
+    "code-tab": "Код",
+    "storage": {
+      "result-copied": "Результат скопирован",
+      "number-slot": "Номер слота",
+      "result": "Результат",
+      "get-value": "Получить значение"
+    },
+    "methods": {
+      "calldata-copied": "Calldata скопирована в буфер обмена",
+      "failed-calldata-copied-title": "Calldata не скопирована",
+      "failed-calldata-copied-description": "Не все поля были заполнены или были заполнены некорректно",
+
+      "parameters-copied": "Параметры скопированы в буфер обмена",
+      "failed-parameters-copied-title": "Параметры не скопированы",
+      "failed-parameters-copied-description": "Не все поля были заполнены или были заполнены некорректно",
+
+      "not-verified": "К сожалению данный контракт не верифицирован, поэтому мы не можем отобразить его методы",
+
+      "account-title": "Аккаунт",
+      "select-account": "Выберите пользователя",
+
+      "value-title": "Value",
+
+      "gas-title": "Газ",
+      "estimated-gas": "Estimated gas",
+      "custom-gas": "Custom",
+
+      "custom-methods": "Пользовательские методы",
+      "add-custom-method": "Добавить метод",
+      "custom-methods-placeholder": "Еще не добавлен ни один пользовательский метод. Вы можете добавить его с помощью кнопки \"Добавить метод\"",
+      "adding-custom-method": "Добавление метода",
+      "method-type": "Тип метода",
+      "method-name": "Название метода",
+      "input-values": "Входные значения",
+      "output-values": "Выходные значения",
+      "input-value-type": "Тип входного значения",
+      "output-value-type": "Тип выходного значения",
+      "add-input-value": "Добавить входное значение",
+      "add-output-value": "Добавить выходное значение",
+      "add-method-button": "Добавить",
+
+      "lowlevel-transaction": "Низкоуровневая транзакция",
+      "call-transaction": "Вызывать",
+
+      "copy-field-value": "Значение поля {{fieldName}} скопированы в буфер обмена"
+    }
   }
 }

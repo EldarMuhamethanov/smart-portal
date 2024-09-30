@@ -1,13 +1,74 @@
 {
   "site-title": "SmartPortal - your universal tool for interacting with smart contracts",
   "select-env-title": "Select environment",
+  "add-contract-button": "Add contract",
+  "common": {
+    "cancel": "Cancel",
+    "calldata": "Calldata",
+    "parameters": "Parameters"
+  },
   "common-form": {
-    "required-field": "This field is required"
+    "required-field": "This field is required",
+    "please-input-value": "Please enter a value"
   },
   "adding-contract-card": {
-    "title": "Add contract",
+    "title": "Adding a contract",
     "contract-address": "Contract address",
     "add-button": "Add",
     "incorrect-contract-address": "Please enter a valid smart contract address"
+  },
+  "code": {
+    "not-verified": "Unfortunately, we cannot display the source code of the smart contract as this smart contract is not verified. However, you can use the custom query builder for this smart contract on the 'Methods' tab"
+  },
+  "contract-card": {
+    "address-copied": "Contract address copied",
+    "methods-tab": "Methods",
+    "storage-tab": "Storage",
+    "code-tab": "Code",
+    "storage": {
+      "result-copied": "Result copied",
+      "number-slot": "Slot number",
+      "result": "Result",
+      "get-value": "Get value"
+    },
+    "methods": {
+      "calldata-copied": "Calldata copied to clipboard",
+      "failed-calldata-copied-title": "Calldata not copied",
+      "failed-calldata-copied-description": "Not all fields were filled or were filled incorrectly",
+
+      "parameters-copied": "Parameters copied to clipboard",
+      "failed-parameters-copied-title": "Parameters not copied",
+      "failed-parameters-copied-description": "Not all fields were filled or were filled incorrectly",
+
+      "not-verified": "Unfortunately, this contract is not verified, so we cannot display its methods",
+
+      "account-title": "Account",
+      "select-account": "Select user",
+
+      "value-title": "Value",
+
+      "gas-title": "Gas",
+      "estimated-gas": "Estimated gas",
+      "custom-gas": "Custom",
+
+      "custom-methods": "Custom methods",
+      "add-custom-method": "Add method",
+      "custom-methods-placeholder": "No custom methods have been added yet. You can add one using the \"Add method button\"",
+      "adding-custom-method": "Adding a method",
+      "method-type": "Method type",
+      "method-name": "Method name",
+      "input-values": "Input values",
+      "output-values": "Output values",
+      "input-value-type": "Input value type",
+      "output-value-type": "Output value type",
+      "add-input-value": "Add input value",
+      "add-output-value": "Add output value",
+      "add-method-button": "Add",
+
+      "lowlevel-transaction": "Low-level transaction",
+      "call-transaction": "Call",
+
+      "copy-field-value": "fieldName field value copied to clipboard"
+    }
   }
 }

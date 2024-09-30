@@ -1,0 +1,74 @@
+{
+  "site-title": "SmartPortal - 您与智能合约交互的通用工具",
+  "select-env-title": "选择环境",
+  "add-contract-button": "添加合约",
+  "common": {
+    "cancel": "取消",
+    "calldata": "调用数据",
+    "parameters": "参数"
+  },
+  "common-form": {
+    "required-field": "此字段为必填项",
+    "please-input-value": "请输入值"
+  },
+  "adding-contract-card": {
+    "title": "添加合约",
+    "contract-address": "合约地址",
+    "add-button": "添加",
+    "incorrect-contract-address": "请输入有效的智能合约地址"
+  },
+  "code": {
+    "not-verified": "很遗憾，我们无法显示智能合约的源代码，因为该智能合约未经验证。但是，您可以在'方法'选项卡中使用自定义查询构建器来查询该智能合约"
+  },
+  "contract-card": {
+    "address-copied": "合约地址已复制",
+    "methods-tab": "方法",
+    "storage-tab": "存储",
+    "code-tab": "代码",
+    "storage": {
+      "result-copied": "结果已复制",
+      "number-slot": "槽位号",
+      "result": "结果",
+      "get-value": "获取值"
+    },
+    "methods": {
+      "calldata-copied": "调用数据已复制到剪贴板",
+      "failed-calldata-copied-title": "调用数据未复制",
+      "failed-calldata-copied-description": "并非所有字段都已填写或填写正确",
+
+      "parameters-copied": "参数已复制到剪贴板",
+      "failed-parameters-copied-title": "参数未复制",
+      "failed-parameters-copied-description": "并非所有字段都已填写或填写正确",
+
+      "not-verified": "很遗憾，此合约未经验证，因此我们无法显示其方法",
+
+      "account-title": "账户",
+      "select-account": "选择用户",
+
+      "value-title": "值",
+
+      "gas-title": "燃料",
+      "estimated-gas": "预估燃料",
+      "custom-gas": "自定义",
+
+      "custom-methods": "自定义方法",
+      "add-custom-method": "添加方法",
+      "custom-methods-placeholder": "尚未添加自定义方法。您可以使用\"添加方法\"按钮添加一个\"",
+      "adding-custom-method": "添加方法",
+      "method-type": "方法类型",
+      "method-name": "方法名称",
+      "input-values": "输入值",
+      "output-values": "输出值",
+      "input-value-type": "输入值类型",
+      "output-value-type": "输出值类型",
+      "add-input-value": "添加输入值",
+      "add-output-value": "添加输出值",
+      "add-method-button": "添加",
+
+      "lowlevel-transaction": "低级交易",
+      "call-transaction": "调用",
+
+      "copy-field-value": "字段 {{fieldName}} 的值已复制到剪贴板"
+    }
+  }
+}

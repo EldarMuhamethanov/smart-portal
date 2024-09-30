@@ -3,6 +3,7 @@ import { Button, Card, Flex, Form, FormProps, Input, Select } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { MethodType } from "../../../types";
 import { v4 as uuidv4 } from "uuid";
+import { useTranslationContext } from "../../../../TranslationContext";
 
 const METHOD_TYPES: MethodType[] = ["pure", "view", "transaction"];
 
@@ -15,6 +16,7 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
   onCancel,
   onAddMethod,
 }) => {
+  const { t } = useTranslationContext();
   const onFinish: FormProps["onFinish"] = (values) => {
     const methodData: CustomMethodData = {
       id: uuidv4(),
@@ -37,8 +39,8 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
   return (
     <Card
       type="inner"
-      title="Добавление метода"
-      extra={<Button onClick={onCancel}>Отмена</Button>}
+      title={t("contract-card.methods.adding-custom-method")}
+      extra={<Button onClick={onCancel}>{t("common.cancel")}</Button>}
     >
       <Form
         name="adding-custom-method"
@@ -49,12 +51,12 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
         layout="vertical"
       >
         <Form.Item
-          label="Тип метода"
+          label={t("contract-card.methods.method-type")}
           name="methodType"
           rules={[
             {
               required: true,
-              message: "Поле обязательное",
+              message: t("common-form.required-field"),
             },
           ]}
         >
@@ -67,12 +69,12 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
           </Select>
         </Form.Item>
         <Form.Item
-          label="Название метода"
+          label={t("contract-card.methods.method-name")}
           name="name"
           rules={[
             {
               required: true,
-              message: "Поле обязательное",
+              message: t("common-form.required-field"),
             },
           ]}
         >
@@ -83,7 +85,9 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
             <>
               {fields.map(({ key, ...fieldProps }, index) => (
                 <Form.Item
-                  label={index === 0 ? "Входные значения" : ""}
+                  label={
+                    index === 0 ? t("contract-card.methods.input-values") : ""
+                  }
                   required={false}
                   key={key}
                   style={{ marginBottom: 12 }}
@@ -96,13 +100,15 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
                         {
                           required: true,
                           whitespace: true,
-                          message: "Пожалуйста введите значение",
+                          message: t("common-form.please-input-value"),
                         },
                       ]}
                       noStyle
                     >
                       <Input
-                        placeholder="Тип входного значения"
+                        placeholder={t(
+                          "contract-card.methods.input-value-type"
+                        )}
                         style={{ width: "60%" }}
                       />
                     </Form.Item>
@@ -121,7 +127,7 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
                   style={{ width: "60%" }}
                   icon={<PlusOutlined />}
                 >
-                  Добавить входное значение
+                  {t("contract-card.methods.add-input-value")}
                 </Button>
               </Form.Item>
             </>
@@ -133,7 +139,9 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
             <>
               {fields.map(({ key, ...fieldProps }, index) => (
                 <Form.Item
-                  label={index === 0 ? "Выходные значения" : ""}
+                  label={
+                    index === 0 ? t("contract-card.methods.output-values") : ""
+                  }
                   required={false}
                   key={key}
                   style={{ marginBottom: 12 }}
@@ -146,13 +154,15 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
                         {
                           required: true,
                           whitespace: true,
-                          message: "Пожалуйста введите значение",
+                          message: t("common-form.please-input-value"),
                         },
                       ]}
                       noStyle
                     >
                       <Input
-                        placeholder="Тип выходного значения"
+                        placeholder={t(
+                          "contract-card.methods.output-value-type"
+                        )}
                         style={{ width: "60%" }}
                       />
                     </Form.Item>
@@ -171,7 +181,7 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
                   style={{ width: "60%" }}
                   icon={<PlusOutlined />}
                 >
-                  Добавить выходное значение
+                  {t("contract-card.methods.add-output-value")}
                 </Button>
               </Form.Item>
             </>
@@ -181,7 +191,7 @@ export const AddCustomMethodForm: React.FC<AddCustomMethodFormProps> = ({
         <Flex gap={10}>
           <Form.Item wrapperCol={{ span: 16 }}>
             <Button type="primary" htmlType="submit">
-              Добавить
+              {t("contract-card.methods.add-method-button")}
             </Button>
           </Form.Item>
 

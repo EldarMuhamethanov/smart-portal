@@ -2,25 +2,33 @@ import { ContractCardModel } from "@/app/client/contract-interface/model/Contrac
 import { Flex, Typography, Radio, InputNumber } from "antd";
 import { RadioChangeEvent } from "antd/lib";
 import { observer } from "mobx-react-lite";
+import { useTranslationContext } from "../../../TranslationContext";
 
 export const ContractGasBlock: React.FC<{
   contractModel: ContractCardModel;
 }> = observer(({ contractModel }) => {
+  const { t } = useTranslationContext();
   const onChange = (e: RadioChangeEvent) => {
     contractModel.setGasIsCustom(e.target.value === "custom");
   };
 
   return (
     <Flex vertical>
-      <Typography.Title level={4}>Газ</Typography.Title>
+      <Typography.Title level={4}>
+        {t("contract-card.methods.gas-title")}
+      </Typography.Title>
       <Radio.Group
         onChange={onChange}
         value={contractModel.gasIsCustom ? "custom" : "estimated"}
       >
         <Flex vertical gap={20} style={{ maxWidth: 600 }}>
-          <Radio value="estimated">Estimated gas</Radio>
+          <Radio value="estimated">
+            {t("contract-card.methods.estimated-gas")}
+          </Radio>
           <Flex align="center" gap={40}>
-            <Radio value="custom">Custom</Radio>
+            <Radio value="custom">
+              {t("contract-card.methods.custom-gas")}
+            </Radio>
 
             <InputNumber
               readOnly={!contractModel.gasIsCustom}

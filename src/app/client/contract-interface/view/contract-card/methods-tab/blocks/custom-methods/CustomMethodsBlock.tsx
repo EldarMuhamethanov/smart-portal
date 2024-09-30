@@ -7,12 +7,14 @@ import styles from "./CustomMethodsBlock.module.css";
 import { AddCustomMethodForm } from "./AddCustomMethodForm";
 import { MethodForm, MethodFormProps } from "../../method-form/MethodForm";
 import { observer } from "mobx-react-lite";
+import { useTranslationContext } from "../../../../TranslationContext";
 
 export const CustomMethodsBlock: React.FC<{
   contractModel: ContractCardModel;
   onCopyCalldata: MethodFormProps["onCopyCalldata"];
   onCopyParameters: MethodFormProps["onCopyParameters"];
 }> = observer(({ contractModel, onCopyCalldata, onCopyParameters }) => {
+  const { t } = useTranslationContext();
   const [showAddMethodForm, setShowAddMethodForm] = useState(false);
 
   return (
@@ -21,7 +23,7 @@ export const CustomMethodsBlock: React.FC<{
         type="inner"
         title={
           <Typography.Title level={4} style={{ marginBottom: 0 }}>
-            Пользовательские методы
+            {t("contract-card.methods.custom-methods")}
           </Typography.Title>
         }
         extra={
@@ -50,7 +52,7 @@ export const CustomMethodsBlock: React.FC<{
         <Flex vertical gap={20}>
           {!showAddMethodForm && (
             <Button type="primary" onClick={() => setShowAddMethodForm(true)}>
-              Добавить метод
+              {t("contract-card.methods.add-custom-method")}
             </Button>
           )}
           {showAddMethodForm && (
@@ -64,8 +66,7 @@ export const CustomMethodsBlock: React.FC<{
           )}
           {!contractModel.customMethods.length ? (
             <Typography.Paragraph>
-              Еще не добавлен ни один пользовательский метод. Вы можете добавить
-              его с помощью кнопки &quot;Добавить метод&quot;
+              {t("contract-card.methods.custom-methods-placeholder")}
             </Typography.Paragraph>
           ) : null}
           <Flex vertical>

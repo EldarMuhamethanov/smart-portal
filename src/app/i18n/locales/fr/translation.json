@@ -1,13 +1,74 @@
 {
   "site-title": "SmartPortal - votre outil universel pour interagir avec les contrats intelligents",
   "select-env-title": "Sélectionnez l'environnement",
+  "add-contract-button": "Ajouter un contrat",
+  "common": {
+    "cancel": "Annuler",
+    "calldata": "Calldata",
+    "parameters": "Paramètres"
+  },
   "common-form": {
-    "required-field": "Ce champ est obligatoire"
+    "required-field": "Ce champ est obligatoire",
+    "please-input-value": "Veuillez saisir une valeur"
   },
   "adding-contract-card": {
-    "title": "Ajouter un contrat",
+    "title": "Ajout d'un contrat",
     "contract-address": "Adresse du contrat",
     "add-button": "Ajouter",
-    "incorrect-contract-address": "Veuillez entrer une adresse de contrat intelligent valide"
+    "incorrect-contract-address": "Veuillez saisir une adresse de contrat intelligent valide"
+  },
+  "code": {
+    "not-verified": "Malheureusement, nous ne pouvons pas afficher le code source du contrat intelligent car ce contrat intelligent n'est pas vérifié. Cependant, vous pouvez utiliser le constructeur de requêtes personnalisées pour ce contrat intelligent dans l'onglet 'Méthodes'"
+  },
+  "contract-card": {
+    "address-copied": "Adresse du contrat copiée",
+    "methods-tab": "Méthodes",
+    "storage-tab": "Stockage",
+    "code-tab": "Code",
+    "storage": {
+      "result-copied": "Résultat copié",
+      "number-slot": "Numéro de slot",
+      "result": "Résultat",
+      "get-value": "Obtenir la valeur"
+    },
+    "methods": {
+      "calldata-copied": "Données d'appel copiées dans le presse-papiers",
+      "failed-calldata-copied-title": "Données d'appel non copiées",
+      "failed-calldata-copied-description": "Tous les champs n'ont pas été remplis ou ont été mal remplis",
+
+      "parameters-copied": "Paramètres copiés dans le presse-papiers",
+      "failed-parameters-copied-title": "Paramètres non copiés",
+      "failed-parameters-copied-description": "Tous les champs n'ont pas été remplis ou ont été mal remplis",
+
+      "not-verified": "Malheureusement, ce contrat n'est pas vérifié, nous ne pouvons donc pas afficher ses méthodes",
+
+      "account-title": "Compte",
+      "select-account": "Sélectionner l'utilisateur",
+
+      "value-title": "Valeur",
+
+      "gas-title": "Gaz",
+      "estimated-gas": "Gaz estimé",
+      "custom-gas": "Personnalisé",
+
+      "custom-methods": "Méthodes personnalisées",
+      "add-custom-method": "Ajouter une méthode",
+      "custom-methods-placeholder": "Aucune méthode personnalisée n'a encore été ajoutée. Vous pouvez en ajouter une en utilisant le bouton Äjouter une méthode",
+      "adding-custom-method": "Ajout d'une méthode",
+      "method-type": "Type de méthode",
+      "method-name": "Nom de la méthode",
+      "input-values": "Valeurs d'entrée",
+      "output-values": "Valeurs de sortie",
+      "input-value-type": "Type de valeur d'entrée",
+      "output-value-type": "Type de valeur de sortie",
+      "add-input-value": "Ajouter une valeur d'entrée",
+      "add-output-value": "Ajouter une valeur de sortie",
+      "add-method-button": "Ajouter",
+
+      "lowlevel-transaction": "Transaction de bas niveau",
+      "call-transaction": "Appeler",
+
+      "copy-field-value": "Valeur du champ fieldName copiée dans le presse-papiers"
+    }
   }
 }

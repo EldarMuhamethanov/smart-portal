@@ -11,6 +11,7 @@ import { MouseEventHandler, useLayoutEffect } from "react";
 import { copyToClipboard } from "@/core/clipboard";
 import { observer } from "mobx-react-lite";
 import { ContractCardModel } from "@/app/client/contract-interface/model/ContractCard/ContractCardModel";
+import { useTranslationContext } from "../../TranslationContext";
 
 type ContractStorageTabProps = {
   contractModel: ContractCardModel;
@@ -20,6 +21,7 @@ export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
   ({ contractModel }) => {
     const [form] = Form.useForm();
     const [api, contextHolder] = notification.useNotification();
+    const { t } = useTranslationContext();
 
     const onFinish: FormProps["onFinish"] = async (values) => {
       const result = await contractModel.getDataFromStorage(values.slotNumber);
@@ -30,7 +32,7 @@ export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
       e.preventDefault();
       copyToClipboard(form.getFieldValue("result"));
       api.info({
-        message: "Результат скопирован",
+        message: t("contract-card.storage.result-copied"),
       });
     };
 
@@ -49,10 +51,17 @@ export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
           onFinish={onFinish}
           layout="vertical"
         >
-          <Form.Item label="Номер слота" name="slotNumber">
+          <Form.Item
+            label={t("contract-card.storage.number-slot")}
+            name="slotNumber"
+          >
             <InputNumber min={0} defaultValue={0} />
           </Form.Item>
-          <Form.Item label="Результат" name="result" style={{ width: "100%" }}>
+          <Form.Item
+            label={t("contract-card.storage.result")}
+            name="result"
+            style={{ width: "100%" }}
+          >
             <Input
               suffix={<Button onClick={onCopyResult} icon={<CopyOutlined />} />}
               readOnly
@@ -60,7 +69,7 @@ export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
           </Form.Item>
           <Form.Item wrapperCol={{ span: 16 }}>
             <Button type="primary" htmlType="submit">
-              Получить данные
+              {t("contract-card.storage.get-value")}
             </Button>
           </Form.Item>
         </Form>

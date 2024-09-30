@@ -4,6 +4,7 @@ import { getValueByCheckedKey } from "@/core/typings";
 import { Typography, Flex, InputNumber, InputNumberProps, Select } from "antd";
 import { SelectProps } from "antd/lib";
 import { observer } from "mobx-react-lite";
+import { useTranslationContext } from "../../../TranslationContext";
 
 const CURRENCY_TYPES: CurrencyType[] = ["wei", "gwei", "finney", "ether"];
 
@@ -19,6 +20,7 @@ const remapCurrencyTypesToLabels = (currencyType: CurrencyType): string => {
 export const ContractValueBlock: React.FC<{
   contractModel: ContractCardModel;
 }> = observer(({ contractModel }) => {
+  const { t } = useTranslationContext();
   const onValueChanged: InputNumberProps<string>["onChange"] = (value) => {
     contractModel.setValueToSend(value || "0");
   };
@@ -29,7 +31,9 @@ export const ContractValueBlock: React.FC<{
 
   return (
     <Flex vertical>
-      <Typography.Title level={4}>Value</Typography.Title>
+      <Typography.Title level={4}>
+        {t("contract-card.methods.value-title")}
+      </Typography.Title>
       <Flex gap={20} style={{ maxWidth: 600 }}>
         <InputNumber
           value={contractModel.valueToSend}

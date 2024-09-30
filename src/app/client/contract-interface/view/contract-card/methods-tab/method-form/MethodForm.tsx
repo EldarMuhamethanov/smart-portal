@@ -18,6 +18,7 @@ import { getValueByCheckedKey } from "@/core/typings";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
+import { useTranslationContext } from "../../../TranslationContext";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -72,11 +73,14 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
     const [form] = Form.useForm();
     const [isDisabled, setIsDisabled] = useState(false);
     const [api, contextHolder] = notification.useNotification();
+    const { t } = useTranslationContext();
 
     const onCopyFieldData = (fieldName: string) => {
       copyToClipboard(form.getFieldValue(fieldName));
       api.info({
-        message: `Значение поля "${fieldName}" скопированы в буфер обмена`,
+        message: t("contract-card.methods.copy-field-value", {
+          fieldName: fieldName,
+        }),
       });
     };
 
@@ -178,14 +182,14 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
                   icon={<CopyOutlined />}
                   onClick={() => onCopyCalldata(name, prepareFieldsData())}
                 >
-                  Calldata
+                  {t("common.calldata")}
                 </Button>
                 <Button
                   type="default"
                   icon={<CopyOutlined />}
                   onClick={() => onCopyParameters(prepareFieldsData())}
                 >
-                  Parameters
+                  {t("common.parameters")}
                 </Button>
               </Space>
             </Form.Item>
