@@ -1,0 +1,17 @@
+{
+  "site-title": "SmartPortal - ваш универсальный инструмент для взаимодействия со смарт-контрактами",
+  "select-env-title": "Выберите окружение",
+  "add-contract-button": "Добавить контракт",
+  "common": {
+    "cancel": "Отмена"
+  },
+  "common-form": {
+    "required-field": "Поле обязательное"
+  },
+  "adding-contract-card": {
+    "title": "Добавление контракта",
+    "contract-address": "Адрес контракта",
+    "add-button": "Добавить",
+    "incorrect-contract-address": "Пожалуйста, введите корректный адрес смарт-контракта"
+  }
+}

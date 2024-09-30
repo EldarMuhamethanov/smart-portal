@@ -1,0 +1,13 @@
+{
+  "site-title": "SmartPortal - your universal tool for interacting with smart contracts",
+  "select-env-title": "Select environment",
+  "common-form": {
+    "required-field": "This field is required"
+  },
+  "adding-contract-card": {
+    "title": "Add contract",
+    "contract-address": "Contract address",
+    "add-button": "Add",
+    "incorrect-contract-address": "Please enter a valid smart contract address"
+  }
+}

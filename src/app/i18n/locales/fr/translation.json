@@ -1,0 +1,13 @@
+{
+  "site-title": "SmartPortal - votre outil universel pour interagir avec les contrats intelligents",
+  "select-env-title": "Sélectionnez l'environnement",
+  "common-form": {
+    "required-field": "Ce champ est obligatoire"
+  },
+  "adding-contract-card": {
+    "title": "Ajouter un contrat",
+    "contract-address": "Adresse du contrat",
+    "add-button": "Ajouter",
+    "incorrect-contract-address": "Veuillez entrer une adresse de contrat intelligent valide"
+  }
+}
