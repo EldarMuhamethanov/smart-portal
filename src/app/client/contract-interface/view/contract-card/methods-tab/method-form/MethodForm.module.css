@@ -14,3 +14,11 @@
 .methodField {
   margin-bottom: 0;
 }
+
+.copyResultButton {
+  opacity: 0;
+}
+
+.resultRow:hover .copyResultButton {
+  opacity: 1;
+}

@@ -90,6 +90,9 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
                   onCall={contractModel.callMethod}
                   onCopyCalldata={onCopyCalldata}
                   onCopyParameters={onCopyParameters}
+                  onResultClear={() =>
+                    contractModel.clearMethodResult(method.name)
+                  }
                 />
                 {index < contractModel.methodsData.length - 1 && <Divider />}
               </Fragment>

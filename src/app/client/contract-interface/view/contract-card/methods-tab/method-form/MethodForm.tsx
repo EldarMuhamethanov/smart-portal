@@ -11,6 +11,7 @@ import {
   Input,
   Space,
   notification,
+  Typography,
 } from "antd";
 import { CopyOutlined, DeleteOutlined } from "@ant-design/icons";
 import { FieldData, MethodType } from "../../types";
@@ -19,9 +20,53 @@ import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
 import { useTranslationContext } from "../../../TranslationContext";
+import ReactJson from "react-json-view";
 
 type FieldDataWithValue = FieldData & {
   value: string;
+};
+
+const parseResult = (result: string) => {
+  try {
+    return JSON.parse(result);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    return result;
+  }
+};
+
+const ResultBlock: React.FC<{
+  result: string[];
+  onResultClear: () => void;
+}> = ({ result, onResultClear }) => {
+  return (
+    <Flex gap={10} vertical align="flex-start">
+      {result.map((item, index) => {
+        const parsedRes = parseResult(item);
+        return (
+          <Flex key={item} gap={10}>
+            <Typography.Text strong>{index}:</Typography.Text>
+            {typeof parsedRes === "object" ? (
+              <ReactJson src={JSON.parse(item)} />
+            ) : (
+              <Flex gap={10} className={styles.resultRow}>
+                <Typography.Text>{item}</Typography.Text>
+                <Button
+                  size="small"
+                  className={styles.copyResultButton}
+                  icon={<CopyOutlined />}
+                  onClick={() => copyToClipboard(item)}
+                ></Button>
+              </Flex>
+            )}
+          </Flex>
+        );
+      })}
+      <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>
+        Очистить
+      </Button>
+    </Flex>
+  );
 };
 
 const MethodField: React.FC<
@@ -48,7 +93,7 @@ export type MethodFormProps = {
   type: MethodType;
   name: string;
   fields: FieldData[];
-  result: string | null;
+  result: string[] | null;
   onRemove?: () => void;
   onCall: (
     methodName: string,
@@ -57,6 +102,7 @@ export type MethodFormProps = {
   ) => void;
   onCopyCalldata: (methodName: string, fields: FieldDataWithValue[]) => void;
   onCopyParameters: (fields: FieldDataWithValue[]) => void;
+  onResultClear: () => void;
 };
 
 export const MethodForm: React.FC<MethodFormProps> = observer(
@@ -69,6 +115,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
     result,
     onCopyCalldata,
     onCopyParameters,
+    onResultClear,
   }) => {
     const [form] = Form.useForm();
     const [isDisabled, setIsDisabled] = useState(false);
@@ -95,6 +142,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
         .validateFields({ validateOnly: true })
         .then(() => setIsDisabled(false))
         .catch(() => setIsDisabled(true));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form, values]);
 
     const buttonProps = useMemo<Partial<ButtonProps>>(() => {
@@ -194,7 +242,9 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
               </Space>
             </Form.Item>
           ) : null}
-          {result && <span>{result}</span>}
+          {result && (
+            <ResultBlock result={result} onResultClear={onResultClear} />
+          )}
         </Flex>
       </Form>
     );

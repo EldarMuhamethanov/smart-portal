@@ -21,6 +21,7 @@ import {
   CustomMethodData,
 } from "./ContractCustomMethodsModel";
 import { UnknownNetwork } from "@/web3/errors";
+import { remapResultObject } from "./helpers";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -32,7 +33,7 @@ export class ContractCardModel {
   methodsData: ContractMethod[] = [];
   verified: boolean = true;
   isLoading: boolean = true;
-  methodToResult: Record<string, string> = {};
+  methodToResult: Record<string, string[]> = {};
   expanded: boolean = false;
 
   private _environmentModel: EnvironmentModel;
@@ -88,6 +89,10 @@ export class ContractCardModel {
     return this._contractCustomMethodsModel.expanded;
   }
 
+  getCustomMethodResult = (methodName: string): string[] | null => {
+    return this._contractCustomMethodsModel.methodToResult[methodName] || null;
+  };
+
   initState = () => {
     this._selectedAccountModel.initState();
     this._contractCustomMethodsModel.initState();
@@ -134,6 +139,14 @@ export class ContractCardModel {
     this.expanded = expanded;
     this._updateExpandedInStorage();
   }
+
+  clearCustomMethodResult = (methodName: string) => {
+    this._contractCustomMethodsModel.clearMethodResult(methodName);
+  };
+
+  clearMethodResult = (methodName: string) => {
+    delete this.methodToResult[methodName];
+  };
 
   async loadMethods() {
     this.setIsLoading(true);
@@ -191,10 +204,9 @@ export class ContractCardModel {
         const result = await contract.methods[methodName](...argsValues).call({
           from: this._selectedAccountModel.selectedAccount.address,
         });
-        console.log("result", result);
-        if (typeof result === "string") {
-          this._updateMethodResult(methodName, result);
-        }
+        const remappedData = remapResultObject(result);
+
+        this._updateMethodResult(methodName, remappedData);
         return;
       } catch (e) {
         console.error("Failed to call method: ", e);
@@ -250,7 +262,13 @@ export class ContractCardModel {
           customMethodData.outputs,
           result
         );
-        console.log("Результат:", decodedResult);
+        console.log("decodedResult", decodedResult);
+        const remappedData = remapResultObject(decodedResult);
+        console.log("remappedData", remappedData);
+        this._contractCustomMethodsModel.setMethodResult(
+          methodName,
+          remappedData
+        );
       } catch (e) {
         console.error("Error: ", e);
       }
@@ -339,7 +357,7 @@ export class ContractCardModel {
     }
   };
 
-  private _updateMethodResult(methodName: string, result: string) {
+  private _updateMethodResult(methodName: string, result: string[]) {
     this.methodToResult[methodName] = result;
   }
 
