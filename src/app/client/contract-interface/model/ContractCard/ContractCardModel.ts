@@ -21,9 +21,9 @@ import {
   CustomMethodData,
 } from "./ContractCustomMethodsModel";
 import { UnknownNetwork } from "@/web3/errors";
-import { remapResultObject } from "./helpers";
+import { remapArgsValues, remapResultObject } from "./helpers";
 
-type FieldDataWithValue = FieldData & {
+export type FieldDataWithValue = FieldData & {
   value: string;
 };
 
@@ -34,6 +34,7 @@ export class ContractCardModel {
   verified: boolean = true;
   isLoading: boolean = true;
   methodToResult: Record<string, string[]> = {};
+  transactionToResult: Record<string, object> = {};
   expanded: boolean = false;
 
   private _environmentModel: EnvironmentModel;
@@ -93,6 +94,12 @@ export class ContractCardModel {
     return this._contractCustomMethodsModel.methodToResult[methodName] || null;
   };
 
+  getCustomTransactionResult = (methodName: string): object | null => {
+    return (
+      this._contractCustomMethodsModel.transactionToResult[methodName] || null
+    );
+  };
+
   initState = () => {
     this._selectedAccountModel.initState();
     this._contractCustomMethodsModel.initState();
@@ -144,8 +151,16 @@ export class ContractCardModel {
     this._contractCustomMethodsModel.clearMethodResult(methodName);
   };
 
+  clearCustomTransactionResult = (methodName: string) => {
+    this._contractCustomMethodsModel.clearTransactionResult(methodName);
+  };
+
   clearMethodResult = (methodName: string) => {
     delete this.methodToResult[methodName];
+  };
+
+  clearTransactionResult = (methodName: string) => {
+    delete this.transactionToResult[methodName];
   };
 
   async loadMethods() {
@@ -197,7 +212,7 @@ export class ContractCardModel {
     const web3 = this._environmentModel.web3!;
 
     const contract = new web3.eth.Contract(this.abi, this.address);
-    const argsValues = fields.map((field) => field.value);
+    const argsValues = remapArgsValues(fields);
 
     if (methodType === "pure" || methodType === "view") {
       try {
@@ -205,8 +220,9 @@ export class ContractCardModel {
           from: this._selectedAccountModel.selectedAccount.address,
         });
         const remappedData = remapResultObject(result);
-
-        this._updateMethodResult(methodName, remappedData);
+        if (remappedData.length) {
+          this._updateMethodResult(methodName, remappedData);
+        }
         return;
       } catch (e) {
         console.error("Failed to call method: ", e);
@@ -215,7 +231,7 @@ export class ContractCardModel {
     }
 
     try {
-      await contract.methods[methodName](...argsValues).send({
+      const result = await contract.methods[methodName](...argsValues).send({
         from: this._selectedAccountModel.selectedAccount.address,
         gas: this._contractGasModel.custom
           ? this._contractGasModel.customGasValue
@@ -225,6 +241,14 @@ export class ContractCardModel {
           this._contractValueModel.selectedCurrency
         ),
       });
+      const stringResult = JSON.stringify(result, (_, value) => {
+        if (typeof value === "bigint") {
+          return Number(String(value));
+        }
+        return value;
+      });
+      const parsedResult = JSON.parse(stringResult);
+      this.transactionToResult[methodName] = parsedResult;
     } catch (e) {
       console.error("Failed to call method: ", e);
       return;
@@ -262,13 +286,13 @@ export class ContractCardModel {
           customMethodData.outputs,
           result
         );
-        console.log("decodedResult", decodedResult);
         const remappedData = remapResultObject(decodedResult);
-        console.log("remappedData", remappedData);
-        this._contractCustomMethodsModel.setMethodResult(
-          methodName,
-          remappedData
-        );
+        if (remappedData.length) {
+          this._contractCustomMethodsModel.setMethodResult(
+            methodName,
+            remappedData
+          );
+        }
       } catch (e) {
         console.error("Error: ", e);
       }
@@ -276,7 +300,14 @@ export class ContractCardModel {
       return;
     }
 
-    await this.lowLevelSendTransaction(calldata);
+    const result = await this.lowLevelSendTransaction(calldata);
+    if (result) {
+      const { receipt } = result;
+      this._contractCustomMethodsModel.setTransactionResult(
+        methodName,
+        receipt
+      );
+    }
   };
 
   createCalldata(methodName: string, fields: FieldDataWithValue[]) {
@@ -299,6 +330,7 @@ export class ContractCardModel {
       return data;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
+      console.error("Error while creating calldata", e);
       return "";
     }
   }
@@ -346,14 +378,21 @@ export class ContractCardModel {
       console.log("Транзакция отправлена:", tx.transactionHash);
       const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
 
-      console.log("Транзакция подтверждена:", receipt);
+      const stringResult = JSON.stringify(receipt, (_, value) => {
+        if (typeof value === "bigint") {
+          return Number(String(value));
+        }
+        return value;
+      });
+      const parsedReceipt = JSON.parse(stringResult);
+      console.log("parsedReceipt", parsedReceipt);
       return {
-        receipt,
+        receipt: parsedReceipt,
         transactionHash: tx.transactionHash,
       };
     } catch (e) {
       console.error("Ошибка при отправке транзакции:", e);
-      return;
+      return null;
     }
   };
 

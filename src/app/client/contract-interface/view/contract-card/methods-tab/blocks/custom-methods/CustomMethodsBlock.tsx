@@ -77,6 +77,9 @@ export const CustomMethodsBlock: React.FC<{
                   name={method.name}
                   fields={method.fields}
                   result={contractModel.getCustomMethodResult(method.name)}
+                  transactionResult={contractModel.getCustomTransactionResult(
+                    method.name
+                  )}
                   onCall={(_, type, fields) =>
                     contractModel.callCustomMethod(method.id, type, fields)
                   }
@@ -85,6 +88,9 @@ export const CustomMethodsBlock: React.FC<{
                   onCopyParameters={onCopyParameters}
                   onResultClear={() =>
                     contractModel.clearCustomMethodResult(method.name)
+                  }
+                  onTransactionResultClear={() =>
+                    contractModel.clearCustomTransactionResult(method.name)
                   }
                 />
                 {index < contractModel.customMethods.length - 1 && <Divider />}

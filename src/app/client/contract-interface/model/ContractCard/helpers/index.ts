@@ -1,5 +1,7 @@
 "use client";
 
+import { FieldDataWithValue } from "../ContractCardModel";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const isArrayLike = (value: any): boolean => {
   if (typeof value === "object" && !Array.isArray(value)) {
@@ -67,4 +69,20 @@ const _prettifyObject = (obj: any): Record<string, string> => {
     res[key] = obj[key] as string;
     return res;
   }, {} as Record<string, string>);
+};
+
+export const remapArgsValues = (fields: FieldDataWithValue[]) => {
+  return fields.map((field) => {
+    const { value, type } = field;
+    if (type === "bool") {
+      return JSON.parse(value);
+    }
+    if (type.endsWith("]")) {
+      return JSON.parse(value);
+    }
+    if (type.startsWith("uint") && !type.endsWith("]")) {
+      return Number(value);
+    }
+    return value;
+  });
 };

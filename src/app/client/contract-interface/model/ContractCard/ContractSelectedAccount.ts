@@ -68,7 +68,6 @@ export class ContractSelectedAccount {
     this._updateBalanceSubscription = this._environmentModel.web3.eth.subscribe(
       "newBlockHeaders",
       () => {
-        console.log("_updateBalanceSubscription");
         this._updateSelectedAccountBalance();
       }
     );

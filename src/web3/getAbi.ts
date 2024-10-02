@@ -35,7 +35,6 @@ export async function getContractCodeData(
   try {
     const response = await fetch(url, { method: "GET" });
     const data = await response.json();
-    console.log("data", data);
     if (data.status === "1") {
       const abi = JSON.parse(data.result[0].ABI) as ABI;
       return {

@@ -10,6 +10,7 @@ export type CustomMethodData = ContractMethod & {
 export class ContractCustomMethodsModel {
   customMethods: CustomMethodData[] = [];
   methodToResult: Record<string, string[]> = {};
+  transactionToResult: Record<string, object> = {};
   expanded: boolean = false;
 
   private _contractAddress: string;
@@ -32,8 +33,16 @@ export class ContractCustomMethodsModel {
     this.methodToResult[methodName] = result;
   };
 
+  setTransactionResult = (methodName: string, result: object) => {
+    this.transactionToResult[methodName] = result;
+  };
+
   clearMethodResult = (methodName: string) => {
     delete this.methodToResult[methodName];
+  };
+
+  clearTransactionResult = (methodName: string) => {
+    delete this.transactionToResult[methodName];
   };
 
   setExpanded = (expanded: boolean) => {

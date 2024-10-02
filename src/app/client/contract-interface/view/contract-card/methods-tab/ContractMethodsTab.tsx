@@ -87,11 +87,17 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
                   name={method.name}
                   fields={method.fields}
                   result={contractModel.methodToResult[method.name]}
+                  transactionResult={
+                    contractModel.transactionToResult[method.name]
+                  }
                   onCall={contractModel.callMethod}
                   onCopyCalldata={onCopyCalldata}
                   onCopyParameters={onCopyParameters}
                   onResultClear={() =>
                     contractModel.clearMethodResult(method.name)
+                  }
+                  onTransactionResultClear={() =>
+                    contractModel.clearTransactionResult(method.name)
                   }
                 />
                 {index < contractModel.methodsData.length - 1 && <Divider />}

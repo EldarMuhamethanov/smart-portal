@@ -69,6 +69,23 @@ const ResultBlock: React.FC<{
   );
 };
 
+const TransactionResultBlock: React.FC<{
+  transactionResult: object;
+  onResultClear: () => void;
+}> = ({ transactionResult, onResultClear }) => {
+  return (
+    <Flex gap={10} vertical align="flex-start">
+      <ReactJson
+        src={transactionResult}
+        style={{ maxWidth: "100%", overflow: "auto" }}
+      />
+      <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>
+        Очистить
+      </Button>
+    </Flex>
+  );
+};
+
 const MethodField: React.FC<
   FieldData & { onCopyResult: (name: string) => void }
 > = ({ name, type, onCopyResult }) => {
@@ -94,6 +111,7 @@ export type MethodFormProps = {
   name: string;
   fields: FieldData[];
   result: string[] | null;
+  transactionResult: object | null;
   onRemove?: () => void;
   onCall: (
     methodName: string,
@@ -103,6 +121,7 @@ export type MethodFormProps = {
   onCopyCalldata: (methodName: string, fields: FieldDataWithValue[]) => void;
   onCopyParameters: (fields: FieldDataWithValue[]) => void;
   onResultClear: () => void;
+  onTransactionResultClear: () => void;
 };
 
 export const MethodForm: React.FC<MethodFormProps> = observer(
@@ -113,9 +132,11 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
     onRemove,
     onCall,
     result,
+    transactionResult,
     onCopyCalldata,
     onCopyParameters,
     onResultClear,
+    onTransactionResultClear,
   }) => {
     const [form] = Form.useForm();
     const [isDisabled, setIsDisabled] = useState(false);
@@ -223,7 +244,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
             : null}
 
           {fields.length ? (
-            <Form.Item wrapperCol={{ span: 8 }}>
+            <Form.Item wrapperCol={{ span: 8 }} className={styles.methodField}>
               <Space>
                 <Button
                   type="default"
@@ -244,6 +265,12 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
           ) : null}
           {result && (
             <ResultBlock result={result} onResultClear={onResultClear} />
+          )}
+          {transactionResult && (
+            <TransactionResultBlock
+              transactionResult={transactionResult}
+              onResultClear={onTransactionResultClear}
+            />
           )}
         </Flex>
       </Form>
