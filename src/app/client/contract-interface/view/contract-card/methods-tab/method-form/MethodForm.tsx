@@ -35,6 +35,20 @@ const parseResult = (result: string) => {
   }
 };
 
+const ErrorBlock: React.FC<{
+  error: string;
+  onErrorClear: () => void;
+}> = ({ error, onErrorClear }) => {
+  return (
+    <Flex gap={10} vertical align="flex-start">
+      <Input readOnly value={error} status="error" variant="filled" />
+      <Button size="small" icon={<DeleteOutlined />} onClick={onErrorClear}>
+        Очистить
+      </Button>
+    </Flex>
+  );
+};
+
 const ResultBlock: React.FC<{
   result: string[];
   onResultClear: () => void;
@@ -45,7 +59,9 @@ const ResultBlock: React.FC<{
         const parsedRes = parseResult(item);
         return (
           <Flex key={item} gap={10}>
-            <Typography.Text strong>{index}:</Typography.Text>
+            <Typography.Text strong style={{ flexShrink: 0 }}>
+              {index}:
+            </Typography.Text>
             {typeof parsedRes === "object" ? (
               <ReactJson src={JSON.parse(item)} />
             ) : (
@@ -112,6 +128,7 @@ export type MethodFormProps = {
   fields: FieldData[];
   result: string[] | null;
   transactionResult: object | null;
+  error: string | null;
   onRemove?: () => void;
   onCall: (
     methodName: string,
@@ -122,6 +139,7 @@ export type MethodFormProps = {
   onCopyParameters: (fields: FieldDataWithValue[]) => void;
   onResultClear: () => void;
   onTransactionResultClear: () => void;
+  onErrorClear: () => void;
 };
 
 export const MethodForm: React.FC<MethodFormProps> = observer(
@@ -131,12 +149,14 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
     fields,
     onRemove,
     onCall,
+    error,
     result,
     transactionResult,
     onCopyCalldata,
     onCopyParameters,
     onResultClear,
     onTransactionResultClear,
+    onErrorClear,
   }) => {
     const [form] = Form.useForm();
     const [isDisabled, setIsDisabled] = useState(false);
@@ -263,6 +283,7 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
               </Space>
             </Form.Item>
           ) : null}
+          {error && <ErrorBlock error={error} onErrorClear={onErrorClear} />}
           {result && (
             <ResultBlock result={result} onResultClear={onResultClear} />
           )}

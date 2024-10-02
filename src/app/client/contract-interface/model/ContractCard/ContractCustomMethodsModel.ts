@@ -11,6 +11,7 @@ export class ContractCustomMethodsModel {
   customMethods: CustomMethodData[] = [];
   methodToResult: Record<string, string[]> = {};
   transactionToResult: Record<string, object> = {};
+  methodToError: Record<string, string> = {};
   expanded: boolean = false;
 
   private _contractAddress: string;
@@ -37,12 +38,20 @@ export class ContractCustomMethodsModel {
     this.transactionToResult[methodName] = result;
   };
 
+  setMethodError = (methodName: string, error: string) => {
+    this.methodToError[methodName] = error;
+  };
+
   clearMethodResult = (methodName: string) => {
     delete this.methodToResult[methodName];
   };
 
   clearTransactionResult = (methodName: string) => {
     delete this.transactionToResult[methodName];
+  };
+
+  clearMethodError = (methodName: string) => {
+    delete this.methodToError[methodName];
   };
 
   setExpanded = (expanded: boolean) => {

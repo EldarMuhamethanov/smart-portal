@@ -35,6 +35,7 @@ export class ContractCardModel {
   isLoading: boolean = true;
   methodToResult: Record<string, string[]> = {};
   transactionToResult: Record<string, object> = {};
+  methodToError: Record<string, string> = {};
   expanded: boolean = false;
 
   private _environmentModel: EnvironmentModel;
@@ -163,6 +164,10 @@ export class ContractCardModel {
     delete this.transactionToResult[methodName];
   };
 
+  clearMethodError = (methodName: string) => {
+    delete this.methodToError[methodName];
+  };
+
   async loadMethods() {
     this.setIsLoading(true);
     if (this._environmentModel.environment === "hardhat") {
@@ -216,6 +221,8 @@ export class ContractCardModel {
 
     if (methodType === "pure" || methodType === "view") {
       try {
+        this.clearMethodResult(methodName);
+        this.clearMethodError(methodName);
         const result = await contract.methods[methodName](...argsValues).call({
           from: this._selectedAccountModel.selectedAccount.address,
         });
@@ -224,13 +231,17 @@ export class ContractCardModel {
           this._updateMethodResult(methodName, remappedData);
         }
         return;
-      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        this.methodToError[methodName] = e.message;
         console.error("Failed to call method: ", e);
         return;
       }
     }
 
     try {
+      this.clearTransactionResult(methodName);
+      this.clearMethodError(methodName);
       const result = await contract.methods[methodName](...argsValues).send({
         from: this._selectedAccountModel.selectedAccount.address,
         gas: this._contractGasModel.custom
@@ -249,8 +260,10 @@ export class ContractCardModel {
       });
       const parsedResult = JSON.parse(stringResult);
       this.transactionToResult[methodName] = parsedResult;
-    } catch (e) {
-      console.error("Failed to call method: ", e);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      this.methodToError[methodName] = e.message;
+      console.error("Failed to send transaction: ", e);
       return;
     }
   };
@@ -275,6 +288,9 @@ export class ContractCardModel {
 
     const calldata = this.createCalldata(methodName, fields);
 
+    this._contractCustomMethodsModel.clearMethodResult(methodName);
+    this._contractCustomMethodsModel.clearMethodError(methodName);
+
     if (methodType === "pure" || methodType === "view") {
       try {
         const result = await web3.eth.call({
@@ -293,7 +309,9 @@ export class ContractCardModel {
             remappedData
           );
         }
-      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        this._contractCustomMethodsModel.setMethodError(methodName, e.message);
         console.error("Error: ", e);
       }
 
@@ -301,12 +319,14 @@ export class ContractCardModel {
     }
 
     const result = await this.lowLevelSendTransaction(calldata);
-    if (result) {
+    if (result.type == "success") {
       const { receipt } = result;
       this._contractCustomMethodsModel.setTransactionResult(
         methodName,
         receipt
       );
+    } else {
+      this._contractCustomMethodsModel.setMethodError(methodName, result.error);
     }
   };
 
@@ -354,7 +374,10 @@ export class ContractCardModel {
   lowLevelSendTransaction = async (calldata: string) => {
     if (!this._selectedAccountModel.selectedAccount) {
       console.error("need to select account");
-      return null;
+      return {
+        type: "error",
+        error: "Need to select account",
+      };
     }
     const web3 = this._environmentModel.web3!;
     try {
@@ -387,12 +410,17 @@ export class ContractCardModel {
       const parsedReceipt = JSON.parse(stringResult);
       console.log("parsedReceipt", parsedReceipt);
       return {
+        type: "success",
         receipt: parsedReceipt,
         transactionHash: tx.transactionHash,
       };
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       console.error("Ошибка при отправке транзакции:", e);
-      return null;
+      return {
+        type: "error",
+        error: e.message,
+      };
     }
   };
 

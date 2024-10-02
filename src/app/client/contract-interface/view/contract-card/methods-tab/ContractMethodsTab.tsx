@@ -1,3 +1,4 @@
+"use client";
 import { Typography, Flex, Divider, notification } from "antd";
 import { MethodForm, MethodFormProps } from "./method-form/MethodForm";
 import { Fragment } from "react";
@@ -90,6 +91,7 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
                   transactionResult={
                     contractModel.transactionToResult[method.name]
                   }
+                  error={contractModel.methodToError[method.name]}
                   onCall={contractModel.callMethod}
                   onCopyCalldata={onCopyCalldata}
                   onCopyParameters={onCopyParameters}
@@ -98,6 +100,9 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
                   }
                   onTransactionResultClear={() =>
                     contractModel.clearTransactionResult(method.name)
+                  }
+                  onErrorClear={() =>
+                    contractModel.clearMethodError(method.name)
                   }
                 />
                 {index < contractModel.methodsData.length - 1 && <Divider />}
