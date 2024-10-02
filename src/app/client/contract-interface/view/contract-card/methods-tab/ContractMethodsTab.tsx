@@ -75,11 +75,18 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
         <Divider />
         <ContractLowLevelActionBlock contractModel={contractModel} />
         <Divider />
-        {!contractModel.verified ? (
+        {!contractModel.verified && !contractModel.methodsData.length && (
           <Typography.Paragraph>
             {t("contract-card.methods.not-verified")}
           </Typography.Paragraph>
-        ) : (
+        )}
+        {!contractModel.verified && !!contractModel.methodsData.length && (
+          <Typography.Text strong type="warning" style={{ marginBottom: 20 }}>
+            Методы были сгенерированы на основе ABI добавленного вручную. Будьте
+            осторожны!
+          </Typography.Text>
+        )}
+        {!!contractModel.methodsData.length && (
           <Flex vertical>
             {contractModel.methodsData.map((method, index) => (
               <Fragment key={method.name}>

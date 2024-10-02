@@ -1,10 +1,9 @@
-import { ABI } from "@/web3/ABI";
 import {
   ContractMethod,
   FieldData,
   MethodType,
 } from "../../view/contract-card/types";
-import { makeAutoObservable, toJS } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { getContractCodeData } from "@/web3/getAbi";
 import { remapABItoMethodsData } from "../../view/contract-card/helpers";
 import { EnvironmentModel } from "../EnvironmentModel";
@@ -22,6 +21,8 @@ import {
 } from "./ContractCustomMethodsModel";
 import { UnknownNetwork } from "@/web3/errors";
 import { remapArgsValues, remapResultObject } from "./helpers";
+import { ContractAbiModel } from "./ContractAbiModel";
+import { ABI } from "@/web3/ABI";
 
 export type FieldDataWithValue = FieldData & {
   value: string;
@@ -29,7 +30,6 @@ export type FieldDataWithValue = FieldData & {
 
 export class ContractCardModel {
   address: string;
-  abi: ABI | null = null;
   methodsData: ContractMethod[] = [];
   verified: boolean = true;
   isLoading: boolean = true;
@@ -44,6 +44,7 @@ export class ContractCardModel {
   private _contractGasModel: ContractGasModel;
   private _contractCodeModel: ContractCodeModel;
   private _contractCustomMethodsModel: ContractCustomMethodsModel;
+  private _contractAbiModel: ContractAbiModel;
 
   constructor(address: string, environmentModel: EnvironmentModel) {
     this.address = address;
@@ -56,7 +57,12 @@ export class ContractCardModel {
     this._contractGasModel = new ContractGasModel(address);
     this._contractCodeModel = new ContractCodeModel();
     this._contractCustomMethodsModel = new ContractCustomMethodsModel(address);
+    this._contractAbiModel = new ContractAbiModel(address);
     makeAutoObservable(this);
+  }
+
+  get abi(): ABI | null {
+    return this._contractAbiModel.abi;
   }
 
   get selectedAccount(): SelectedAccountData | null {
@@ -104,7 +110,13 @@ export class ContractCardModel {
   initState = () => {
     this._selectedAccountModel.initState();
     this._contractCustomMethodsModel.initState();
+    this._initSelectedAccount();
     this.expanded = this._getExpandedFromStorage();
+  };
+
+  setAbi = (abi: ABI) => {
+    this._contractAbiModel.setAbi(abi);
+    this._updateMethodsData();
   };
 
   setSelectedAccount = (address: string | null) => {
@@ -172,13 +184,15 @@ export class ContractCardModel {
     this.setIsLoading(true);
     if (this._environmentModel.environment === "hardhat") {
       this.verified = false;
+      this._contractAbiModel.tryToGetAbiFromStorage();
+      this._updateMethodsData();
       this.setIsLoading(false);
       return;
     }
     const networkId = await this._environmentModel.web3!.eth.net.getId();
     try {
       const result = await getContractCodeData(this.address, Number(networkId));
-      this.abi = result?.abi || null;
+      this._contractAbiModel.setAbi(result?.abi || null);
       this._contractCodeModel.setCode(result?.code || "");
     } catch (e) {
       if (e instanceof UnknownNetwork) {
@@ -186,13 +200,13 @@ export class ContractCardModel {
       }
       return;
     }
-    if (!this.abi) {
+    if (!this._contractAbiModel.abi) {
       this.verified = false;
+      this._contractAbiModel.tryToGetAbiFromStorage();
     } else {
       this.verified = true;
-      const result = remapABItoMethodsData(toJS(this.abi));
-      this.methodsData = result;
     }
+    this._updateMethodsData();
     this.setIsLoading(false);
   }
 
@@ -207,7 +221,7 @@ export class ContractCardModel {
     methodType: MethodType,
     fields: FieldDataWithValue[]
   ) => {
-    if (!this.abi) {
+    if (!this._contractAbiModel.abi) {
       return;
     }
     if (!this._selectedAccountModel.selectedAccount) {
@@ -215,14 +229,24 @@ export class ContractCardModel {
       return;
     }
     const web3 = this._environmentModel.web3!;
+    this.clearMethodResult(methodName);
+    this.clearMethodError(methodName);
 
-    const contract = new web3.eth.Contract(this.abi, this.address);
-    const argsValues = remapArgsValues(fields);
+    const contract = new web3.eth.Contract(
+      this._contractAbiModel.abi,
+      this.address
+    );
+    let argsValues;
+    try {
+      argsValues = remapArgsValues(fields);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      this.methodToError[methodName] = e.message;
+      return;
+    }
 
     if (methodType === "pure" || methodType === "view") {
       try {
-        this.clearMethodResult(methodName);
-        this.clearMethodError(methodName);
         const result = await contract.methods[methodName](...argsValues).call({
           from: this._selectedAccountModel.selectedAccount.address,
         });
@@ -240,8 +264,6 @@ export class ContractCardModel {
     }
 
     try {
-      this.clearTransactionResult(methodName);
-      this.clearMethodError(methodName);
       const result = await contract.methods[methodName](...argsValues).send({
         from: this._selectedAccountModel.selectedAccount.address,
         gas: this._contractGasModel.custom
@@ -421,6 +443,22 @@ export class ContractCardModel {
         type: "error",
         error: e.message,
       };
+    }
+  };
+
+  private _initSelectedAccount = () => {
+    if (!this._selectedAccountModel.selectedAccount) {
+      this._selectedAccountModel.setSelectedAccount(
+        this._environmentModel.accountsModel.accounts[0]
+      );
+    }
+  };
+
+  private _updateMethodsData = () => {
+    if (this._contractAbiModel.abi) {
+      this.methodsData = remapABItoMethodsData(this._contractAbiModel.abi);
+    } else {
+      this.methodsData = [];
     }
   };
 

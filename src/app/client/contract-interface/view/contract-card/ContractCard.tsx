@@ -19,6 +19,7 @@ import { addContractLoadToQueue } from "@/app/client/contract-interface/model/Co
 import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 import { ContractCodeTab } from "./code-tab/ContractCodeTab";
 import { useTranslationContext } from "../TranslationContext";
+import { ContractAbiTab } from "./abi-tab/ContractAbiTab";
 
 const CardExtra: React.FC<{
   expanded: boolean;
@@ -76,12 +77,17 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
         key: "code",
         tab: t("contract-card.code-tab"),
       },
+      {
+        key: "abi",
+        tab: "ABI",
+      },
     ];
 
     const tabContent: Record<string, ReactNode> = {
       methods: <ContractsMethodsTab contractModel={cardModel} />,
       storage: <ContractStorageTab contractModel={cardModel} />,
       code: <ContractCodeTab contractModel={cardModel} />,
+      abi: <ContractAbiTab contractModel={cardModel} />,
     };
 
     return (

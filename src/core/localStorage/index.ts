@@ -7,7 +7,8 @@ type StorageKey =
   | `contract-${string}-gas-custom`
   | `contract-${string}-gas-value`
   | `contract-${string}-custom-methods`
-  | `contract-${string}-custom-methods-expanded`;
+  | `contract-${string}-custom-methods-expanded`
+  | `contract-${string}-abi`;
 
 function setValue<T>(key: StorageKey, value: T) {
   localStorage.setItem(key, JSON.stringify(value));

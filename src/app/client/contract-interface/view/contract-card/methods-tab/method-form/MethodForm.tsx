@@ -21,6 +21,7 @@ import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
 import { useTranslationContext } from "../../../TranslationContext";
 import ReactJson from "react-json-view";
+import { appSettings } from "@/app/client/contract-interface/model/AppModel";
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -63,7 +64,10 @@ const ResultBlock: React.FC<{
               {index}:
             </Typography.Text>
             {typeof parsedRes === "object" ? (
-              <ReactJson src={JSON.parse(item)} />
+              <ReactJson
+                src={JSON.parse(item)}
+                theme={appSettings.darkModeOn ? "twilight" : undefined}
+              />
             ) : (
               <Flex gap={10} className={styles.resultRow}>
                 <Typography.Text>{item}</Typography.Text>
@@ -94,6 +98,7 @@ const TransactionResultBlock: React.FC<{
       <ReactJson
         src={transactionResult}
         style={{ maxWidth: "100%", overflow: "auto" }}
+        theme={appSettings.darkModeOn ? "twilight" : undefined}
       />
       <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>
         Очистить
