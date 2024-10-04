@@ -20,8 +20,10 @@ import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
 import { useTranslationContext } from "../../../TranslationContext";
-import ReactJson from "react-json-view";
 import { appSettings } from "@/app/client/contract-interface/model/AppModel";
+import dynamic from "next/dynamic";
+
+const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -64,7 +66,7 @@ const ResultBlock: React.FC<{
               {index}:
             </Typography.Text>
             {typeof parsedRes === "object" ? (
-              <ReactJson
+              <DynamicReactJson
                 src={JSON.parse(item)}
                 theme={appSettings.darkModeOn ? "twilight" : undefined}
               />
@@ -95,11 +97,13 @@ const TransactionResultBlock: React.FC<{
 }> = ({ transactionResult, onResultClear }) => {
   return (
     <Flex gap={10} vertical align="flex-start">
-      <ReactJson
-        src={transactionResult}
-        style={{ maxWidth: "100%", overflow: "auto" }}
-        theme={appSettings.darkModeOn ? "twilight" : undefined}
-      />
+      {false && (
+        <DynamicReactJson
+          src={transactionResult}
+          style={{ maxWidth: "100%", overflow: "auto" }}
+          theme={appSettings.darkModeOn ? "twilight" : undefined}
+        />
+      )}
       <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>
         Очистить
       </Button>

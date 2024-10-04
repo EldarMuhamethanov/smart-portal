@@ -77,6 +77,7 @@ export const CustomMethodsBlock: React.FC<{
                   name={method.name}
                   fields={method.fields}
                   result={contractModel.getCustomMethodResult(method.name)}
+                  error={contractModel.getCustomMethodError(method.name)}
                   transactionResult={contractModel.getCustomTransactionResult(
                     method.name
                   )}
@@ -91,6 +92,9 @@ export const CustomMethodsBlock: React.FC<{
                   }
                   onTransactionResultClear={() =>
                     contractModel.clearCustomTransactionResult(method.name)
+                  }
+                  onErrorClear={() =>
+                    contractModel.clearCustomMethodError(method.name)
                   }
                 />
                 {index < contractModel.customMethods.length - 1 && <Divider />}

@@ -107,6 +107,10 @@ export class ContractCardModel {
     );
   };
 
+  getCustomMethodError = (methodName: string): string | null => {
+    return this._contractCustomMethodsModel.methodToError[methodName] || null;
+  };
+
   initState = () => {
     this._selectedAccountModel.initState();
     this._contractCustomMethodsModel.initState();
@@ -166,6 +170,10 @@ export class ContractCardModel {
 
   clearCustomTransactionResult = (methodName: string) => {
     this._contractCustomMethodsModel.clearTransactionResult(methodName);
+  };
+
+  clearCustomMethodError = (methodName: string) => {
+    this._contractCustomMethodsModel.clearMethodError(methodName);
   };
 
   clearMethodResult = (methodName: string) => {
