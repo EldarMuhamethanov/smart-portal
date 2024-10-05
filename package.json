@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dc:dev:build": "docker compose -f docker-compose.dev.yml build",
+    "dc:dev:up": "docker compose -f docker-compose.dev.yml up -d",
+    "dc:dev:down": "docker compose -f docker-compose.dev.yml down",
+    "dc:dev:logs": "docker compose -f docker-compose.dev.yml logs",
+    "dc:prod:build": "docker compose -f docker-compose.prod.yml build",
+    "dc:prod:up": "docker compose -f docker-compose.prod.yml up -d",
+    "dc:prod:down": "docker compose -f docker-compose.prod.yml down",
+    "dc:prod:logs": "docker compose -f docker-compose.prod.yml logs"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",

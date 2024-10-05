@@ -190,7 +190,10 @@ export class ContractCardModel {
 
   async loadMethods() {
     this.setIsLoading(true);
-    if (this._environmentModel.environment === "hardhat") {
+    if (
+      this._environmentModel.environment === "hardhat" ||
+      this._environmentModel.environment === "foundry"
+    ) {
       this.verified = false;
       this._contractAbiModel.tryToGetAbiFromStorage();
       this._updateMethodsData();

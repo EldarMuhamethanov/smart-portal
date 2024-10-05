@@ -26,7 +26,7 @@ import { darkTheme, lightTheme } from "../model/Settings/themes";
 import { useTranslation } from "@/app/i18n/client";
 import { TranslationContext } from "./TranslationContext";
 
-const ENVIRONMENTS: EnvironmentType[] = ["metamask", "hardhat"];
+const ENVIRONMENTS: EnvironmentType[] = ["metamask", "hardhat", "foundry"];
 
 export const ContractInterface: React.FC<{ lng: string }> = observer(
   ({ lng }) => {

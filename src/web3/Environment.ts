@@ -1,1 +1,1 @@
-export type EnvironmentType = "metamask" | "hardhat";
+export type EnvironmentType = "metamask" | "hardhat" | "foundry";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { lazy, useEffect, useMemo, useState } from "react";
 import styles from "./MethodForm.module.css";
 import {
   Flex,
@@ -21,9 +21,11 @@ import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
 import { useTranslationContext } from "../../../TranslationContext";
 import { appSettings } from "@/app/client/contract-interface/model/AppModel";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
+// import ReactJson from "react-json-view";
+// const DynamicReactJson = dynamic(import("react-json-view"), { ssr: true });
 
-const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
+const LazyReactJson = lazy(() => import("react-json-view"));
 
 type FieldDataWithValue = FieldData & {
   value: string;
@@ -66,7 +68,7 @@ const ResultBlock: React.FC<{
               {index}:
             </Typography.Text>
             {typeof parsedRes === "object" ? (
-              <DynamicReactJson
+              <LazyReactJson
                 src={JSON.parse(item)}
                 theme={appSettings.darkModeOn ? "twilight" : undefined}
               />
@@ -97,13 +99,13 @@ const TransactionResultBlock: React.FC<{
 }> = ({ transactionResult, onResultClear }) => {
   return (
     <Flex gap={10} vertical align="flex-start">
-      {false && (
-        <DynamicReactJson
+      {
+        <LazyReactJson
           src={transactionResult}
           style={{ maxWidth: "100%", overflow: "auto" }}
           theme={appSettings.darkModeOn ? "twilight" : undefined}
         />
-      )}
+      }
       <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>
         Очистить
       </Button>

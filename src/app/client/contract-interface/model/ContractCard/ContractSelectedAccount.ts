@@ -61,7 +61,7 @@ export class ContractSelectedAccount {
   private _subscribeToNewBlockCreated() {
     if (
       !this._environmentModel.web3 ||
-      this._environmentModel.environment === "hardhat"
+      this._environmentModel.environment !== "metamask"
     ) {
       return;
     }
