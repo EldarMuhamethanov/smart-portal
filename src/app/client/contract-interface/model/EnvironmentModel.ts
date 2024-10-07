@@ -32,23 +32,29 @@ export class EnvironmentModel {
   }
 
   async setEnvironment(env: EnvironmentType | undefined) {
+    if (env === this.environment) {
+      return;
+    }
     this.environment = env || null;
     this.smartContracts.resetState();
-    try {
-      await this._createWeb3();
-      await this._updateAccounts();
+    await this._recreateWeb3();
+    if (this.web3) {
       this._updateLocalState();
       this._updateRPCEndpointInStorage();
       this.smartContracts.resetState();
-    } catch {
-      this.rpcEndpointError = true;
-      this.web3 = null;
     }
   }
 
   async updateRPCEndpoint(endpoint: string) {
+    if (endpoint === this.rpcEndpoint) {
+      return;
+    }
     this.rpcEndpoint = endpoint;
-    this.setEnvironment(this.environment!);
+    await this._recreateWeb3();
+    if (this.web3) {
+      this._updateRPCEndpointInStorage();
+      this.smartContracts.resetState();
+    }
   }
 
   async initState() {
@@ -60,13 +66,9 @@ export class EnvironmentModel {
     if (this.environment !== "metamask") {
       this.rpcEndpoint = this._getEndpointFromStorage();
     }
-    try {
-      await this._createWeb3();
-      await this._updateAccounts();
+    await this._recreateWeb3();
+    if (this.web3) {
       this.smartContracts.initState();
-    } catch {
-      this.rpcEndpointError = true;
-      this.web3 = null;
     }
   }
 
@@ -86,6 +88,16 @@ export class EnvironmentModel {
       Object.values(this.contractsModelsMap).forEach((model) => {
         model.setSelectedAccount(accounts[0]);
       });
+    }
+  }
+
+  private async _recreateWeb3() {
+    try {
+      await this._createWeb3();
+      await this._updateAccounts();
+    } catch {
+      this.rpcEndpointError = true;
+      this.web3 = null;
     }
   }
 
