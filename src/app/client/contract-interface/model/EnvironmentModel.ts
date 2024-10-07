@@ -7,10 +7,14 @@ import { SmartContractsModel } from "./SmartContractsModel";
 import { AccountsModel } from "./AccountsModel";
 import { ContractCardModel } from "./ContractCard/ContractCardModel";
 
+const DEFAULT_RPC_ENDPOINT = "http://localhost:8545";
+
 export class EnvironmentModel {
   smartContracts: SmartContractsModel;
   accountsModel: AccountsModel;
   environment: EnvironmentType | null;
+  rpcEndpoint: string = DEFAULT_RPC_ENDPOINT;
+  rpcEndpointError: boolean = false;
   web3: Web3 | null;
   contractsModelsMap: Record<string, ContractCardModel> = {};
 
@@ -30,9 +34,21 @@ export class EnvironmentModel {
   async setEnvironment(env: EnvironmentType | undefined) {
     this.environment = env || null;
     this.smartContracts.resetState();
-    await this._createWeb3();
-    await this._updateAccounts();
-    this._updateLocalState();
+    try {
+      await this._createWeb3();
+      await this._updateAccounts();
+      this._updateLocalState();
+      this._updateRPCEndpointInStorage();
+      this.smartContracts.resetState();
+    } catch {
+      this.rpcEndpointError = true;
+      this.web3 = null;
+    }
+  }
+
+  async updateRPCEndpoint(endpoint: string) {
+    this.rpcEndpoint = endpoint;
+    this.setEnvironment(this.environment!);
   }
 
   async initState() {
@@ -41,16 +57,24 @@ export class EnvironmentModel {
     if (!this.environment) {
       return;
     }
-    await this._createWeb3();
-    await this._updateAccounts();
-    this.smartContracts.initState();
+    if (this.environment !== "metamask") {
+      this.rpcEndpoint = this._getEndpointFromStorage();
+    }
+    try {
+      await this._createWeb3();
+      await this._updateAccounts();
+      this.smartContracts.initState();
+    } catch {
+      this.rpcEndpointError = true;
+      this.web3 = null;
+    }
   }
 
   private async _createWeb3() {
     if (this.environment === "metamask") {
       this.web3 = await connectToMetaMask();
     } else {
-      this.web3 = new Web3("http://localhost:8545");
+      this.web3 = new Web3(this.rpcEndpoint);
     }
   }
 
@@ -67,5 +91,17 @@ export class EnvironmentModel {
 
   private _updateLocalState() {
     LocalStorage.setValue("environment", this.environment);
+  }
+
+  private _updateRPCEndpointInStorage() {
+    if (this.rpcEndpoint) {
+      LocalStorage.setValue("rpc-endpoint", this.rpcEndpoint);
+    } else {
+      LocalStorage.removeValue("rpc-endpoint");
+    }
+  }
+
+  private _getEndpointFromStorage(): string {
+    return LocalStorage.getValue("rpc-endpoint") || DEFAULT_RPC_ENDPOINT;
   }
 }

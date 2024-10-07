@@ -2,6 +2,7 @@ type StorageKey =
   | "smart-contracts"
   | "environment"
   | "dark-mode-on"
+  | "rpc-endpoint"
   | `contract-${string}-selected-account`
   | `contract-${string}-expanded`
   | `contract-${string}-gas-custom`

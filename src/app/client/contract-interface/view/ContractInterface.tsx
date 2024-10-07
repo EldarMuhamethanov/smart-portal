@@ -25,6 +25,7 @@ import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 import { darkTheme, lightTheme } from "../model/Settings/themes";
 import { useTranslation } from "@/app/i18n/client";
 import { TranslationContext } from "./TranslationContext";
+import { RpcEndpointBlock } from "./RpcEndpointBlock";
 
 const ENVIRONMENTS: EnvironmentType[] = ["metamask", "hardhat", "foundry"];
 
@@ -76,8 +77,11 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
                 ))}
               </Select>
             </Flex>
+            {environmentModel.environment !== "metamask" && (
+              <RpcEndpointBlock />
+            )}
 
-            {environmentModel.environment && (
+            {environmentModel.environment && !!environmentModel.web3 && (
               <>
                 {!showAddingContractForm && (
                   <Button
@@ -85,6 +89,10 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
                     onClick={() => setShowAddingContractForm(true)}
                     icon={<PlusOutlined />}
                     iconPosition="end"
+                    size="large"
+                    style={{
+                      alignSelf: "flex-start",
+                    }}
                   >
                     {translation.t("add-contract-button")}
                   </Button>
