@@ -46,6 +46,8 @@ export class EnvironmentModel {
   }
 
   async updateRPCEndpoint(endpoint: string) {
+    console.log("endpoint", endpoint);
+    console.log("this.rpcEndpoint", this.rpcEndpoint);
     if (endpoint === this.rpcEndpoint) {
       return;
     }
@@ -95,6 +97,7 @@ export class EnvironmentModel {
     try {
       await this._createWeb3();
       await this._updateAccounts();
+      this.rpcEndpointError = false;
     } catch {
       this.rpcEndpointError = true;
       this.web3 = null;
