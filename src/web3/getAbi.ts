@@ -1,6 +1,6 @@
 "use server";
 
-import { ABI } from "./ABI";
+import { ABI } from "./abi/ABI";
 import { UnknownNetwork } from "./errors";
 
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
@@ -43,8 +43,7 @@ export async function getContractCodeData(
       };
     }
     return null;
-  } catch (error) {
-    console.log("Error: ", error);
+  } catch {
     return null;
   }
 }

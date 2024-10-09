@@ -225,10 +225,6 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
       onCall(name, type, prepareFieldsData());
     };
 
-    const onSendFailed: FormProps["onFinishFailed"] = (errorInfo) => {
-      console.log("onSendFailed", errorInfo);
-    };
-
     return (
       <Form
         name={`method_${name}`}
@@ -237,7 +233,6 @@ export const MethodForm: React.FC<MethodFormProps> = observer(
         wrapperCol={{ span: 24 }}
         style={{ maxWidth: 600 }}
         onFinish={onSend}
-        onFinishFailed={onSendFailed}
         layout="vertical"
       >
         {contextHolder}

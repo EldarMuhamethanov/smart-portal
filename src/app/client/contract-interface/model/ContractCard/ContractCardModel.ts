@@ -22,7 +22,7 @@ import {
 import { UnknownNetwork } from "@/web3/errors";
 import { remapArgsValues, remapResultObject } from "./helpers";
 import { ContractAbiModel } from "./ContractAbiModel";
-import { ABI } from "@/web3/ABI";
+import { ABI } from "@/web3/abi/ABI";
 
 export type FieldDataWithValue = FieldData & {
   value: string;
@@ -345,7 +345,6 @@ export class ContractCardModel {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         this._contractCustomMethodsModel.setMethodError(methodName, e.message);
-        console.error("Error: ", e);
       }
 
       return;
@@ -381,9 +380,7 @@ export class ContractCardModel {
 
       const data = methodSignature + params.slice(2);
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      console.error("Error while creating calldata", e);
+    } catch {
       return "";
     }
   }
@@ -431,7 +428,6 @@ export class ContractCardModel {
           this._contractValueModel.selectedCurrency
         ),
       });
-      console.log("Транзакция отправлена:", tx.transactionHash);
       const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
 
       const stringResult = JSON.stringify(receipt, (_, value) => {
@@ -441,7 +437,6 @@ export class ContractCardModel {
         return value;
       });
       const parsedReceipt = JSON.parse(stringResult);
-      console.log("parsedReceipt", parsedReceipt);
       return {
         type: "success",
         receipt: parsedReceipt,

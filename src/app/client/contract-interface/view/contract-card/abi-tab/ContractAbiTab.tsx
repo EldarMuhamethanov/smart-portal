@@ -4,8 +4,8 @@ import { Button, Flex, Input, Typography } from "antd";
 import { Editor } from "@monaco-editor/react";
 import { appSettings } from "../../../model/AppModel";
 import { useEffect, useState } from "react";
-import { isValidContractABI } from "../../../model/ContractCard/helpers/validateAbi";
-import { ABI } from "@/web3/ABI";
+import { isValidContractABI } from "../../../../../../web3/abi/validateAbi";
+import { ABI } from "@/web3/abi/ABI";
 
 const NotVerifiedContractAbiContent: React.FC<{
   contractModel: ContractCardModel;

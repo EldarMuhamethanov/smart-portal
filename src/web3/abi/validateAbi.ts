@@ -3,9 +3,7 @@ export function isValidContractABI(abiStr: string): boolean {
   let abi: any;
   try {
     abi = JSON.parse(abiStr);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    console.log("e", e);
+  } catch {
     return false;
   }
 

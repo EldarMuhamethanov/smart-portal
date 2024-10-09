@@ -8,6 +8,7 @@ import {
   ConfigProvider,
   theme,
   Typography,
+  Input,
 } from "antd";
 import styles from "./ContractInterface.module.css";
 import { useEffect, useState } from "react";
@@ -50,6 +51,12 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
       });
     }, [appSettings.darkModeOn]);
 
+    const showAddContractButton =
+      environmentModel.environment &&
+      !!environmentModel.web3 &&
+      !environmentModel.rpcEndpointError &&
+      !environmentModel.chainIdError;
+
     return (
       <TranslationContext.Provider value={translation}>
         <ConfigProvider
@@ -59,7 +66,7 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
               : theme.defaultAlgorithm,
           }}
         >
-          <Flex vertical className={styles.container} gap={20}>
+          <Flex vertical className={styles.container} gap={15}>
             <Flex vertical>
               <Typography.Title level={4}>
                 {translation.t("select-env-title")}
@@ -77,11 +84,28 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
                 ))}
               </Select>
             </Flex>
+            {environmentModel.environment === "metamask" &&
+              !environmentModel.web3 && (
+                <Button
+                  type="primary"
+                  onClick={environmentModel.tryToConnectMetamask}
+                  style={{ alignSelf: "flex-start" }}
+                >
+                  Подключиться к Metamask
+                </Button>
+              )}
+            {environmentModel.chainIdError && (
+              <Input
+                value={"Неподдерживаемая сеть, Пожалуйста выберете другую"}
+                variant="filled"
+                status="error"
+              />
+            )}
             {environmentModel.environment !== "metamask" && (
               <RpcEndpointBlock />
             )}
 
-            {environmentModel.environment && !!environmentModel.web3 && (
+            {showAddContractButton && (
               <>
                 {!showAddingContractForm && (
                   <Button

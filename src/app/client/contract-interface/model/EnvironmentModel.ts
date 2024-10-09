@@ -9,12 +9,17 @@ import { ContractCardModel } from "./ContractCard/ContractCardModel";
 
 const DEFAULT_RPC_ENDPOINT = "http://localhost:8545";
 
+const etherscanEndpoints: Array<number> = [
+  1, 3, 4, 5, 10, 42, 56, 97, 137, 80001, 42161, 421613, 43114, 11155111,
+];
+
 export class EnvironmentModel {
   smartContracts: SmartContractsModel;
   accountsModel: AccountsModel;
   environment: EnvironmentType | null;
   rpcEndpoint: string = DEFAULT_RPC_ENDPOINT;
   rpcEndpointError: boolean = false;
+  chainIdError: boolean = false;
   web3: Web3 | null;
   contractsModelsMap: Record<string, ContractCardModel> = {};
 
@@ -37,13 +42,26 @@ export class EnvironmentModel {
     }
     this.environment = env || null;
     this.smartContracts.resetState();
+    this.rpcEndpoint =
+      this.rpcEndpoint ||
+      this._getEndpointFromStorage() ||
+      DEFAULT_RPC_ENDPOINT;
+    this.rpcEndpointError = false;
     await this._recreateWeb3();
     if (this.web3) {
       this._updateLocalState();
       this._updateRPCEndpointInStorage();
-      this.smartContracts.resetState();
     }
   }
+
+  tryToConnectMetamask = async () => {
+    this.environment = "metamask";
+    this.smartContracts.resetState();
+    await this._recreateWeb3();
+    if (this.web3) {
+      this._updateLocalState();
+    }
+  };
 
   async updateRPCEndpoint(endpoint: string) {
     if (endpoint === this.rpcEndpoint) {
@@ -69,6 +87,7 @@ export class EnvironmentModel {
       this._updateRPCEndpointInStorage();
     }
     await this._recreateWeb3();
+    await this._initChain();
     if (this.web3) {
       this.smartContracts.initState();
     } else {
@@ -78,11 +97,26 @@ export class EnvironmentModel {
 
   private async _createWeb3() {
     if (this.environment === "metamask") {
-      this.web3 = await connectToMetaMask();
+      this.web3 = await connectToMetaMask({
+        onChainChanged: this._onChangeChain,
+        onDisconnectValet: this._onDisconnectValet,
+        onDisconnectMetamask: this._onDisconnectValet,
+      });
     } else {
       this.web3 = new Web3(this.rpcEndpoint);
     }
   }
+
+  private _initChain = async () => {
+    if (!this.web3 || this.environment !== "metamask") {
+      return;
+    }
+    const networkId = await this.web3.eth.net.getId();
+
+    this.chainIdError = !etherscanEndpoints.includes(
+      Number(networkId.toString())
+    );
+  };
 
   private async _updateAccounts() {
     if (this.web3) {
@@ -92,6 +126,8 @@ export class EnvironmentModel {
       Object.values(this.contractsModelsMap).forEach((model) => {
         model.setSelectedAccount(accounts[0]);
       });
+    } else {
+      this.accountsModel.updateAccounts([]);
     }
   }
 
@@ -105,6 +141,17 @@ export class EnvironmentModel {
       this.web3 = null;
     }
   }
+
+  private _onChangeChain = () => {
+    this.smartContracts.resetState();
+    this._initChain();
+  };
+
+  private _onDisconnectValet = () => {
+    this.web3 = null;
+    this._updateAccounts();
+    this.smartContracts.resetState();
+  };
 
   private _updateLocalState() {
     LocalStorage.setValue("environment", this.environment);

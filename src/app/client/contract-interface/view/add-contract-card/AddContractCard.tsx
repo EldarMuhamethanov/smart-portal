@@ -15,10 +15,6 @@ export const AddContractCard: React.FC<AddContractCardProps> = ({
     onSubmit(values.address);
   };
 
-  const onFinisFailed: FormProps["onFinishFailed"] = (errorInfo) => {
-    console.log("errorInfo", errorInfo);
-  };
-
   const ethereumAddressValidator = (_: unknown, value: string) => {
     const ethereumAddressRegex = /^0x[a-fA-F0-9]{40}$/;
     if (!value || ethereumAddressRegex.test(value)) {
@@ -35,7 +31,6 @@ export const AddContractCard: React.FC<AddContractCardProps> = ({
       <Form
         name="adding-contract"
         onFinish={onFinish}
-        onFinishFailed={onFinisFailed}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         layout="vertical"
