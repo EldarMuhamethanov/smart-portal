@@ -46,8 +46,6 @@ export class EnvironmentModel {
   }
 
   async updateRPCEndpoint(endpoint: string) {
-    console.log("endpoint", endpoint);
-    console.log("this.rpcEndpoint", this.rpcEndpoint);
     if (endpoint === this.rpcEndpoint) {
       return;
     }
@@ -60,17 +58,21 @@ export class EnvironmentModel {
   }
 
   async initState() {
-    this.environment =
-      LocalStorage.getValue<EnvironmentType>("environment") || null;
+    this.environment = this._getEnvFromStorage();
     if (!this.environment) {
       return;
     }
     if (this.environment !== "metamask") {
       this.rpcEndpoint = this._getEndpointFromStorage();
+    } else {
+      this.rpcEndpoint = "";
+      this._updateRPCEndpointInStorage();
     }
     await this._recreateWeb3();
     if (this.web3) {
       this.smartContracts.initState();
+    } else {
+      this.smartContracts.resetState();
     }
   }
 
@@ -106,6 +108,10 @@ export class EnvironmentModel {
 
   private _updateLocalState() {
     LocalStorage.setValue("environment", this.environment);
+  }
+
+  private _getEnvFromStorage() {
+    return LocalStorage.getValue<EnvironmentType>("environment") || null;
   }
 
   private _updateRPCEndpointInStorage() {
