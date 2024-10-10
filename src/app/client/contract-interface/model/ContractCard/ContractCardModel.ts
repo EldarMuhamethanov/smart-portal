@@ -6,7 +6,7 @@ import {
 import { makeAutoObservable } from "mobx";
 import { getContractCodeData } from "@/web3/getAbi";
 import { remapABItoMethodsData } from "../../view/contract-card/helpers";
-import { EnvironmentModel } from "../EnvironmentModel";
+import { EnvironmentModel } from "../env/EnvironmentModel";
 import {
   ContractSelectedAccount,
   SelectedAccountData,

@@ -1,6 +1,6 @@
 import { LocalStorage } from "@/core/localStorage";
 import { makeAutoObservable } from "mobx";
-import { EnvironmentModel } from "../EnvironmentModel";
+import { EnvironmentModel } from "../env/EnvironmentModel";
 
 export type SelectedAccountData = {
   address: string;

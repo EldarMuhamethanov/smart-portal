@@ -1,5 +1,5 @@
 import { SmartContractsModel } from "./SmartContractsModel";
-import { EnvironmentModel } from "./EnvironmentModel";
+import { EnvironmentModel } from "./env/EnvironmentModel";
 import { AccountsModel } from "./AccountsModel";
 import { ContractCardModel } from "./ContractCard/ContractCardModel";
 import { AppSettingsModel } from "./Settings/AppSettingsModel";

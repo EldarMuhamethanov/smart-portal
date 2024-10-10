@@ -51,12 +51,7 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
       });
     }, [appSettings.darkModeOn]);
 
-    const showAddContractButton =
-      environmentModel.environment &&
-      !!environmentModel.web3 &&
-      !environmentModel.rpcEndpointError &&
-      !environmentModel.chainIdError;
-
+    const showAddContractButton = !!environmentModel.web3;
     return (
       <TranslationContext.Provider value={translation}>
         <ConfigProvider
@@ -84,7 +79,8 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
                 ))}
               </Select>
             </Flex>
-            {environmentModel.environment === "metamask" &&
+            {environmentModel.environment &&
+              environmentModel.environment === "metamask" &&
               !environmentModel.web3 && (
                 <Button
                   type="primary"
@@ -101,9 +97,10 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
                 status="error"
               />
             )}
-            {environmentModel.environment !== "metamask" && (
-              <RpcEndpointBlock />
-            )}
+            {environmentModel.environment &&
+              environmentModel.environment !== "metamask" && (
+                <RpcEndpointBlock />
+              )}
 
             {showAddContractButton && (
               <>
