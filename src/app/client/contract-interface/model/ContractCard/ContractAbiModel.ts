@@ -1,5 +1,5 @@
 import { LocalStorage } from "@/core/localStorage";
-import { ABI } from "@/web3/ABI";
+import { ABI } from "@/web3/abi/ABI";
 import { makeAutoObservable } from "mobx";
 
 export class ContractAbiModel {

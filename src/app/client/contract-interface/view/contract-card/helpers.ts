@@ -1,4 +1,4 @@
-import { ABI } from "@/web3/ABI";
+import { ABI } from "@/web3/abi/ABI";
 import { ContractMethod, FieldData, MethodType } from "./types";
 
 export const remapABItoMethodsData = (abi: ABI): ContractMethod[] => {
