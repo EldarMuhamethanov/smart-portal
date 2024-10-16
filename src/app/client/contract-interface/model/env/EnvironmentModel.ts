@@ -74,7 +74,7 @@ export class EnvironmentModel {
       return;
     }
     this._privateImplModel = this._createModel();
-    this._privateImplModel?.initState();
+    await this._privateImplModel?.initState();
 
     if (this._privateImplModel?.web3) {
       this._smartContracts.initState();
