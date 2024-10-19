@@ -1,5 +1,7 @@
 "use client";
 
+import Web3 from "web3";
+import { FieldData } from "../../../view/contract-card/types";
 import { FieldDataWithValue } from "../ContractCardModel";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -85,4 +87,63 @@ export const remapArgsValues = (fields: FieldDataWithValue[]) => {
     }
     return value;
   });
+};
+
+const _remapMethodDataToSignature = (
+  methodName: string,
+  fields: FieldData[]
+) => {
+  return `${methodName}(${fields.map((field) => field.type)})`;
+};
+
+export const createParameters = (web3: Web3, fields: FieldDataWithValue[]) => {
+  if (fields.some((field) => !field.value)) {
+    return "";
+  }
+  try {
+    const params = web3.eth.abi.encodeParameters(
+      fields.map((field) => field.type),
+      fields.map((field) => field.value)
+    );
+    return params || "";
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    return "";
+  }
+};
+
+export const createCalldata = (
+  web3: Web3,
+  methodName: string,
+  fields: FieldDataWithValue[]
+) => {
+  if (fields.some((field) => !field.value)) {
+    return "";
+  }
+
+  try {
+    const methodSignature = web3.eth.abi.encodeFunctionSignature(
+      _remapMethodDataToSignature(methodName, fields)
+    );
+
+    const params = createParameters(web3, fields);
+    if (!methodSignature || !params) {
+      return "";
+    }
+
+    const data = methodSignature + params.slice(2);
+    return data;
+  } catch {
+    return "";
+  }
+};
+
+export const objectWithoutBigNumber = (obj: object): object => {
+  const stringResult = JSON.stringify(obj, (_, value) => {
+    if (typeof value === "bigint") {
+      return Number(String(value));
+    }
+    return value;
+  });
+  return JSON.parse(stringResult);
 };

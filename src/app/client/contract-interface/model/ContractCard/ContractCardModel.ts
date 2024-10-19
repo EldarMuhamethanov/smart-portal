@@ -20,9 +20,17 @@ import {
   CustomMethodData,
 } from "./ContractCustomMethodsModel";
 import { UnknownNetwork } from "@/web3/errors";
-import { remapArgsValues, remapResultObject } from "./helpers";
+import {
+  createCalldata,
+  createParameters,
+  objectWithoutBigNumber,
+  remapArgsValues,
+  remapResultObject,
+} from "./helpers";
 import { ContractAbiModel } from "./ContractAbiModel";
 import { ABI } from "@/web3/abi/ABI";
+import { ContractEventsModel } from "./ContractEventsModel";
+import { Bytes } from "web3";
 
 export type FieldDataWithValue = FieldData & {
   value: string;
@@ -45,6 +53,7 @@ export class ContractCardModel {
   private _contractCodeModel: ContractCodeModel;
   private _contractCustomMethodsModel: ContractCustomMethodsModel;
   private _contractAbiModel: ContractAbiModel;
+  private _contractEventsModel: ContractEventsModel;
 
   constructor(address: string, environmentModel: EnvironmentModel) {
     this.address = address;
@@ -58,6 +67,11 @@ export class ContractCardModel {
     this._contractCodeModel = new ContractCodeModel();
     this._contractCustomMethodsModel = new ContractCustomMethodsModel(address);
     this._contractAbiModel = new ContractAbiModel(address);
+    this._contractEventsModel = new ContractEventsModel(
+      address,
+      this._contractAbiModel,
+      this._environmentModel
+    );
     makeAutoObservable(this);
   }
 
@@ -95,6 +109,10 @@ export class ContractCardModel {
 
   get customMethodsExpanded() {
     return this._contractCustomMethodsModel.expanded;
+  }
+
+  get eventsLoading() {
+    return this._contractEventsModel.eventsLoading;
   }
 
   getCustomMethodResult = (methodName: string): string[] | null => {
@@ -188,6 +206,10 @@ export class ContractCardModel {
     delete this.methodToError[methodName];
   };
 
+  async loadEvents() {
+    this._contractEventsModel.loadEvents();
+  }
+
   async loadMethods() {
     this.setIsLoading(true);
     if (
@@ -242,6 +264,7 @@ export class ContractCardModel {
     const web3 = this._environmentModel.web3!;
     this.clearMethodResult(methodName);
     this.clearMethodError(methodName);
+    this.clearTransactionResult(methodName);
 
     const contract = new web3.eth.Contract(
       this._contractAbiModel.abi,
@@ -285,13 +308,7 @@ export class ContractCardModel {
           this._contractValueModel.selectedCurrency
         ),
       });
-      const stringResult = JSON.stringify(result, (_, value) => {
-        if (typeof value === "bigint") {
-          return Number(String(value));
-        }
-        return value;
-      });
-      const parsedResult = JSON.parse(stringResult);
+      const parsedResult = objectWithoutBigNumber(result);
       this.transactionToResult[methodName] = parsedResult;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
@@ -323,6 +340,7 @@ export class ContractCardModel {
 
     this._contractCustomMethodsModel.clearMethodResult(methodName);
     this._contractCustomMethodsModel.clearMethodError(methodName);
+    this._contractCustomMethodsModel.clearTransactionResult(methodName);
 
     if (methodType === "pure" || methodType === "view") {
       try {
@@ -352,10 +370,9 @@ export class ContractCardModel {
 
     const result = await this.lowLevelSendTransaction(calldata);
     if (result.type == "success") {
-      const { receipt } = result;
       this._contractCustomMethodsModel.setTransactionResult(
         methodName,
-        receipt
+        result.receipt
       );
     } else {
       this._contractCustomMethodsModel.setMethodError(methodName, result.error);
@@ -363,47 +380,20 @@ export class ContractCardModel {
   };
 
   createCalldata(methodName: string, fields: FieldDataWithValue[]) {
-    if (fields.some((field) => !field.value)) {
-      return "";
-    }
-
-    try {
-      const methodSignature =
-        this._environmentModel.web3?.eth.abi.encodeFunctionSignature(
-          this._remapMethodDataToSignature(methodName, fields)
-        );
-
-      const params = this.createParameters(fields);
-      if (!methodSignature || !params) {
-        return "";
-      }
-
-      const data = methodSignature + params.slice(2);
-      return data;
-    } catch {
-      return "";
-    }
+    return createCalldata(this._environmentModel.web3!, methodName, fields);
   }
 
   createParameters(fields: FieldDataWithValue[]) {
-    if (fields.some((field) => !field.value)) {
-      return "";
-    }
-    try {
-      const params = this._environmentModel.web3?.eth.abi.encodeParameters(
-        fields.map((field) => field.type),
-        fields.map((field) => field.value)
-      );
-      return params || "";
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      return "";
-    }
+    return createParameters(this._environmentModel.web3!, fields);
   }
 
-  lowLevelSendTransaction = async (calldata: string) => {
+  lowLevelSendTransaction = async (
+    calldata: string
+  ): Promise<
+    | { type: "error"; error: string }
+    | { type: "success"; receipt: object; transactionHash: Bytes }
+  > => {
     if (!this._selectedAccountModel.selectedAccount) {
-      console.error("need to select account");
       return {
         type: "error",
         error: "Need to select account",
@@ -429,14 +419,7 @@ export class ContractCardModel {
         ),
       });
       const receipt = await web3.eth.getTransactionReceipt(tx.transactionHash);
-
-      const stringResult = JSON.stringify(receipt, (_, value) => {
-        if (typeof value === "bigint") {
-          return Number(String(value));
-        }
-        return value;
-      });
-      const parsedReceipt = JSON.parse(stringResult);
+      const parsedReceipt = objectWithoutBigNumber(receipt);
       return {
         type: "success",
         receipt: parsedReceipt,
@@ -482,11 +465,4 @@ export class ContractCardModel {
       false
     );
   }
-
-  private _remapMethodDataToSignature = (
-    methodName: string,
-    fields: FieldData[]
-  ) => {
-    return `${methodName}(${fields.map((field) => field.type)})`;
-  };
 }

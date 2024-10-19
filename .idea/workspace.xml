@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41c68909-a88e-45a4-be1f-64b679e3a011" name="Changes" comment="" />
+    <list default="true" id="41c68909-a88e-45a4-be1f-64b679e3a011" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/client/contract-interface/model/ContractCard/ContractCardModel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/client/contract-interface/model/ContractCard/ContractCardModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/client/contract-interface/view/contract-card/ContractCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/client/contract-interface/view/contract-card/ContractCard.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,6 +50,7 @@
       <updated>1727969906755</updated>
       <workItem from="1727969909539" duration="515000" />
       <workItem from="1728028905176" duration="7000" />
+      <workItem from="1729109954450" duration="611000" />
     </task>
     <servers />
   </component>

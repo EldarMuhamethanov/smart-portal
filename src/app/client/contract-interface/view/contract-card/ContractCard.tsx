@@ -20,6 +20,7 @@ import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
 import { ContractCodeTab } from "./code-tab/ContractCodeTab";
 import { useTranslationContext } from "../TranslationContext";
 import { ContractAbiTab } from "./abi-tab/ContractAbiTab";
+import { ContractEventsTab } from "./events-tab/ContractEventsTab";
 
 const CardExtra: React.FC<{
   expanded: boolean;
@@ -81,6 +82,10 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
         key: "abi",
         tab: "ABI",
       },
+      {
+        key: "events",
+        tabs: "События",
+      },
     ];
 
     const tabContent: Record<string, ReactNode> = {
@@ -88,6 +93,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
       storage: <ContractStorageTab contractModel={cardModel} />,
       code: <ContractCodeTab contractModel={cardModel} />,
       abi: <ContractAbiTab contractModel={cardModel} />,
+      events: <ContractEventsTab contractModel={cardModel} />,
     };
 
     return (
