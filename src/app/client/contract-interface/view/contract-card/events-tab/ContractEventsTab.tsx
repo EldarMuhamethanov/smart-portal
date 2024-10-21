@@ -1,17 +1,63 @@
 import { observer } from "mobx-react-lite";
 import { ContractCardModel } from "../../../model/ContractCard/ContractCardModel";
-import { Flex } from "antd";
-import { useEffect } from "react";
+import { Spin, Flex, Card, Typography } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { lazy } from "react";
+import { appSettings } from "../../../model/AppModel";
+import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
+
+const LazyReactJson = lazy(() => import("react-json-view"));
 
 export const ContractEventsTab: React.FC<{ contractModel: ContractCardModel }> =
   observer(({ contractModel }) => {
-    useEffect(() => {
+    useSingleLayoutEffect(() => {
       contractModel.loadEvents();
-    }, [contractModel]);
+    });
 
     return (
-      <Flex>
-        <div></div>
+      <Flex vertical gap={20}>
+        {!contractModel.abi && (
+          <Typography.Paragraph>
+            Данный контракт неверифицирован, поэтому мы не можем отобразить
+            события
+          </Typography.Paragraph>
+        )}
+        {contractModel.eventsLoading && (
+          <Spin indicator={<LoadingOutlined spin />} />
+        )}
+        {!contractModel.eventsLoading && (
+          <>
+            {!contractModel.events.length && (
+              <Typography.Paragraph>
+                У данного контракта не было вызвано ни одного события
+              </Typography.Paragraph>
+            )}
+            {contractModel.events.map((event, index) => (
+              <Card
+                title={
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    {event.name}
+                  </Typography.Title>
+                }
+                key={`${event.name}_${index}`}
+                type="inner"
+              >
+                <LazyReactJson
+                  src={event.values}
+                  style={{ maxWidth: "100%", overflow: "auto" }}
+                  theme={appSettings.darkModeOn ? "twilight" : undefined}
+                />
+                <Typography.Title level={5}>Полная информация</Typography.Title>
+                <LazyReactJson
+                  src={event.fullData}
+                  style={{ maxWidth: "100%", overflow: "auto" }}
+                  theme={appSettings.darkModeOn ? "twilight" : undefined}
+                  collapsed
+                />
+              </Card>
+            ))}
+          </>
+        )}
       </Flex>
     );
   });

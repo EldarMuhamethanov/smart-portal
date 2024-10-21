@@ -1,9 +1,20 @@
 import { makeAutoObservable } from "mobx";
 import { ContractAbiModel } from "./ContractAbiModel";
 import { EnvironmentModel } from "../env/EnvironmentModel";
+import { parseEventData } from "./helpers";
+import { optionalArray } from "@/core/array";
+
+export type EventData = {
+  name: string;
+  values: object;
+  fullData: object;
+};
+
+const STEP = 1000;
 
 export class ContractEventsModel {
-  eventsLoading: boolean = false;
+  events: EventData[] = [];
+  eventsLoading: boolean = true;
 
   private _contractAddress: string;
   private _abiModel: ContractAbiModel;
@@ -19,7 +30,7 @@ export class ContractEventsModel {
     makeAutoObservable(this);
   }
 
-  loadEvents() {
+  loadEvents = async () => {
     if (!this._envModel.web3 || !this._abiModel.abi) {
       return;
     }
@@ -29,19 +40,15 @@ export class ContractEventsModel {
       this._contractAddress
     );
 
-    contract.getPastEvents(
-      "allEvents",
-      {
-        fromBlock: 0,
-        toBlock: "latest",
-      },
-      (error, events) => {
-        if (error) {
-          console.error("Error:", error);
-        } else {
-          console.log("Past events:", events);
-        }
-      }
-    );
-  }
+    try {
+      const latest = await this._envModel.web3.eth.getBlockNumber();
+
+      const events = await contract.getPastEvents("allEvents", {
+        fromBlock: Math.max(Number(latest) - STEP, 0),
+        toBlock: latest,
+      });
+      this.events = optionalArray(events.map(parseEventData)).toReversed();
+      this.eventsLoading = false;
+    } catch {}
+  };
 }

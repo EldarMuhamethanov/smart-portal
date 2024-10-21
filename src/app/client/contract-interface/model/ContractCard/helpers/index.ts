@@ -1,8 +1,9 @@
 "use client";
 
-import Web3 from "web3";
+import Web3, { EventLog } from "web3";
 import { FieldData } from "../../../view/contract-card/types";
 import { FieldDataWithValue } from "../ContractCardModel";
+import { EventData } from "../ContractEventsModel";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const isArrayLike = (value: any): boolean => {
@@ -146,4 +147,15 @@ export const objectWithoutBigNumber = (obj: object): object => {
     return value;
   });
   return JSON.parse(stringResult);
+};
+
+export const parseEventData = (event: EventLog | string): EventData | null => {
+  if (typeof event === "string") {
+    return null;
+  }
+  return {
+    name: event.event,
+    values: _remapObject(event.returnValues),
+    fullData: objectWithoutBigNumber(event),
+  };
 };

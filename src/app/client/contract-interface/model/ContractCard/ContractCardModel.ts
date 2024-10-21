@@ -115,6 +115,10 @@ export class ContractCardModel {
     return this._contractEventsModel.eventsLoading;
   }
 
+  get events() {
+    return this._contractEventsModel.events;
+  }
+
   getCustomMethodResult = (methodName: string): string[] | null => {
     return this._contractCustomMethodsModel.methodToResult[methodName] || null;
   };

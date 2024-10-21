@@ -29,6 +29,8 @@ export function isValidContractABI(abiStr: string): boolean {
         return isValidConstructor(item);
       case "event":
         return isValidEvent(item);
+      case "error":
+        return isValidError(item);
       case "fallback":
       case "receive":
         return isValidFallbackOrReceive(item);
@@ -81,6 +83,17 @@ function isValidEvent(event: any) {
     (input: any) =>
       isValidParameter(input) && typeof input.indexed === "boolean"
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isValidError(error: any) {
+  if (!error.name || typeof error.name !== "string") {
+    return false;
+  }
+  if (!Array.isArray(error.inputs)) {
+    return false;
+  }
+  return error.inputs.every(isValidParameter);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

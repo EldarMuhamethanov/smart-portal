@@ -23,6 +23,10 @@ export const EnvironmentBlock: React.FC = observer(() => {
           onChange={onEnvChange}
           value={environmentModel.environment}
           allowClear
+          style={{
+            maxWidth: "100%",
+            width: 600,
+          }}
         >
           {ENVIRONMENTS.map((environment) => (
             <Select.Option key={environment} value={environment}>

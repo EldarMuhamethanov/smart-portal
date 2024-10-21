@@ -84,7 +84,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
       },
       {
         key: "events",
-        tabs: "События",
+        tab: "События",
       },
     ];
 

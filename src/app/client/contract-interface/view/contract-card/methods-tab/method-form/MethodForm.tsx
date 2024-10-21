@@ -21,9 +21,6 @@ import { observer } from "mobx-react-lite";
 import { copyToClipboard } from "@/core/clipboard";
 import { useTranslationContext } from "../../../TranslationContext";
 import { appSettings } from "@/app/client/contract-interface/model/AppModel";
-// import dynamic from "next/dynamic";
-// import ReactJson from "react-json-view";
-// const DynamicReactJson = dynamic(import("react-json-view"), { ssr: true });
 
 const LazyReactJson = lazy(() => import("react-json-view"));
 
@@ -46,7 +43,13 @@ const ErrorBlock: React.FC<{
 }> = ({ error, onErrorClear }) => {
   return (
     <Flex gap={10} vertical align="flex-start">
-      <Input readOnly value={error} status="error" variant="filled" />
+      <Input.TextArea
+        readOnly
+        value={error}
+        status="error"
+        variant="filled"
+        autoSize={{ minRows: 1, maxRows: 4 }}
+      />
       <Button size="small" icon={<DeleteOutlined />} onClick={onErrorClear}>
         Очистить
       </Button>
@@ -71,6 +74,7 @@ const ResultBlock: React.FC<{
               <LazyReactJson
                 src={JSON.parse(item)}
                 theme={appSettings.darkModeOn ? "twilight" : undefined}
+                collapsed
               />
             ) : (
               <Flex gap={10} className={styles.resultRow}>
@@ -104,6 +108,7 @@ const TransactionResultBlock: React.FC<{
           src={transactionResult}
           style={{ maxWidth: "100%", overflow: "auto" }}
           theme={appSettings.darkModeOn ? "twilight" : undefined}
+          collapsed
         />
       }
       <Button size="small" icon={<DeleteOutlined />} onClick={onResultClear}>

@@ -89,8 +89,8 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
           }}
         >
           <Flex vertical className={styles.container} gap={15}>
-            <AddContractBlock />
             <EnvironmentBlock />
+            <AddContractBlock />
             <ContractsList />
           </Flex>
         </ConfigProvider>
