@@ -80,7 +80,7 @@ export const remapArgsValues = (fields: FieldDataWithValue[]) => {
     if (type === "bool") {
       return JSON.parse(value);
     }
-    if (type.endsWith("]")) {
+    if (type.endsWith("]") || type === "tuple") {
       return JSON.parse(value);
     }
     if (type.startsWith("uint") && !type.endsWith("]")) {
