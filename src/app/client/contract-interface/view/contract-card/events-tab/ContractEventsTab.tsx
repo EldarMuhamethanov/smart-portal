@@ -5,6 +5,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { lazy } from "react";
 import { appSettings } from "../../../model/AppModel";
 import { useSingleLayoutEffect } from "@/core/hooks/useSingleLayoutEffect";
+import { EventsFilterBlock } from "./EventsFilterBlock";
 
 const LazyReactJson = lazy(() => import("react-json-view"));
 
@@ -16,6 +17,7 @@ export const ContractEventsTab: React.FC<{ contractModel: ContractCardModel }> =
 
     return (
       <Flex vertical gap={20}>
+        <EventsFilterBlock contractModel={contractModel} />
         {!contractModel.abi && (
           <Typography.Paragraph>
             Данный контракт неверифицирован, поэтому мы не можем отобразить

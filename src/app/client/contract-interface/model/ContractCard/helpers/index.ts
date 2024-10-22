@@ -38,13 +38,15 @@ const _remapComplexObject = (obj: any): any => {
   if (Array.isArray(obj)) {
     return _remapArrayObject(obj);
   }
+  if (typeof obj === "bigint") {
+    return Number(String(obj));
+  }
   if (
     typeof obj === "string" ||
     typeof obj === "number" ||
-    typeof obj === "bigint" ||
     typeof obj === "boolean"
   ) {
-    return obj.toString();
+    return obj;
   }
   return _remapObject(obj);
 };

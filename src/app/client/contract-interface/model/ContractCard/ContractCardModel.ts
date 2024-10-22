@@ -29,7 +29,7 @@ import {
 } from "./helpers";
 import { ContractAbiModel } from "./ContractAbiModel";
 import { ABI } from "@/web3/abi/ABI";
-import { ContractEventsModel } from "./ContractEventsModel";
+import { ContractEventsModel, FilterData } from "./ContractEventsModel";
 import { Bytes } from "web3";
 
 export type FieldDataWithValue = FieldData & {
@@ -117,6 +117,10 @@ export class ContractCardModel {
 
   get events() {
     return this._contractEventsModel.events;
+  }
+
+  get eventsFilter() {
+    return this._contractEventsModel.filterData;
   }
 
   getCustomMethodResult = (methodName: string): string[] | null => {
@@ -208,6 +212,11 @@ export class ContractCardModel {
 
   clearMethodError = (methodName: string) => {
     delete this.methodToError[methodName];
+  };
+
+  setFilterData = (filterData: FilterData | null) => {
+    console.log("filterData", filterData);
+    this._contractEventsModel.setFilterData(filterData);
   };
 
   async loadEvents() {
