@@ -16,8 +16,16 @@ export const ContractEventsTab: React.FC<{ contractModel: ContractCardModel }> =
     });
 
     return (
-      <Flex vertical gap={20}>
-        <EventsFilterBlock contractModel={contractModel} />
+      <Flex
+        vertical
+        gap={20}
+        style={{
+          background: "inherit",
+        }}
+      >
+        {contractModel.abi && (
+          <EventsFilterBlock contractModel={contractModel} />
+        )}
         {!contractModel.abi && (
           <Typography.Paragraph>
             Данный контракт неверифицирован, поэтому мы не можем отобразить

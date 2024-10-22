@@ -215,7 +215,6 @@ export class ContractCardModel {
   };
 
   setFilterData = (filterData: FilterData | null) => {
-    console.log("filterData", filterData);
     this._contractEventsModel.setFilterData(filterData);
   };
 

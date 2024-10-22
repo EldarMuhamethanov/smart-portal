@@ -171,7 +171,18 @@ export const EventsFilterBlock: React.FC<{ contractModel: ContractCardModel }> =
     };
 
     return (
-      <Flex vertical align="flex-start" gap={20}>
+      <Flex
+        vertical
+        align="flex-start"
+        gap={20}
+        style={{
+          top: -50,
+          position: "sticky",
+          zIndex: 2,
+          background: "inherit",
+          paddingBlock: 10,
+        }}
+      >
         <Flex gap={20}>
           <Select
             placeholder={"Выберите название события"}

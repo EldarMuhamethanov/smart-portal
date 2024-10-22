@@ -67,7 +67,10 @@ export class ContractEventsModel {
 
       this.events = optionalArray(events.map(parseEventData)).toReversed();
       this.eventsLoading = false;
-    } catch {}
+    } catch {
+      this.eventsLoading = false;
+      this.events = [];
+    }
   };
 
   private _getEventsByFilter = (

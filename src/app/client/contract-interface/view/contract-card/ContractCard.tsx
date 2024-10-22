@@ -116,6 +116,7 @@ export const ContractCard: React.FC<ContractCardProps> = observer(
           activeTabKey={activeTabKey}
           onTabChange={setActiveTabKey}
           className={classNames(
+            styles.Card,
             !cardModel.isLoading &&
               !cardModel.expanded &&
               styles.Card__collapsed
