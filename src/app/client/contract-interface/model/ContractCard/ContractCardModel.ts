@@ -315,6 +315,7 @@ export class ContractCardModel {
         gas: this._contractGasModel.custom
           ? this._contractGasModel.customGasValue
           : undefined,
+        // @ts-expect-error: unknown value
         value: web3.utils.toWei(
           this._contractValueModel.value,
           this._contractValueModel.selectedCurrency
