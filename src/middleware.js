@@ -20,7 +20,8 @@ export function middleware(req) {
   // Redirect if lng in path is not supported
   if (
     req.nextUrl.pathname.startsWith("/sitemap") ||
-    req.nextUrl.pathname.startsWith("/robots.txt")
+    req.nextUrl.pathname.startsWith("/robots.txt") ||
+    req.nextUrl.pathname.startsWith("/yandex")
   ) {
     return NextResponse.next();
   }
