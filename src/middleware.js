@@ -19,6 +19,12 @@ export function middleware(req) {
   if (!lng) lng = fallbackLng;
   // Redirect if lng in path is not supported
   if (
+    req.nextUrl.pathname.startsWith("/sitemap") ||
+    req.nextUrl.pathname.startsWith("/robots.txt")
+  ) {
+    return NextResponse.next();
+  }
+  if (
     !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith("/_next")
   ) {

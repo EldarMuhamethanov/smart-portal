@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://smart-portal.xyz
+
+# Sitemaps
+Sitemap: https://smart-portal.xyz/sitemap.xml

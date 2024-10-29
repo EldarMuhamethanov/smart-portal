@@ -13,7 +13,7 @@ export const RpcEndpointBlock: React.FC = observer(() => {
 
   useEffect(() => {
     form.setFieldValue("endpoint", environmentModel.rpcEndpoint);
-  }, [environmentModel.rpcEndpoint]);
+  }, [form, environmentModel.rpcEndpoint]);
 
   useEffect(() => {
     setShowUpdateButton(values?.endpoint !== environmentModel.rpcEndpoint);
@@ -30,11 +30,11 @@ export const RpcEndpointBlock: React.FC = observer(() => {
         },
       ]);
     }
-  }, [form, environmentModel.rpcEndpointError]);
+  }, [form]);
 
   useEffect(() => {
     setIsDisabled((prev) => prev || environmentModel.rpcEndpointError);
-  }, [environmentModel.rpcEndpointError]);
+  }, []);
 
   useEffect(() => {
     form

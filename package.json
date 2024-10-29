@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "dc:dev:build": "docker compose -f docker-compose.dev.yml build",
@@ -28,6 +29,7 @@
     "mobx": "^6.13.2",
     "mobx-react-lite": "^4.0.7",
     "next": "latest",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-cookie": "^7.2.0",
     "react-dom": "^18",

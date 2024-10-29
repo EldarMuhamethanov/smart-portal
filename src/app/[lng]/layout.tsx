@@ -38,6 +38,7 @@ export default function RootLayout({
           name="google-site-verification"
           content="2QkqNsABacNJY0X28EMkilBJt_K4y25FWUT85d3DQ28"
         />
+        <meta name="yandex-verification" content="ec70ba14fbff8c7c" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
