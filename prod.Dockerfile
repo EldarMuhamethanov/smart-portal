@@ -24,7 +24,6 @@ ENV ETHERSCAN_API_KEY=${ETHERSCAN_API_KEY}
 
 # Build Next.js based on the preferred package manager
 RUN yarn build
-RUN yarn postbuild
 
 # Start Next.js based on the preferred package manager
 CMD yarn start
