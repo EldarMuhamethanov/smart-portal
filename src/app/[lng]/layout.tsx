@@ -4,6 +4,9 @@ import "./globals.css";
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
 
+const keywords =
+  "smart contracts, ethereum, blockchain, web3, dapp, decentralized application, smart contract interaction, ethereum network, blockchain platform, cryptocurrency, ETH, smart portal, smart contract deployment, blockchain technology, ethereum wallet, web3 integration, smart contract development, blockchain interface, decentralized finance, DeFi, ethereum transactions, gas fees, metamask, ethereum blockchain, smart contract security, blockchain explorer, ethereum smart contracts, crypto wallet, blockchain platform, digital assets, cryptocurrency exchange, blockchain development, smart contract audit, ethereum mining, blockchain solutions, crypto payments, blockchain infrastructure, smart contract platform, ethereum ecosystem, blockchain technology, decentralized network, crypto trading, blockchain security, smart contract tools, ethereum development, blockchain applications, crypto investment, smart contract management, blockchain protocol, ethereum mining, digital currency, cryptocurrency wallet, blockchain consulting";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -18,6 +21,13 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Smart Portal",
   description: "Smart portal - your portal to the smart contracts world",
+  viewport: "width=device-width, initial-scale=1.0",
+  authors: {
+    url: "https://github.com/EldarMuhamethanov",
+    name: "EldarMuhamethanov",
+  },
+  robots: "index, follow",
+  keywords,
 };
 
 export async function generateStaticParams() {
