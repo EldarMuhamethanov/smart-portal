@@ -21,7 +21,6 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Smart Portal",
   description: "Smart portal - your portal to the smart contracts world",
-  viewport: "width=device-width, initial-scale=1.0",
   authors: {
     url: "https://github.com/EldarMuhamethanov",
     name: "EldarMuhamethanov",
