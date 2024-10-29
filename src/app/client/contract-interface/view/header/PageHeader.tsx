@@ -9,7 +9,7 @@ import {
   Image,
   Typography,
 } from "antd";
-import { MoonFilled, MoonOutlined } from "@ant-design/icons";
+import { MoonFilled, MoonOutlined, GithubOutlined } from "@ant-design/icons";
 import { observer } from "mobx-react-lite";
 import { appSettings } from "@/app/client/contract-interface/model/AppModel";
 import styles from "./PageHeader.module.css";
@@ -58,6 +58,16 @@ export const PageHeader: React.FC<{ lng: string }> = observer(({ lng }) => {
               </Select.Option>
             ))}
           </Select>
+          <Button
+            icon={<GithubOutlined />}
+            size="large"
+            onClick={() =>
+              window.open(
+                "https://github.com/EldarMuhamethanov/smart-portal",
+                "_blank"
+              )
+            }
+          />
           <Button
             icon={appSettings.darkModeOn ? <MoonFilled /> : <MoonOutlined />}
             size="large"
