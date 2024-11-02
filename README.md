@@ -1,5 +1,11 @@
 Smart-portal - an application for interacting with smart contracts on the ethereum network. To work with the application, you need a metamask wallet for network interactions. Alternatively, you can use a locally running hardhat or foundry network.
 
+## Application Launch Preparation
+
+You need to create a copy of the `.env.local.example` file named `.env.dev.local` for local launch
+or `.env.production.local` for production build. In the created file, you need to insert
+the key from [etherscan](https://etherscan.io) into `ETHERSCAN_API_KEY`
+
 ## Local Application Launch
 
 For development, it's sufficient to run the command
