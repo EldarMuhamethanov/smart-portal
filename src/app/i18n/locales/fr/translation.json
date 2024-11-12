@@ -27,9 +27,14 @@
     "code-tab": "Code",
     "storage": {
       "result-copied": "Résultat copié",
-      "number-slot": "Numéro de slot",
+      "number-slot": "Numéro du slot",
       "result": "Résultat",
-      "get-value": "Obtenir la valeur"
+      "get-value": "Obtenir la valeur",
+      "number-input": "Slot numérique",
+      "hash-input": "Hash du slot",
+      "slot-required": "Veuillez spécifier le slot",
+      "invalid-hash": "Le hash doit commencer par 0x",
+      "invalid-number": "Doit être un nombre non négatif"
     },
     "methods": {
       "calldata-copied": "Calldata copié dans le presse-papiers",

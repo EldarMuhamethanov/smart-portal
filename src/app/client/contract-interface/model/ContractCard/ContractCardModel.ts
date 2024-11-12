@@ -255,9 +255,17 @@ export class ContractCardModel {
     this.setIsLoading(false);
   }
 
-  getDataFromStorage = async (slotNumber: number) => {
+  getDataFromStorage = async (slotNumber: string | number) => {
     const web3 = this._environmentModel.web3!;
-    const result = await web3.eth.getStorageAt(this.address, slotNumber);
+    let slot: string | number = slotNumber;
+    
+    // Если передана строка и она похожа на хе�� (начинается с 0x), используем её напрямую
+    // Иначе конвертируем в число
+    if (typeof slotNumber === 'string' && !slotNumber.startsWith('0x')) {
+      slot = Number(slotNumber);
+    }
+    
+    const result = await web3.eth.getStorageAt(this.address, slot);
     return result;
   };
 

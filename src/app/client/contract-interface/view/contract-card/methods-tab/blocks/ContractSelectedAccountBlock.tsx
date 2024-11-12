@@ -18,8 +18,8 @@ export const ContractSelectedAccountBlock: React.FC<{
   };
 
   const calculateAccountBalance = () => {
-    if (typeof contractModel.selectedAccount?.balance === "string") {
-      const balanceInEth = environmentModel.web3!.utils.fromWei(
+    if (typeof contractModel.selectedAccount?.balance === "string" && environmentModel.web3) {
+      const balanceInEth = environmentModel.web3.utils.fromWei(
         contractModel.selectedAccount.balance,
         "ether"
       );

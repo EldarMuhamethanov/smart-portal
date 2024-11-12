@@ -57,6 +57,7 @@ export class MetamaskEnvironmentModel implements IEvnModel {
   resetState = () => {
     this.web3 = null;
     this.chainIdError = false;
+    this._smartContracts.resetState();
   };
 
   private async _recreateWeb3() {

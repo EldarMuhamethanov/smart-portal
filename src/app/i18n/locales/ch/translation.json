@@ -29,7 +29,12 @@
       "result-copied": "结果已复制",
       "number-slot": "槽位号",
       "result": "结果",
-      "get-value": "获取值"
+      "get-value": "获取值",
+      "number-input": "数字槽位",
+      "hash-input": "槽位哈希",
+      "slot-required": "请指定槽位",
+      "invalid-hash": "哈希必须以0x开头",
+      "invalid-number": "必须是非负数"
     },
     "methods": {
       "calldata-copied": "调用数据已复制到剪贴板",

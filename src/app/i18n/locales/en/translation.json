@@ -29,7 +29,12 @@
       "result-copied": "Result copied",
       "number-slot": "Slot number",
       "result": "Result",
-      "get-value": "Get value"
+      "get-value": "Get value",
+      "number-input": "Numeric slot",
+      "hash-input": "Slot hash",
+      "slot-required": "Please specify the slot",
+      "invalid-hash": "Hash must start with 0x",
+      "invalid-number": "Must be a non-negative number"
     },
     "methods": {
       "calldata-copied": "Calldata copied to clipboard",

@@ -67,6 +67,7 @@ export class LocalEnvironmentModel implements IEvnModel {
     this.web3 = null;
     this.rpcEndpointError = false;
     this.rpcEndpoint = "";
+    this._smartContracts.resetState();
     this._updateRPCEndpointInStorage();
   };
 

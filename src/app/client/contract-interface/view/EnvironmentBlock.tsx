@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Input, Select, SelectProps, Typography } from "antd";
+import { Button, Flex, Input, Select, SelectProps, Typography } from "antd";
 import { observer } from "mobx-react-lite";
 import { environmentModel } from "../model/AppModel";
 import { RpcEndpointBlock } from "./RpcEndpointBlock";
