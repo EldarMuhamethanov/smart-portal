@@ -1,0 +1,29 @@
+.modal :global(.ant-modal-content) {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal :global(.ant-steps-item-description) {
+  margin-left: 24px;
+}
+
+.modal :global(.ant-typography) {
+  margin-bottom: 16px;
+}
+
+.modal :global(.ant-divider) {
+  margin: 12px 0;
+}
+
+.modal :global(ul) {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.modal :global(li) {
+  margin-bottom: 8px;
+}
+
+.modal :global(strong) {
+  color: var(--ant-primary-color);
+} 

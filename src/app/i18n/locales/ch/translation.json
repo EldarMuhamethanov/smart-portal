@@ -59,7 +59,7 @@
       "method-name": "方法名称",
       "input-values": "输入值",
       "output-values": "输出值",
-      "input-value-type": "输入值类型",
+      "input-value-type": "���入值类型",
       "output-value-type": "输出值类型",
       "add-input-value": "添加输入值",
       "add-output-value": "添加输出值",
@@ -69,6 +69,57 @@
       "call-transaction": "调用",
 
       "copy-field-value": "字段 {{fieldName}} 的值已复制到剪贴板"
+    }
+  },
+  "documentation": {
+    "title": "如何使用应用程序",
+    "step1": {
+      "title": "选择环境",
+      "description": "要开始使用，您需要选择一个环境。以下选项可用：",
+      "metamask": {
+        "title": "Metamask",
+        "description": "要使用公共网络（以太坊、Polygon等），请选择Metamask。确保您的浏览器中已安装Metamask扩展程序并且您已登录账户。"
+      },
+      "local": {
+        "title": "本地网络 (Hardhat/Foundry)",
+        "description": "要使用本地网络，您首先需要启动所选框架的本地节点：",
+        "hardhat": "使用命令 npx hardhat node 启动节点",
+        "foundry": "使用命令 anvil 启动节点",
+        "rpc_description": "启动节点后，在输入字段中指定相应的JSON RPC URL。本地节点的标准URL："
+      }
+    },
+    "step2": {
+      "title": "添加智能合约",
+      "description": "点击\"添加合约\"按钮，并在所选网络中输入智能合约地址"
+    },
+    "step3": {
+      "title": "与合约交互",
+      "description": "添加合约后，以下标签页将可用：",
+      "tabs": {
+        "methods": {
+          "title": "方法",
+          "description": "用于与智能合约函数交互的标签页。",
+          "verification": "如果合约在网络中已验证，合约方法将自动可用。如果合约未验证，您可以在ABI标签页中手动添加ABI。",
+          "constructor": "每个方法都有一个方便的构造器，带有参数输入字段。填写参数后，您可以调用该方法或获取calldata以供后续使用。",
+          "custom_methods": "如果您知道方法签名但没有完整的ABI，您可以使用方法构造器创建自定义方法。这将允许您与未验证的合约进行交互。"
+        },
+        "storage": {
+          "title": "存储",
+          "description": "允许直接从合约存储槽读取数据。输入槽号（从0到2^256-1）并点击按钮获取存储在该槽中的值。"
+        },
+        "code": {
+          "title": "代码",
+          "description": "显示智能合约源代码。仅适用于在网络中已验证的合约（源代码已发布并确认）。"
+        },
+        "abi": {
+          "title": "ABI",
+          "description": "允许查看和编辑合约ABI。如果合约未验证但您有其ABI，您可以在此处添加它。添加ABI后，所有合约方法将在方法标签页中可用。"
+        },
+        "events": {
+          "title": "事件",
+          "description": "显示合约事件历史。您可以按事件类型和索引参数值过滤事件，这使您能够快速在合约历史中找到所需的事件。"
+        }
+      }
     }
   }
 }

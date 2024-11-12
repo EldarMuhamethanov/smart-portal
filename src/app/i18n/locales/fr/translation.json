@@ -70,5 +70,56 @@
 
       "copy-field-value": "Valeur du champ fieldName copiée dans le presse-papiers"
     }
+  },
+  "documentation": {
+    "title": "Comment utiliser l'application",
+    "step1": {
+      "title": "Sélectionnez l'environnement",
+      "description": "Pour commencer, vous devez sélectionner un environnement. Les options suivantes sont disponibles :",
+      "metamask": {
+        "title": "Metamask",
+        "description": "Pour travailler avec les réseaux publics (Ethereum, Polygon, etc.), sélectionnez Metamask. Assurez-vous que l'extension Metamask est installée dans votre navigateur et que vous êtes connecté à votre compte."
+      },
+      "local": {
+        "title": "Réseaux locaux (Hardhat/Foundry)",
+        "description": "Pour travailler avec un réseau local, vous devez d'abord démarrer un nœud local du framework sélectionné :",
+        "hardhat": "Démarrez le nœud avec la commande npx hardhat node",
+        "foundry": "Démarrez le nœud avec la commande anvil",
+        "rpc_description": "Après avoir démarré le nœud, spécifiez l'URL JSON RPC correspondante dans le champ de saisie. URLs standard pour les nœuds locaux :"
+      }
+    },
+    "step2": {
+      "title": "Ajoutez un smart contract",
+      "description": "Cliquez sur le bouton \"Ajouter un contrat\" et entrez l'adresse du smart contract dans le réseau sélectionné"
+    },
+    "step3": {
+      "title": "Interagissez avec le contrat",
+      "description": "Après avoir ajouté le contrat, les onglets suivants seront disponibles :",
+      "tabs": {
+        "methods": {
+          "title": "Méthodes",
+          "description": "Onglet pour interagir avec les fonctions du smart contract.",
+          "verification": "Les méthodes du contrat seront disponibles automatiquement si le contrat est vérifié dans le réseau. Si le contrat n'est pas vérifié, vous pouvez ajouter l'ABI manuellement dans l'onglet ABI.",
+          "constructor": "Chaque méthode dispose d'un constructeur pratique avec des champs de saisie de paramètres. Après avoir rempli les paramètres, vous pouvez appeler la méthode ou obtenir le calldata pour une utilisation ultérieure.",
+          "custom_methods": "Si vous connaissez la signature de la méthode mais n'avez pas l'ABI complet, vous pouvez créer une méthode personnalisée à l'aide du constructeur de méthodes. Cela vous permettra d'interagir avec des contrats non vérifiés."
+        },
+        "storage": {
+          "title": "Stockage",
+          "description": "Permet de lire les données directement depuis les slots de stockage du contrat. Entrez le numéro du slot (de 0 à 2^256-1) et cliquez sur le bouton pour obtenir la valeur stockée dans ce slot."
+        },
+        "code": {
+          "title": "Code",
+          "description": "Affiche le code source du smart contract. Disponible uniquement pour les contrats qui ont été vérifiés dans le réseau (le code source a été publié et confirmé)."
+        },
+        "abi": {
+          "title": "ABI",
+          "description": "Permet de visualiser et d'éditer l'ABI du contrat. Si le contrat n'est pas vérifié mais que vous avez son ABI, vous pouvez l'ajouter ici. Après avoir ajouté l'ABI, toutes les méthodes du contrat seront disponibles dans l'onglet Méthodes."
+        },
+        "events": {
+          "title": "Événements",
+          "description": "Affiche l'historique des événements du contrat. Vous pouvez filtrer les événements par leur type et les valeurs des paramètres indexés, ce qui permet de trouver rapidement les événements nécessaires dans l'historique du contrat."
+        }
+      }
+    }
   }
 }

@@ -70,5 +70,56 @@
 
       "copy-field-value": "fieldName field value copied to clipboard"
     }
+  },
+  "documentation": {
+    "title": "How to use the application",
+    "step1": {
+      "title": "Select environment",
+      "description": "To get started, you need to select an environment. The following options are available:",
+      "metamask": {
+        "title": "Metamask",
+        "description": "To work with public networks (Ethereum, Polygon, etc.), select Metamask. Make sure the Metamask extension is installed in your browser and you are logged into your account."
+      },
+      "local": {
+        "title": "Local networks (Hardhat/Foundry)",
+        "description": "To work with a local network, you first need to start a local node of the selected framework:",
+        "hardhat": "Start the node with the command npx hardhat node",
+        "foundry": "Start the node with the command anvil",
+        "rpc_description": "After starting the node, specify the corresponding JSON RPC URL in the input field. Standard URLs for local nodes:"
+      }
+    },
+    "step2": {
+      "title": "Add a smart contract",
+      "description": "Click the \"Add contract\" button and enter the smart contract address in the selected network"
+    },
+    "step3": {
+      "title": "Interact with the contract",
+      "description": "After adding the contract, the following tabs will be available:",
+      "tabs": {
+        "methods": {
+          "title": "Methods",
+          "description": "Tab for interacting with smart contract functions.",
+          "verification": "Contract methods will be available automatically if the contract is verified in the network. If the contract is not verified, you can add the ABI manually in the ABI tab.",
+          "constructor": "Each method has a convenient constructor with parameter input fields. After filling in the parameters, you can call the method or get calldata for later use.",
+          "custom_methods": "If you know the method signature but don't have the full ABI, you can create a custom method using the method constructor. This will allow you to interact with unverified contracts."
+        },
+        "storage": {
+          "title": "Storage",
+          "description": "Allows reading data directly from contract storage slots. Enter the slot number (from 0 to 2^256-1) and click the button to get the value stored in that slot."
+        },
+        "code": {
+          "title": "Code",
+          "description": "Displays the smart contract source code. Only available for contracts that have been verified in the network (source code has been published and confirmed)."
+        },
+        "abi": {
+          "title": "ABI",
+          "description": "Allows viewing and editing the contract ABI. If the contract is not verified but you have its ABI, you can add it here. After adding the ABI, all contract methods will be available in the Methods tab."
+        },
+        "events": {
+          "title": "Events",
+          "description": "Shows the contract event history. You can filter events by their type and indexed parameter values, which allows you to quickly find the needed events in the contract history."
+        }
+      }
+    }
   }
 }
