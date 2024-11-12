@@ -82,8 +82,7 @@ export const ContractsMethodsTab: React.FC<ContractsMethodsTabProps> = observer(
         )}
         {!contractModel.verified && !!contractModel.methodsData.length && (
           <Typography.Text strong type="warning" style={{ marginBottom: 20 }}>
-            Методы были сгенерированы на основе ABI добавленного вручную. Будьте
-            осторожны!
+            {t("contract-card.methods.manually-added-abi-warning")}
           </Typography.Text>
         )}
         {!!contractModel.methodsData.length && (

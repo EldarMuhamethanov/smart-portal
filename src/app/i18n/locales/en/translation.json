@@ -68,7 +68,18 @@
       "lowlevel-transaction": "Low-level transaction",
       "call-transaction": "Call",
 
-      "copy-field-value": "fieldName field value copied to clipboard"
+      "copy-field-value": "fieldName field value copied to clipboard",
+      "manually-added-abi-warning": "Methods were generated based on manually added ABI. Be careful!",
+      "clear": "Clear"
+    },
+    "abi": {
+      "title": "Manually added ABI",
+      "add": "Add ABI",
+      "edit": "Edit ABI",
+      "apply": "Apply ABI",
+      "not-verified": "This contract is not verified, so we cannot display the ABI",
+      "placeholder": "Add ABI for this contract",
+      "incorrect-format": "Incorrect ABI format"
     }
   },
   "documentation": {
@@ -121,5 +132,18 @@
         }
       }
     }
+  },
+  "environment": {
+    "connect-metamask": "Connect to Metamask",
+    "unsupported-network": "Unsupported network, Please select another one",
+    "rpc-endpoint": {
+      "required": "This field is required",
+      "update": "Update"
+    }
+  },
+  "events": {
+    "select-event": "Select event name",
+    "reset": "Reset",
+    "apply-filter": "Apply filter"
   }
 }

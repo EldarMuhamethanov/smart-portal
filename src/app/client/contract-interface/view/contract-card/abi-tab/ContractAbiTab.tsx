@@ -6,17 +6,19 @@ import { appSettings } from "../../../model/AppModel";
 import { useEffect, useState } from "react";
 import { isValidContractABI } from "../../../../../../web3/abi/validateAbi";
 import { ABI } from "@/web3/abi/ABI";
+import { useTranslationContext } from "../../TranslationContext";
 
 const NotVerifiedContractAbiContent: React.FC<{
   contractModel: ContractCardModel;
 }> = observer(({ contractModel }) => {
+  const { t } = useTranslationContext();
   const [abiShowMode, setAbiShowMode] = useState<
     "none" | "add" | "edit" | "readonly"
   >(contractModel.abi ? "readonly" : "none");
   const [editorValue, setEditorValue] = useState(
     contractModel.abi
       ? JSON.stringify(contractModel.abi, null, 2)
-      : "// Добавьте ABI этого контракта"
+      : t("contract-card.abi.placeholder")
   );
   const [incorrectFormatError, setIncorrectFormatError] = useState(false);
 
@@ -28,16 +30,16 @@ const NotVerifiedContractAbiContent: React.FC<{
     <Flex vertical gap={20} align="flex-start">
       {!contractModel.abi && (
         <Typography.Paragraph>
-          Данный контракт неверифицирован, поэтому мы не можем отобразить ABI
+          {t("contract-card.abi.not-verified")}
         </Typography.Paragraph>
       )}
       {!contractModel.abi && abiShowMode !== "add" && (
         <Button type="primary" onClick={() => setAbiShowMode("add")}>
-          Добавить ABI
+          {t("contract-card.abi.add")}
         </Button>
       )}
       {abiShowMode === "readonly" && (
-        <Typography.Title level={3}>Вручную добавленный ABI</Typography.Title>
+        <Typography.Title level={3}>{t("contract-card.abi.title")}</Typography.Title>
       )}
       {abiShowMode !== "none" && (
         <Editor
@@ -62,11 +64,13 @@ const NotVerifiedContractAbiContent: React.FC<{
           readOnly
           status="error"
           variant="filled"
-          value={"Некорректный формат ABI"}
+          value={t("contract-card.abi.incorrect-format")}
         />
       )}
       {abiShowMode === "readonly" && (
-        <Button onClick={() => setAbiShowMode("edit")}>Изменить ABI</Button>
+        <Button onClick={() => setAbiShowMode("edit")}>
+          {t("contract-card.abi.edit")}
+        </Button>
       )}
       {(abiShowMode === "edit" || abiShowMode === "add") && (
         <Button
@@ -80,7 +84,7 @@ const NotVerifiedContractAbiContent: React.FC<{
             }
           }}
         >
-          Применить ABI
+          {t("contract-card.abi.apply")}
         </Button>
       )}
     </Flex>

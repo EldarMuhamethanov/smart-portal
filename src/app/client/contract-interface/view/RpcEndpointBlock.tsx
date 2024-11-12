@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { environmentModel } from "../model/AppModel";
 import { useEffect, useState } from "react";
 import { FormProps } from "antd/lib";
+import { useTranslation } from "react-i18next";
 
 export const RpcEndpointBlock: React.FC = observer(() => {
   const [form] = Form.useForm();
@@ -10,6 +11,8 @@ export const RpcEndpointBlock: React.FC = observer(() => {
   const [disabled, setIsDisabled] = useState(false);
 
   const values = Form.useWatch([], form);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     form.setFieldValue("endpoint", environmentModel.rpcEndpoint);
@@ -53,7 +56,7 @@ export const RpcEndpointBlock: React.FC = observer(() => {
     if (!value || ethereumAddressRegex.test(value)) {
       return Promise.resolve();
     }
-    return Promise.reject("Некорректный формат endpoint");
+    return Promise.reject("Некорректный ф��рмат endpoint");
   };
 
   return (
@@ -72,7 +75,7 @@ export const RpcEndpointBlock: React.FC = observer(() => {
           rules={[
             {
               required: true,
-              message: "Поле обязательное",
+              message: t("environment.rpc-endpoint.required"),
             },
             {
               validator: rpcEndpointValidator,
@@ -91,7 +94,7 @@ export const RpcEndpointBlock: React.FC = observer(() => {
               htmlType="submit"
               disabled={!showUpdateButton || disabled}
             >
-              Изменить
+              {t("environment.rpc-endpoint.update")}
             </Button>
           </Form.Item>
         }

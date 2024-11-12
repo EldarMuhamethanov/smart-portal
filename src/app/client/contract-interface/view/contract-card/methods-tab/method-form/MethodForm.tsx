@@ -41,6 +41,7 @@ const ErrorBlock: React.FC<{
   error: string;
   onErrorClear: () => void;
 }> = ({ error, onErrorClear }) => {
+  const { t } = useTranslationContext();
   return (
     <Flex gap={10} vertical align="flex-start">
       <Input.TextArea
@@ -51,7 +52,7 @@ const ErrorBlock: React.FC<{
         autoSize={{ minRows: 1, maxRows: 4 }}
       />
       <Button size="small" icon={<DeleteOutlined />} onClick={onErrorClear}>
-        Очистить
+        {t("contract-card.methods.clear")}
       </Button>
     </Flex>
   );

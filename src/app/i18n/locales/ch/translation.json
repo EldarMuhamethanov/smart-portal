@@ -45,7 +45,7 @@
       "account-title": "账户",
       "select-account": "选择用户",
 
-      "value-title": "值",
+      "value-title": "数值",
 
       "gas-title": "燃料",
       "estimated-gas": "预估燃料",
@@ -53,13 +53,13 @@
 
       "custom-methods": "自定义方法",
       "add-custom-method": "添加方法",
-      "custom-methods-placeholder": "尚未添加自定义方法。您可以使用\"添加方法\"按钮添加一个\"",
+      "custom-methods-placeholder": "尚未添加任何自定义方法。您可以使用"添加方法"按钮添加一个",
       "adding-custom-method": "添加方法",
       "method-type": "方法类型",
       "method-name": "方法名称",
       "input-values": "输入值",
       "output-values": "输出值",
-      "input-value-type": "���入值类型",
+      "input-value-type": "输入值类型",
       "output-value-type": "输出值类型",
       "add-input-value": "添加输入值",
       "add-output-value": "添加输出值",
@@ -68,7 +68,18 @@
       "lowlevel-transaction": "低级交易",
       "call-transaction": "调用",
 
-      "copy-field-value": "字段 {{fieldName}} 的值已复制到剪贴板"
+      "copy-field-value": "字段 {{fieldName}} 的值已复制到剪贴板",
+      "manually-added-abi-warning": "这些方法是根据手动添加的ABI生成的。请谨慎操作！",
+      "clear": "清除"
+    },
+    "abi": {
+      "title": "手动添加的ABI",
+      "add": "添加ABI",
+      "edit": "编辑ABI",
+      "apply": "应用ABI",
+      "not-verified": "此合约未经验证，因此我们无法显示ABI",
+      "placeholder": "添加此合约的ABI",
+      "incorrect-format": "ABI格式不正确"
     }
   },
   "documentation": {
@@ -121,5 +132,18 @@
         }
       }
     }
+  },
+  "environment": {
+    "connect-metamask": "连接到Metamask",
+    "unsupported-network": "不支持的网络，请选择其他网络",
+    "rpc-endpoint": {
+      "required": "此字段为必填项",
+      "update": "更新"
+    }
+  },
+  "events": {
+    "select-event": "选择事件名称",
+    "reset": "重置",
+    "apply-filter": "应用筛选"
   }
 }

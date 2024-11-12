@@ -7,6 +7,7 @@ import {
   FilterData,
   FilterFieldData,
 } from "../../../model/ContractCard/ContractEventsModel";
+import { useTranslationContext } from "../../TranslationContext";
 
 type ViewEventData = {
   name: string;
@@ -170,6 +171,8 @@ export const EventsFilterBlock: React.FC<{ contractModel: ContractCardModel }> =
       contractModel.setFilterData(null);
     };
 
+    const { t } = useTranslationContext();
+
     return (
       <Flex
         vertical
@@ -185,7 +188,7 @@ export const EventsFilterBlock: React.FC<{ contractModel: ContractCardModel }> =
       >
         <Flex gap={20}>
           <Select
-            placeholder={"Выберите название события"}
+            placeholder={t("events.select-event")}
             onChange={onEventNameChanged}
             value={selectedEvent}
             allowClear
@@ -197,7 +200,9 @@ export const EventsFilterBlock: React.FC<{ contractModel: ContractCardModel }> =
               </Select.Option>
             ))}
           </Select>
-          {selectedEvent && <Button onClick={onClearFilter}>Сбросить</Button>}
+          {selectedEvent && (
+            <Button onClick={onClearFilter}>{t("events.reset")}</Button>
+          )}
         </Flex>
         {selectedEventFields?.length && (
           <Flex gap={20}>
@@ -217,7 +222,7 @@ export const EventsFilterBlock: React.FC<{ contractModel: ContractCardModel }> =
         {filtersChanged && (
           <Flex gap={20}>
             <Button type="primary" onClick={onSubmitFilter}>
-              Применить фильтр
+              {t("events.apply-filter")}
             </Button>
           </Flex>
         )}

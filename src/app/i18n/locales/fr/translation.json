@@ -32,8 +32,8 @@
       "get-value": "Obtenir la valeur"
     },
     "methods": {
-      "calldata-copied": "Données d'appel copiées dans le presse-papiers",
-      "failed-calldata-copied-title": "Données d'appel non copiées",
+      "calldata-copied": "Calldata copié dans le presse-papiers",
+      "failed-calldata-copied-title": "Calldata non copié",
       "failed-calldata-copied-description": "Tous les champs n'ont pas été remplis ou ont été mal remplis",
 
       "parameters-copied": "Paramètres copiés dans le presse-papiers",
@@ -53,7 +53,7 @@
 
       "custom-methods": "Méthodes personnalisées",
       "add-custom-method": "Ajouter une méthode",
-      "custom-methods-placeholder": "Aucune méthode personnalisée n'a encore été ajoutée. Vous pouvez en ajouter une en utilisant le bouton Äjouter une méthode",
+      "custom-methods-placeholder": "Aucune méthode personnalisée n'a encore été ajoutée. Vous pouvez en ajouter une à l'aide du bouton \"Ajouter une méthode\"",
       "adding-custom-method": "Ajout d'une méthode",
       "method-type": "Type de méthode",
       "method-name": "Nom de la méthode",
@@ -65,10 +65,21 @@
       "add-output-value": "Ajouter une valeur de sortie",
       "add-method-button": "Ajouter",
 
-      "lowlevel-transaction": "Transaction de bas niveau",
+      "lowlevel-transaction": "Transaction bas niveau",
       "call-transaction": "Appeler",
 
-      "copy-field-value": "Valeur du champ fieldName copiée dans le presse-papiers"
+      "copy-field-value": "La valeur du champ {{fieldName}} a été copiée dans le presse-papiers",
+      "manually-added-abi-warning": "Les méthodes ont été générées à partir de l'ABI ajouté manuellement. Soyez prudent!",
+      "clear": "Effacer"
+    },
+    "abi": {
+      "title": "ABI ajouté manuellement",
+      "add": "Ajouter l'ABI",
+      "edit": "Modifier l'ABI",
+      "apply": "Appliquer l'ABI",
+      "not-verified": "Ce contrat n'est pas vérifié, nous ne pouvons donc pas afficher l'ABI",
+      "placeholder": "Ajoutez l'ABI de ce contrat",
+      "incorrect-format": "Format ABI incorrect"
     }
   },
   "documentation": {
@@ -121,5 +132,18 @@
         }
       }
     }
+  },
+  "environment": {
+    "connect-metamask": "Se connecter à Metamask",
+    "unsupported-network": "Réseau non pris en charge, veuillez en sélectionner un autre",
+    "rpc-endpoint": {
+      "required": "Ce champ est obligatoire",
+      "update": "Mettre à jour"
+    }
+  },
+  "events": {
+    "select-event": "Sélectionner le nom de l'événement",
+    "reset": "Réinitialiser",
+    "apply-filter": "Appliquer le filtre"
   }
 }
