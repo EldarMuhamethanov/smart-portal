@@ -150,5 +150,46 @@
     "select-event": "Sélectionner le nom de l'événement",
     "reset": "Réinitialiser",
     "apply-filter": "Appliquer le filtre"
+  },
+  "welcome": {
+    "title": "Bienvenue sur Smart Portal",
+    "intro": {
+      "title": "Votre Outil Universel pour l'Interaction avec les Smart Contracts",
+      "description": "Smart Portal fournit une interface puissante et intuitive pour interagir avec les smart contracts sur différents réseaux blockchain. Que vous soyez développeur, chercheur ou simplement intéressé par la blockchain, notre application vous aidera à travailler facilement avec les contrats."
+    },
+    "features": {
+      "title": "Fonctionnalités Principales",
+      "metamask": {
+        "title": "Support MetaMask",
+        "description": "Connectez-vous facilement aux réseaux publics via MetaMask et interagissez avec les contrats sur le réseau principal Ethereum, les réseaux de test et d'autres blockchains compatibles EVM."
+      },
+      "local": {
+        "title": "Développement Local",
+        "description": "Travaillez avec des réseaux locaux via Hardhat ou Foundry pour les tests et le développement. Parfait pour le développement et les tests locaux."
+      },
+      "methods": {
+        "title": "Interaction Pratique",
+        "description": "Appelez les méthodes du contrat, visualisez leurs paramètres et les résultats d'exécution. Prise en charge des contrats vérifiés et non vérifiés avec la possibilité de créer des méthodes personnalisées."
+      },
+      "storage": {
+        "title": "Accès au Stockage",
+        "description": "Lisez les données directement depuis les slots de stockage du contrat. Particulièrement utile lors du travail avec des contrats non vérifiés ou lorsqu'un accès bas niveau aux données est nécessaire."
+      }
+    },
+    "getStarted": {
+      "title": "Pour Commencer",
+      "step1": {
+        "title": "Choisissez l'Environnement",
+        "description": "Commencez par sélectionner un environnement : connectez-vous à MetaMask pour les réseaux publics ou spécifiez une URL RPC pour travailler avec un réseau local."
+      },
+      "step2": {
+        "title": "Ajoutez un Contrat",
+        "description": "Entrez l'adresse du smart contract avec lequel vous souhaitez interagir. Pour les contrats vérifiés, les méthodes seront disponibles automatiquement."
+      },
+      "step3": {
+        "title": "Commencez à Interagir",
+        "description": "Utilisez différents onglets pour interagir avec le contrat : appelez des méthodes, lisez le stockage, visualisez le code et les événements."
+      }
+    }
   }
 }

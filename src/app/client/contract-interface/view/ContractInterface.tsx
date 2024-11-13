@@ -20,6 +20,10 @@ import {
   useTranslationContext,
 } from "./TranslationContext";
 import { EnvironmentBlock } from "./EnivronmentBlock";
+import { WelcomeModal } from "./welcome/WelcomeModal";
+import { LocalStorage } from "@/core/localStorage";
+
+const WELCOME_MODAL_SHOWN_KEY = "welcome-modal-shown";
 
 const AddContractBlock: React.FC = observer(() => {
   const translation = useTranslationContext();
@@ -71,6 +75,14 @@ const useColorScheme = (darkModeOn: boolean) => {
 export const ContractInterface: React.FC<{ lng: string }> = observer(
   ({ lng }) => {
     const translation = useTranslation(lng);
+    const [showWelcome, setShowWelcome] = useState(false);
+
+    useEffect(() => {
+      const wasShown = LocalStorage.getValue(WELCOME_MODAL_SHOWN_KEY);
+      if (!wasShown) {
+        setShowWelcome(true);
+      }
+    }, []);
 
     useSingleLayoutEffect(() => {
       environmentModel.initState();
@@ -88,11 +100,17 @@ export const ContractInterface: React.FC<{ lng: string }> = observer(
               : theme.defaultAlgorithm,
           }}
         >
-          <Flex vertical className={styles.container} gap={15}>
-            <EnvironmentBlock />
-            <AddContractBlock />
-            <ContractsList />
-          </Flex>
+          <div className={styles.page}>
+            <Flex vertical gap={20}>
+              <EnvironmentBlock />
+              <AddContractBlock />
+              <ContractsList />
+            </Flex>
+          </div>
+          <WelcomeModal 
+            open={showWelcome} 
+            onClose={() => setShowWelcome(false)} 
+          />
         </ConfigProvider>
       </TranslationContext.Provider>
     );

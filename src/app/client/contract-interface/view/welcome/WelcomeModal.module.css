@@ -1,0 +1,86 @@
+.modal :global(.ant-modal-content) {
+  max-height: 90vh;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.modal :global(.ant-modal-body) {
+  padding: 24px;
+  max-height: calc(90vh - 110px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.modal :global(.ant-modal-body)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal :global(.ant-modal-body)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal :global(.ant-modal-body)::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.modal :global(.ant-modal-body)::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.introCard {
+  background: linear-gradient(135deg, #1890ff0d 0%, #eb2f9610 100%);
+  border: 1px solid #1890ff33;
+  border-radius: 8px;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.featureCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.featureCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+  font-size: 24px;
+  color: #1890ff;
+}
+
+.modal :global(.ant-typography) {
+  margin-bottom: 16px;
+}
+
+.modal :global(.ant-typography):last-child {
+  margin-bottom: 0;
+}
+
+.modal :global(.ant-steps-item-description) {
+  margin-left: 24px;
+}
+
+:global(.dark) .modal :global(.ant-modal-body)::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+:global(.dark) .modal :global(.ant-modal-body)::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+:global(.dark) .modal :global(.ant-modal-body) {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+} 

@@ -3,6 +3,7 @@ type StorageKey =
   | "environment"
   | "dark-mode-on"
   | "rpc-endpoint"
+  | "welcome-modal-shown"
   | `contract-${string}-selected-account`
   | `contract-${string}-expanded`
   | `contract-${string}-gas-custom`

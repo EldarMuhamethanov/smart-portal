@@ -150,5 +150,46 @@
     "select-event": "Select event name",
     "reset": "Reset",
     "apply-filter": "Apply filter"
+  },
+  "welcome": {
+    "title": "Welcome to Smart Portal",
+    "intro": {
+      "title": "Your Universal Tool for Smart Contract Interaction",
+      "description": "Smart Portal provides a powerful and intuitive interface for interacting with smart contracts across various blockchain networks. Whether you're a developer, researcher, or just interested in blockchain, our application will help you work with contracts easily."
+    },
+    "features": {
+      "title": "Key Features",
+      "metamask": {
+        "title": "MetaMask Support",
+        "description": "Easily connect to public networks via MetaMask and interact with contracts on Ethereum mainnet, test networks, and other EVM-compatible blockchains."
+      },
+      "local": {
+        "title": "Local Development",
+        "description": "Work with local networks through Hardhat or Foundry for testing and development. Perfect for local development and testing."
+      },
+      "methods": {
+        "title": "Convenient Interaction",
+        "description": "Call contract methods, view their parameters and execution results. Support for both verified and unverified contracts with the ability to create custom methods."
+      },
+      "storage": {
+        "title": "Storage Access",
+        "description": "Read data directly from contract storage slots. Especially useful when working with unverified contracts or when low-level data access is needed."
+      }
+    },
+    "getStarted": {
+      "title": "Getting Started",
+      "step1": {
+        "title": "Choose Environment",
+        "description": "Start by selecting an environment: connect to MetaMask for public networks or specify an RPC URL for working with a local network."
+      },
+      "step2": {
+        "title": "Add Contract",
+        "description": "Enter the address of the smart contract you want to interact with. For verified contracts, methods will be available automatically."
+      },
+      "step3": {
+        "title": "Start Interacting",
+        "description": "Use various tabs to interact with the contract: call methods, read storage, view code and events."
+      }
+    }
   }
 }

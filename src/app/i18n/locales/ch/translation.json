@@ -150,5 +150,46 @@
     "select-event": "选择事件名称",
     "reset": "重置",
     "apply-filter": "应用筛选"
+  },
+  "welcome": {
+    "title": "欢迎使用 Smart Portal",
+    "intro": {
+      "title": "您的智能合约交互通用工具",
+      "description": "Smart Portal 为在各种区块链网络上与智能合约交互提供了强大而直观的界面。无论您是开发者、研究人员还是对区块链感兴趣的用户，我们的应用程序都能帮助您轻松处理合约。"
+    },
+    "features": {
+      "title": "主要功能",
+      "metamask": {
+        "title": "MetaMask 支持",
+        "description": "通过 MetaMask 轻松连接到公共网络，与以太坊主网、测试网络和其他 EVM 兼容区块链上的合约进行交互。"
+      },
+      "local": {
+        "title": "本地开发",
+        "description": "通过 Hardhat 或 Foundry 使用本地网络进行测试和开发。完美适用于本地开发和测试。"
+      },
+      "methods": {
+        "title": "便捷交互",
+        "description": "调用合约方法，查看参数和执行结果。支持已验证和未验证的合约，并能创建自定义方法。"
+      },
+      "storage": {
+        "title": "存储访问",
+        "description": "直接从合约存储槽读取数据。在处理未验证的合约或需要低级数据访问时特别有用。"
+      }
+    },
+    "getStarted": {
+      "title": "开始使用",
+      "step1": {
+        "title": "选择环境",
+        "description": "首先选择环境：连接到 MetaMask 以使用公共网络，或指定 RPC URL 以使用本地网络。"
+      },
+      "step2": {
+        "title": "添加合约",
+        "description": "输入要交互的智能合约地址。对于已验证的合约，方法将自动可用。"
+      },
+      "step3": {
+        "title": "开始交互",
+        "description": "使用各种标签页与合约交互：调用方法、读取存储、查看代码和事件。"
+      }
+    }
   }
 }
