@@ -54,42 +54,52 @@ export const ContractStorageTab: React.FC<ContractStorageTabProps> = observer(
           layout="vertical"
         >
           <Form.Item>
-            <Radio.Group 
-              onChange={(e) => setIsHashInput(e.target.value)} 
+            <Radio.Group
+              onChange={(e) => setIsHashInput(e.target.value)}
               value={isHashInput}
             >
-              <Radio value={false}>{t("contract-card.storage.number-input")}</Radio>
-              <Radio value={true}>{t("contract-card.storage.hash-input")}</Radio>
+              <Radio value={false}>
+                {t("contract-card.storage.number-input")}
+              </Radio>
+              <Radio value={true}>
+                {t("contract-card.storage.hash-input")}
+              </Radio>
             </Radio.Group>
           </Form.Item>
-          
+
           <Form.Item
             label={t("contract-card.storage.number-slot")}
             name="slotNumber"
             rules={[
               {
                 validator: (_, value) => {
-                  if (!value) {
-                    return Promise.reject(t("contract-card.storage.slot-required"));
+                  if (value === undefined) {
+                    return Promise.reject(
+                      t("contract-card.storage.slot-required")
+                    );
                   }
                   if (isHashInput) {
-                    if (!value.startsWith('0x')) {
-                      return Promise.reject(t("contract-card.storage.invalid-hash"));
+                    if (!value.startsWith("0x")) {
+                      return Promise.reject(
+                        t("contract-card.storage.invalid-hash")
+                      );
                     }
                   } else {
                     if (isNaN(Number(value)) || Number(value) < 0) {
-                      return Promise.reject(t("contract-card.storage.invalid-number"));
+                      return Promise.reject(
+                        t("contract-card.storage.invalid-number")
+                      );
                     }
                   }
                   return Promise.resolve();
-                }
-              }
+                },
+              },
             ]}
           >
             {isHashInput ? (
               <Input placeholder="0x..." />
             ) : (
-              <InputNumber min={0} defaultValue={0} style={{ width: '100%' }} />
+              <InputNumber min={0} defaultValue={0} style={{ width: "100%" }} />
             )}
           </Form.Item>
 
