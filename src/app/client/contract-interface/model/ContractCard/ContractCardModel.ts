@@ -237,8 +237,10 @@ export class ContractCardModel {
     const networkId = await this._environmentModel.web3!.eth.net.getId();
     try {
       const result = await getContractCodeData(this.address, Number(networkId));
-      this._contractAbiModel.setAbi(result?.abi || null);
-      this._contractCodeModel.setCode(result?.code || "");
+      if (result) {
+        this._contractAbiModel.setAbi(result?.abi || null);
+        this._contractCodeModel.setCode(result?.code || "");
+      }
     } catch (e) {
       if (e instanceof UnknownNetwork) {
         console.log("Неизвестная сеть");
